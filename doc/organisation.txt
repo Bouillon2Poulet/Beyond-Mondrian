@@ -1,16 +1,16 @@
 1 - Faire une scène de base avec un carré au milieu et un sol -> Ensemble
 2 - Objectifs
 -------------------------------------------------------------------------
-	Déplacement joueur & gravité -> Antoine (class Player)
-		Collision -> Romain (class Decor) + Quadtree
-		Caméra -> Mathurin (class Cam)
--------------------------------------------------------------------------
+	Déplacement joueur & gravité -> Antoine (class Player) // Lundi 25/04
+		Collision -> Romain (class Decor) + Quadtree // Mardi 26/04
+		Caméra -> Mathurin (class Cam) // Mardi 26/04
+------------------------------------------------------------------------- // Jeudi 27/04
 	Changement de personnage (+ flèche qui indique lequel on incarne)
 	Tutoriel (niveau ultra simple)
 	Tableau de map (initialisation au début, erase à fin de niveau)
 	Passage d'un niveau à un autre
 	Niveau 1
--------------------------------------------------------------------------
+------------------------------------------------------------------------- //Deuxième semaine des vacances
 	Menu
 	Graphisme/Texture
 	SoundDesign
