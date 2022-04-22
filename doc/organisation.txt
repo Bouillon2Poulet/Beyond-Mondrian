@@ -1,0 +1,19 @@
+1 - Faire une scène de base avec un carré au milieu et un sol -> Ensemble
+2 - Objectifs
+-------------------------------------------------------------------------
+	Déplacement joueur & gravité -> Antoine (class Player)
+		Collision -> Romain (class Decor) + Quadtree
+		Caméra -> Mathurin (class Cam)
+-------------------------------------------------------------------------
+	Changement de personnage (+ flèche qui indique lequel on incarne)
+	Tutoriel (niveau ultra simple)
+	Tableau de map (initialisation au début, erase à fin de niveau)
+	Passage d'un niveau à un autre
+	Niveau 1
+-------------------------------------------------------------------------
+	Menu
+	Graphisme/Texture
+	SoundDesign
+	Map mouvante
+	Caméra smooth
+	Caméra qui part de la fin du niveau et qui arrive vers le joueur (qui ne peut donc pas bouger en attendant)
