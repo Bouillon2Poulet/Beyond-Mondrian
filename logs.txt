@@ -1,0 +1,5 @@
+Date : 25/04/2022
+Modified by : Antoine
+
+    - Added Player movements
+    - Added gravity

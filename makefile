@@ -1,28 +1,31 @@
-CC			= gcc
+CC		= gcc
 CFLAGS	= -Wall -O2 -g
-LDFLAGS= -lSDL2 -lGLU -lGL -lm
+LDFLAGS = -lSDL2 -lGLU -lGL -lm
 
-BINDIR	= bin/
-SRCDIR	= src/
-OBJDIR	= obj/
+BIN_DIR	= bin
+INC_DIR = -I include
+SRC_DIR	= src
+OBJ_DIR	= obj
 
 # Fichiers main
-OBJ_MAIN= main.o
-EXEC_MAIN= main.out
+SRC_FILES 	= $(shell find $(SRC_DIR)/ -type f -name '*.c')
+OBJ_FILES 	= $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o, $(SRC_FILES))
+EXEC_BIN	= main.out
 
 # Regles compilation
 
-all :
+all : $(OBJ_FILES)
 
-main : $(OBJDIR)$(OBJ_MAIN)
-	$(CC) $(CFLAGS) $(OBJDIR)$(OBJ_MAIN) -o $(BINDIR)$(EXEC_MAIN) $(LDFLAGS)
+main : $(OBJ_FILES)
+	@mkdir -p $(BIN_DIR)/
+	$(CC) -o $(BIN_DIR)/$(EXEC_BIN) $(OBJ_FILES) $(LDFLAGS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p "$(@D)"
+	$(CC) -c $< -o $@ $(CFLAGS) $(INC_DIR)
 
 clean :
 	rm -rf *~
-	rm -rf $(SRCDIR)*/*~
-	rm -rf $(OBJDIR)
-	rm -rf $(BINDIR)*
-
-$(OBJDIR)%.o: $(SRCDIR)%.c
-	mkdir -p `dirname $@`
-	$(CC) -o $@ -c $< $(CFLAGS)
+	rm -rf $(SRC_DIR)/*/*~
+	rm -rf $(OBJ_DIR)/
+	rm -rf $(BIN_DIR)/*
