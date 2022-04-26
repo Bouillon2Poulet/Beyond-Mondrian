@@ -3,3 +3,9 @@ Modified by : Antoine
 
     - Added Player movements
     - Added gravity
+    
+Date : 26/04/2022
+Modified by : Antoine
+
+    - Removed interpolation
+    - Added collision

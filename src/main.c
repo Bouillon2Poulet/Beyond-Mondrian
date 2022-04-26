@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "player.h"
+#include "scene.h"
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 800;
@@ -102,7 +102,15 @@ int main(int argc, char** argv)
     /* Boucle principale */
     int loop = 1;
 
+    Scene scene = createScene();
     Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
+    addPlayerToScene(&scene, player);
+    Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
+    Cube cube1 = createCube(4, -1, 1, 1, 1, 0, 0, 1);
+    Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
+    addCubeToScene(&scene, cube);
+    addCubeToScene(&scene, cube1);
+    addCubeToScene(&scene, cube2);
 
     while(loop)
     {
@@ -114,9 +122,27 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        drawPlayer(player);
-        addGravity(&player);
-        playerMove(&player);
+        addGravity(&scene.player);
+        for (int i = 0; i < scene.cubesCount; i++)
+        {
+            if (checkCollision(scene.player, scene.cubes[i]) == 1)
+            {
+                if (scene.player.cube.y > scene.cubes[i].y)
+                {
+                    scene.player.cube.y = scene.cubes[i].y + scene.cubes[i].height/2 + scene.player.cube.height/2;
+                    scene.player.isGrounded = 1;
+                    scene.player.gravity = 0;
+                    break;
+                }
+                else if (scene.player.cube.y < scene.cubes[i].y)
+                {
+                    scene.player.cube.y = scene.cubes[i].y - scene.cubes[i].height/2 - scene.player.cube.height/2;
+                    scene.player.gravity = 0;
+                }
+            }
+            scene.player.isGrounded = 0;
+        }
+        drawScene(scene);
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
@@ -172,22 +198,34 @@ int main(int argc, char** argv)
 
         if(keystates[SDL_SCANCODE_LEFT]) 
         {
-            if (player.cube.x - player.nextPosition < player.movementSpeed*2)
+            scene.player.cube.x -= scene.player.movementSpeed;
+            for (int i = 0; i < scene.cubesCount; i++)
             {
-                player.nextPosition -= player.movementSpeed*2;
+                if (checkCollision(scene.player, scene.cubes[i]) == 1)
+                {
+                    scene.player.cube.x = scene.cubes[i].x + scene.cubes[i].width/2 + scene.player.cube.width/2;
+                }
             }
         }
+        
         if(keystates[SDL_SCANCODE_RIGHT]) 
         {
-            if (player.nextPosition - player.cube.x < player.movementSpeed*2)
+            scene.player.cube.x += scene.player.movementSpeed;
+            for (int i = 0; i < scene.cubesCount; i++)
             {
-                player.nextPosition += player.movementSpeed*2;
+                if (checkCollision(scene.player, scene.cubes[i]) == 1)
+                {
+                    scene.player.cube.x = scene.cubes[i].x - scene.cubes[i].width/2 - scene.player.cube.width/2;
+                }
             }
         }
 
         if(keystates[SDL_SCANCODE_SPACE]) 
         {
-            playerJump(&player);
+            if (scene.player.isGrounded == 1)
+            {
+                playerJump(&scene.player);
+            }
         }
 
         /* Calcul du temps ecoule */

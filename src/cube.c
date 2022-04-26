@@ -2,13 +2,13 @@
 #include <GL/glu.h>
 #include "cube.h"
 
-Cube createCube(float x, float y, float height, float width, int filled, float red, float green, float blue)
+Cube createCube(float x, float y, float width, float height, int filled, float red, float green, float blue)
 {
     Cube cube;
     cube.x = x;
     cube.y = y;
-    cube.height = height;
     cube.width = width;
+    cube.height = height;
     cube.filled = filled;
     cube.red = red;
     cube.green = green;
@@ -21,7 +21,6 @@ void drawCube(Cube cube)
     if(cube.filled)
     {
         glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(cube.x, cube.y);
     }
     else
     {
@@ -34,7 +33,6 @@ void drawCube(Cube cube)
     glVertex2f(cube.x + cube.width/2, cube.y + cube.height/2);
     glVertex2f(cube.x - cube.width/2, cube.y + cube.height/2);
     glVertex2f(cube.x - cube.width/2, cube.y - cube.height/2);
-    glVertex2f(cube.x + cube.width/2, cube.y - cube.height/2);
 
     glEnd();
 }

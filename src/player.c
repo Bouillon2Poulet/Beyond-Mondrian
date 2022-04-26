@@ -1,47 +1,40 @@
 #include "player.h"
 
-Player createPlayer(float x, float y, float height, float width, int filled, float red, float green, float blue)
+Player createPlayer(float x, float y, float width, float height, int filled, float red, float green, float blue)
 {
     Player player;
-    player.cube = createCube(x, y, height, width, filled, red, green, blue);
-    player.gravity = 0;
-    player.jumpPower = 0.3;
+    player.cube = createCube(x, y, width, height, filled, red, green, blue);
     player.movementSpeed = 0.15;
-    player.nextPosition = player.cube.x;
+    player.jumpPower = 0.3;
+    player.gravity = 0;
+    player.isGrounded = 0;
     return player;
-}
-
-void playerMove(Player* player)
-{
-    if (player->cube.x < player->nextPosition)
-    {
-        player->cube.x += player->movementSpeed;
-    }
-    if (player->cube.x > player->nextPosition)
-    {
-        player->cube.x -= player->movementSpeed;
-    }
 }
 
 void playerJump(Player* player)
 {
-    if (player->gravity == 0)
-    {
-        player->gravity = -player->jumpPower;
-    }
+    player->gravity = -player->jumpPower;
 }
 
 void addGravity(Player* player)
 {
-    if (player->cube.y > 0)
-    {
-        player->gravity += 0.01;
-    }
-    else if (player->gravity > 0)
-    {
-        player->gravity = 0;
-    }
+    player->gravity += 0.01;
     player->cube.y -= player->gravity;
+}
+
+int checkCollision(Player player, Cube cube)
+{
+    if (player.cube.x + player.cube.width/2 > cube.x - cube.width/2 &&
+    player.cube.x - player.cube.width/2 < cube.x + cube.width/2 &&
+    player.cube.y + player.cube.width/2 > cube.y - cube.height/2 &&
+    player.cube.y - player.cube.height/2 < cube.y + cube.height/2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void drawPlayer(Player player)

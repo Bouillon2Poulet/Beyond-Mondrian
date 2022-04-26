@@ -5,19 +5,19 @@
 
 typedef struct Player {
     Cube cube;
-    float gravity;
-    float jumpPower;
     float movementSpeed;
-    float nextPosition;
+    float jumpPower;
+    float gravity;
+    int isGrounded;
 } Player;
 
 Player createPlayer(float x, float y, float height, float width, int filled, float red, float green, float blue);
 
-void playerMove(Player* player);
-
 void playerJump(Player* player);
 
 void addGravity(Player* player);
+
+int checkCollision(Player player, Cube cube);
 
 void drawPlayer(Player player);
 
