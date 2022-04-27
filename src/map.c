@@ -16,6 +16,11 @@ MapNode createMapNode (int width, int height)
 
 void buildMapTree (MapNode* mapNode) //Recursive way to build MapTree in 4 steps, take root as first argument
 {
+    if (mapNode->height<=50) //Case : leaf
+    {
+        return;
+    }
+
     for (int i=0;i<4;i++) //Case : parent
     {
         MapNode* newMapNode = malloc(sizeof(MapNode));
@@ -27,10 +32,6 @@ void buildMapTree (MapNode* mapNode) //Recursive way to build MapTree in 4 steps
             case 2 : mapNode->TRMapNode = newMapNode; buildMapTree(mapNode->TRMapNode); break;
             case 3 : mapNode->BRMapNode = newMapNode; buildMapTree(mapNode->BRMapNode); break;
         }
-    }
-    if (mapNode->height==50) //Case : leaf
-    {
-        return;
     }
 }
 

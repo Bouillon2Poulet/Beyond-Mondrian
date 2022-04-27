@@ -22,4 +22,4 @@ void buildMapTree (MapNode* mapNode);
 void addCubeToMapTree (MapNode* mapNode, Cube cube);
 MapNode findActualMapNode (Player player, MapNode mapNode); 
 
-#endif
+#endif  
