@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include "map.h"
 #include "scene.h"
 
 /* Dimensions initiales et titre de la fenetre */
@@ -105,12 +106,24 @@ int main(int argc, char** argv)
     Scene scene = createScene();
     Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
     addPlayerToScene(&scene, player);
+    /*
     Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
     Cube cube1 = createCube(4, -1, 1, 1, 1, 0, 0, 1);
     Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
     addCubeToScene(&scene, cube);
     addCubeToScene(&scene, cube1);
-    addCubeToScene(&scene, cube2);
+    addCubeToScene(&scene, cube2);*/
+
+    //Rom1
+    Cube tabCube[30];
+    fillRandomTabCube(tabCube);
+    MapNode root = createMapNode(3200,3200);
+    buildMapTree (&root);
+    for (int i=0;i<30;i++)
+    {
+        addCubeToMapTree(&root,tabCube[i]);
+    }
+    scene.map=root;
 
     while(loop)
     {
@@ -123,20 +136,21 @@ int main(int argc, char** argv)
         glLoadIdentity();
 
         addGravity(&scene.player);
-        for (int i = 0; i < scene.cubesCount; i++)
+        MapNode actualMapNode = findActualMapNode(scene.player,scene.map);
+        for (int i = 0; i < actualMapNode.nbCubes; i++)
         {
-            if (checkCollision(scene.player, scene.cubes[i]) == 1)
+            if (checkCollision(scene.player, actualMapNode.tabCubes[i]) == 1)
             {
-                if (scene.player.cube.y > scene.cubes[i].y)
+                if (actualMapNode.tabCubes[i].y)
                 {
-                    scene.player.cube.y = scene.cubes[i].y + scene.cubes[i].height/2 + scene.player.cube.height/2;
+                    scene.player.cube.y = actualMapNode.tabCubes[i].y + actualMapNode.tabCubes[i].height/2 + scene.player.cube.height/2;
                     scene.player.isGrounded = 1;
                     scene.player.gravity = 0;
                     break;
                 }
-                else if (scene.player.cube.y < scene.cubes[i].y)
+                else if (scene.player.cube.y < actualMapNode.tabCubes[i].y)
                 {
-                    scene.player.cube.y = scene.cubes[i].y - scene.cubes[i].height/2 - scene.player.cube.height/2;
+                    scene.player.cube.y = actualMapNode.tabCubes[i].y - actualMapNode.tabCubes[i].height/2 - scene.player.cube.height/2;
                     scene.player.gravity = 0;
                 }
             }
@@ -199,11 +213,11 @@ int main(int argc, char** argv)
         if(keystates[SDL_SCANCODE_LEFT]) 
         {
             scene.player.cube.x -= scene.player.movementSpeed;
-            for (int i = 0; i < scene.cubesCount; i++)
+            for (int i = 0; i < actualMapNode.nbCubes; i++)
             {
-                if (checkCollision(scene.player, scene.cubes[i]) == 1)
+                if (checkCollision(scene.player, actualMapNode.tabCubes[i]) == 1)
                 {
-                    scene.player.cube.x = scene.cubes[i].x + scene.cubes[i].width/2 + scene.player.cube.width/2;
+                    scene.player.cube.x = actualMapNode.tabCubes[i].x + actualMapNode.tabCubes[i].width/2 + scene.player.cube.width/2;
                 }
             }
         }
@@ -211,11 +225,11 @@ int main(int argc, char** argv)
         if(keystates[SDL_SCANCODE_RIGHT]) 
         {
             scene.player.cube.x += scene.player.movementSpeed;
-            for (int i = 0; i < scene.cubesCount; i++)
+            for (int i = 0; i < actualMapNode.nbCubes; i++)
             {
-                if (checkCollision(scene.player, scene.cubes[i]) == 1)
+                if (checkCollision(scene.player, actualMapNode.tabCubes[i]) == 1)
                 {
-                    scene.player.cube.x = scene.cubes[i].x - scene.cubes[i].width/2 - scene.player.cube.width/2;
+                    scene.player.cube.x = actualMapNode.tabCubes[i].x - actualMapNode.tabCubes[i].width/2 - scene.player.cube.width/2;
                 }
             }
         }
@@ -236,7 +250,7 @@ int main(int argc, char** argv)
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
-
+    free(tabCube);
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);

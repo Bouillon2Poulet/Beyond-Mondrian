@@ -1,5 +1,5 @@
 CC		= gcc
-CFLAGS	= -Wall -O2 -g
+CFLAGS	= -g -Wall -O2
 LDFLAGS = -lSDL2 -lGLU -lGL -lm
 
 BIN_DIR	= bin

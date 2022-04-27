@@ -3,13 +3,15 @@
 
 #include "cube.h"
 #include "player.h"
+#include "map.h"
 
 #define MAX_CUBE_COUNT 10
 
 typedef struct Scene {
     Player player;
-    Cube cubes[MAX_CUBE_COUNT];
-    int cubesCount;
+    MapNode map; //Map tree root
+    //Cube cubes[MAX_CUBE_COUNT];
+    //int cubesCount;
 } Scene;
 
 Scene createScene();

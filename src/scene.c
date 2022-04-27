@@ -3,7 +3,7 @@
 Scene createScene()
 {
     Scene scene;
-    scene.cubesCount = 0;
+    MapNode root;
     return scene;
 }
 
@@ -12,6 +12,7 @@ void addPlayerToScene(Scene* scene, Player player)
     scene->player = player;
 }
 
+/*
 void addCubeToScene(Scene* scene, Cube cube)
 {
     if (scene->cubesCount < 10)
@@ -20,12 +21,14 @@ void addCubeToScene(Scene* scene, Cube cube)
         scene->cubesCount++;
     }
 }
+*/
 
 void drawScene(Scene scene)
 {
     drawPlayer(scene.player);
-    for (int i = 0; i < scene.cubesCount; i++)
+    MapNode actualNode = findActualMapNode(scene.player, scene.map);
+    for (int i = 0; i < actualNode.nbCubes; i++)
     {
-        drawCube(scene.cubes[i]);
+        drawCube(actualNode.tabCubes[i]);
     }
 }
