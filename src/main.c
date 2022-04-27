@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "scene.h"
+#include "camera.h"
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 800;
@@ -114,6 +115,8 @@ int main(int argc, char** argv)
     addCubeToScene(&scene, cube1);
     addCubeToScene(&scene, cube2);
 
+    Camera camera = createCamera(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y);
+
     while(loop)
     {
         /* Recuperation du temps au debut de la boucle */
@@ -123,8 +126,8 @@ int main(int argc, char** argv)
         glClear(GL_COLOR_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
 
-        
         for (int j = 0; j < scene.playersCount; j++)
         {
             addGravity(&scene.players[j]);
@@ -149,7 +152,6 @@ int main(int argc, char** argv)
             }
         }
         drawScene(scene);
-        
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);

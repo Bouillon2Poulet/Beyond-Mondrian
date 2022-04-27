@@ -1,5 +1,4 @@
 #include <GL/gl.h>
-#include <GL/glu.h>
 #include "cube.h"
 
 Cube createCube(float x, float y, float width, float height, int filled, float red, float green, float blue)
