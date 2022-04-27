@@ -26,7 +26,7 @@ int checkCollision(Player player, Cube cube)
 {
     if (player.cube.x + player.cube.width/2 > cube.x - cube.width/2 &&
     player.cube.x - player.cube.width/2 < cube.x + cube.width/2 &&
-    player.cube.y + player.cube.width/2 > cube.y - cube.height/2 &&
+    player.cube.y + player.cube.height/2 > cube.y - cube.height/2 &&
     player.cube.y - player.cube.height/2 < cube.y + cube.height/2)
     {
         return 1;

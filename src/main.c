@@ -104,7 +104,9 @@ int main(int argc, char** argv)
 
     Scene scene = createScene();
     Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
+    Player player2 = createPlayer(2, 2, 0.5, 2, 1, 0, 1, 0);
     addPlayerToScene(&scene, player);
+    addPlayerToScene(&scene, player2);
     Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
     Cube cube1 = createCube(4, -1, 1, 1, 1, 0, 0, 1);
     Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
@@ -122,27 +124,32 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        addGravity(&scene.player);
-        for (int i = 0; i < scene.cubesCount; i++)
+        
+        for (int j = 0; j < scene.playersCount; j++)
         {
-            if (checkCollision(scene.player, scene.cubes[i]) == 1)
+            addGravity(&scene.players[j]);
+            for (int i = 0; i < scene.cubesCount; i++)
             {
-                if (scene.player.cube.y > scene.cubes[i].y)
+                if (checkCollision(scene.players[j], scene.cubes[i]) == 1)
                 {
-                    scene.player.cube.y = scene.cubes[i].y + scene.cubes[i].height/2 + scene.player.cube.height/2;
-                    scene.player.isGrounded = 1;
-                    scene.player.gravity = 0;
+                    if (scene.players[j].cube.y > scene.cubes[i].y)
+                    {
+                        scene.players[j].cube.y = scene.cubes[i].y + scene.cubes[i].height/2 + scene.players[j].cube.height/2;
+                        scene.players[j].isGrounded = 1;
+                        scene.players[j].gravity = 0;
+                    }
+                    else if (scene.players[j].cube.y < scene.cubes[i].y)
+                    {
+                        scene.players[j].cube.y = scene.cubes[i].y - scene.cubes[i].height/2 - scene.players[j].cube.height/2;
+                        scene.players[j].gravity = 0;
+                    }
                     break;
                 }
-                else if (scene.player.cube.y < scene.cubes[i].y)
-                {
-                    scene.player.cube.y = scene.cubes[i].y - scene.cubes[i].height/2 - scene.player.cube.height/2;
-                    scene.player.gravity = 0;
-                }
+                scene.players[j].isGrounded = 0;
             }
-            scene.player.isGrounded = 0;
         }
         drawScene(scene);
+        
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
@@ -188,7 +195,10 @@ int main(int argc, char** argv)
                 /* Touche clavier */
                 case SDL_KEYDOWN:
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
-
+                    if (e.key.keysym.sym == SDLK_a)
+                    {
+                        switchCurrentPlayer(&scene);
+                    }
                 default:
                     break;
             }
@@ -198,33 +208,33 @@ int main(int argc, char** argv)
 
         if(keystates[SDL_SCANCODE_LEFT]) 
         {
-            scene.player.cube.x -= scene.player.movementSpeed;
+            scene.players[scene.currentPlayerIndex].cube.x -= scene.players[scene.currentPlayerIndex].movementSpeed;
             for (int i = 0; i < scene.cubesCount; i++)
             {
-                if (checkCollision(scene.player, scene.cubes[i]) == 1)
+                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.cubes[i]) == 1)
                 {
-                    scene.player.cube.x = scene.cubes[i].x + scene.cubes[i].width/2 + scene.player.cube.width/2;
+                    scene.players[scene.currentPlayerIndex].cube.x = scene.cubes[i].x + scene.cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
                 }
             }
         }
         
         if(keystates[SDL_SCANCODE_RIGHT]) 
         {
-            scene.player.cube.x += scene.player.movementSpeed;
+            scene.players[scene.currentPlayerIndex].cube.x += scene.players[scene.currentPlayerIndex].movementSpeed;
             for (int i = 0; i < scene.cubesCount; i++)
             {
-                if (checkCollision(scene.player, scene.cubes[i]) == 1)
+                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.cubes[i]) == 1)
                 {
-                    scene.player.cube.x = scene.cubes[i].x - scene.cubes[i].width/2 - scene.player.cube.width/2;
+                    scene.players[scene.currentPlayerIndex].cube.x = scene.cubes[i].x - scene.cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
                 }
             }
         }
 
         if(keystates[SDL_SCANCODE_SPACE]) 
         {
-            if (scene.player.isGrounded == 1)
+            if (scene.players[scene.currentPlayerIndex].isGrounded == 1)
             {
-                playerJump(&scene.player);
+                playerJump(&scene.players[scene.currentPlayerIndex]);
             }
         }
 
