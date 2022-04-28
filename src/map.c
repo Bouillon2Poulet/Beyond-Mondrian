@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include "map.h"
 
-MapNode createMapNode (int left, int right, int top, int bot)
+MapNode createMapNode (char* name,int left, int right, int top, int bot)
 {
     MapNode newMapNode;
+    strcpy(newMapNode.name,name);
     newMapNode.leftSide=left;
     newMapNode.rightSide=right;
     newMapNode.topSide=top;
@@ -20,16 +21,27 @@ void splitIntoFourChildren (MapNode* mapNode) //Add 4 children to a parent mapNo
 {
     //Create 4 children :
     MapNode* TLChildren = malloc(sizeof(MapNode));
-    *TLChildren=createMapNode(mapNode->leftSide,(mapNode->rightSide-mapNode->leftSide)/2,mapNode->topSide,(mapNode->topSide-mapNode->botSide)/2);
+    *TLChildren=createMapNode(mapNode->name,mapNode->leftSide,(mapNode->rightSide-mapNode->leftSide)/2,mapNode->topSide,(mapNode->topSide-mapNode->botSide)/2);
+    char* name1= ".TLMapNode";
+    strcat(TLChildren->name,name1); //Add parent name to current name
     mapNode->TLMapNode=TLChildren;
+
     MapNode* BLChildren = malloc(sizeof(MapNode));
-    *BLChildren=createMapNode(mapNode->leftSide,(mapNode->rightSide-mapNode->leftSide)/2,(mapNode->topSide-mapNode->botSide)/2,mapNode->botSide);
+    *BLChildren=createMapNode(mapNode->name,mapNode->leftSide,(mapNode->rightSide-mapNode->leftSide)/2,(mapNode->topSide-mapNode->botSide)/2,mapNode->botSide);
+    char* name2 = ".BLMapNode";
+    strcat(BLChildren->name,name2);
     mapNode->BLMapNode=BLChildren;
+
     MapNode* TRChildren = malloc(sizeof(MapNode));
-    *TRChildren=createMapNode((mapNode->rightSide-mapNode->leftSide)/2,mapNode->rightSide,mapNode->topSide,(mapNode->topSide-mapNode->botSide)/2);
+    *TRChildren=createMapNode(mapNode->name,(mapNode->rightSide-mapNode->leftSide)/2,mapNode->rightSide,mapNode->topSide,(mapNode->topSide-mapNode->botSide)/2);
+    char* name3= ".TRMapNode";
+    strcat(TRChildren->name,name3);
     mapNode->TRMapNode=TRChildren;
+
     MapNode* BRChildren = malloc(sizeof(MapNode));
-    *BRChildren=createMapNode((mapNode->rightSide-mapNode->leftSide)/2,mapNode->rightSide,(mapNode->topSide-mapNode->botSide)/2,mapNode->botSide);
+    *BRChildren=createMapNode(mapNode->name,(mapNode->rightSide-mapNode->leftSide)/2,mapNode->rightSide,(mapNode->topSide-mapNode->botSide)/2,mapNode->botSide);
+    char* name4= ".TLMapNode";
+    strcat(TLChildren->name,name4);
     mapNode->BRMapNode=BRChildren;
 
     //Fill 4 children with parent's cubes
@@ -75,8 +87,8 @@ void splitIntoFourChildren (MapNode* mapNode) //Add 4 children to a parent mapNo
                 printf("BRChildren.nbCubes :%d\n",mapNode->BRMapNode->nbCubes);
             }
         }
-    //Remove current cube from parent's tab
-    mapNode->tabCubes[i]=createCube(0,0,0,0,0,0,0,0);
+
+    mapNode->tabCubes[i]=createCube(0,0,0,0,0,0,0,0); //Remove current cube from parent's tab
     }
 }
 
@@ -84,19 +96,16 @@ void addCubeToMapTree (MapNode* mapNode, Cube cube) //Recursive way to add a cub
 {
     printf("nbCube before adding=%d\n",mapNode->nbCubes);
     printf("mapNode->hasChildren :%d \n",mapNode->hasChildren);
+    mapNode->nbCubes++; //Increase nbCube by 1 in order to get mapNode.nbCubes as the sum of its children nbCubes
     if (mapNode->nbCubes>=4) //Case parent
     {
         if (mapNode->hasChildren==0) //If no children
         {
             printf("Going to be splitted\n");
             mapNode->hasChildren=1;
-            printf("Avant split mapNode.tabCubes[0].x : %f",mapNode->tabCubes[0].x);
             splitIntoFourChildren(mapNode); //Then add 4 children and split its cubes
-            /*int a;
-            fflush( stdout );
-            scanf("%d\n",&a);
-            fgetc( stdin );*/
         }
+
         printf("mapNode has children\n");
         //Put new cube in the correct children
         if(cube.x<=(mapNode->rightSide+mapNode->leftSide)/2) //Case : left side
@@ -130,8 +139,7 @@ void addCubeToMapTree (MapNode* mapNode, Cube cube) //Recursive way to add a cub
     else //No subdivide
     {
         printf("Cube added !\n");
-        mapNode->tabCubes[mapNode->nbCubes]=cube;
-        mapNode->nbCubes++;
+        mapNode->tabCubes[mapNode->nbCubes-1]=cube; //-1 because of the previous nbCubes++
         printf("cube.x : %f, cube.y : %f\n",mapNode->tabCubes[mapNode->nbCubes].x,mapNode->tabCubes[mapNode->nbCubes].y);
         return;
     }

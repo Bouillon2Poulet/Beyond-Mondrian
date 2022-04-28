@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include "scene.h"
 
-Scene createScene()
+Scene createScene(MapNode root)
 {
     Scene scene;
-    MapNode root;
     return scene;
 }
 
@@ -13,23 +12,16 @@ void addPlayerToScene(Scene* scene, Player player)
     scene->player = player;
 }
 
-/*
-void addCubeToScene(Scene* scene, Cube cube)
+void addMapToScene(Scene* scene, MapNode root)
 {
-    if (scene->cubesCount < 10)
-    {
-        scene->cubes[scene->cubesCount] = cube;
-        scene->cubesCount++;
-    }
+    scene->map = root;
 }
-*/
 
 void drawScene(Scene scene)
 {
     drawPlayer(scene.player);
     MapNode actualNode = *findActualMapNode(scene.player, &scene.map);
-    printf("actualNode[0].x : %f",actualNode.tabCubes[0].x);
-    for (int i = 0; i < actualNode.nbCubes; i++)
+    for (int i = 0; i < scene.map.nbCubes; i++)
     {
         drawCube(actualNode.tabCubes[i]);
     }

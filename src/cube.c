@@ -40,7 +40,7 @@ void drawCube(Cube cube)
     glEnd();
 }
 
-void fillRandomTabCube(Cube* tabCube)
+void fillRandomTabCube(Cube* tabCube) //Fill tabCube[30] with random cubes
 {
     srand(time(NULL)); //init random seed
     for (int i = 0; i<30;i++)
@@ -59,9 +59,6 @@ void fillRandomTabCube(Cube* tabCube)
         float green=(rand() % (100 - 0 + 1))/100; //random green value between 0 and 1
         float red=(rand() % (100 - 0 + 1))/100; //random red value between 0 and 1
         
-        printf("\nCube n°%d\n",i+1);
-        printf("newCube.x : %d\n",x);
-        printf("newCube.y : %d\n",y);
         tabCube[i]=createCube(x,y,width,height,filled,red,green,blue);
     }
 }

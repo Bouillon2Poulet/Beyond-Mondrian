@@ -106,37 +106,30 @@ int main(int argc, char** argv)
     Scene scene = createScene();
     Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
     addPlayerToScene(&scene, player);
-    /*
-    Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
-    Cube cube1 = createCube(4, -1, 1, 1, 1, 0, 0, 1);
-    Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
-    addCubeToScene(&scene, cube);
-    addCubeToScene(&scene, cube1);
-    addCubeToScene(&scene, cube2);*/
 
     //Rom1
+    MapNode root = createMapNode("root",-1600,1600,1600,-1600);
+
+    Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
+    Cube cube1 = createCube(4, -1, 1, 1, 1, 0, 1, 1);
+    Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
+    Cube cube3 = createCube(10, 3, 4, 2, 1, 0, 0, 1);
+
     Cube tabCube[30];
-    fillRandomTabCube(tabCube);
-    MapNode root = createMapNode(-1600,1600,1600,-1600);
-    for (int i=0;i<30;i++)
+    tabCube[0]=cube;
+    tabCube[1]=cube1;
+    tabCube[2]=cube2;
+    tabCube[3]=cube3;
+
+    //fillRandomTabCube(tabCube); //Fill tabCube with 30 random cubes
+
+    for (int i=0;i<3;i++) //3->30 if using fillRandomTabCube function
     {
         printf("-----\nCube n°%d, x : %f, y : %f\n",i+1,tabCube[i].x,tabCube[i].y);
-        //PB
-        int a;
-        /*fflush( stdout );
-        scanf("%d\n",&a);
-        fgetc( stdin );
-        printf("i:%d\n",i);*/
         addCubeToMapTree(&root,tabCube[i]);
     }
     printf("-----\nNodeTree filled !!!\n-----");
-    printf("NodeTree root nbCube :%d\n",root.nbCubes);
-    printf("NodeTree root.TLChildren.nbCube :%d\n",root.TLMapNode->nbCubes);
-    printf("NodeTree root.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->nbCubes);
-    //printf("NodeTree root.TLChildren.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->TLMapNode->nbCubes);
-    //printf("NodeTree root.TLChildren.TLChildren.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->TLMapNode->TLMapNode->nbCubes);
-    //printf("NodeTree root.TLChildren.TLChildren.TLChildren.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->TLMapNode->TLMapNode->TLMapNode->nbCubes);
-    scene.map=root;
+    addMapToScene(&scene,root);
 
     while(loop)
     {
@@ -150,6 +143,7 @@ int main(int argc, char** argv)
 
         addGravity(&scene.player);
         MapNode* actualMapNode = findActualMapNode(scene.player,&scene.map);
+        printf("actualMapNode.name: %s\n",actualMapNode->name);
         for (int i = 0; i < actualMapNode->nbCubes; i++)
         {
             if (checkCollision(scene.player, actualMapNode->tabCubes[i]) == 1)
