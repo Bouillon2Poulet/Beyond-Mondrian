@@ -117,12 +117,25 @@ int main(int argc, char** argv)
     //Rom1
     Cube tabCube[30];
     fillRandomTabCube(tabCube);
-    MapNode root = createMapNode(3200,3200);
-    buildMapTree (&root);
+    MapNode root = createMapNode(-1600,1600,1600,-1600);
     for (int i=0;i<30;i++)
     {
+        printf("-----\nCube n°%d, x : %f, y : %f\n",i+1,tabCube[i].x,tabCube[i].y);
+        //PB
+        int a;
+        /*fflush( stdout );
+        scanf("%d\n",&a);
+        fgetc( stdin );
+        printf("i:%d\n",i);*/
         addCubeToMapTree(&root,tabCube[i]);
     }
+    printf("-----\nNodeTree filled !!!\n-----");
+    printf("NodeTree root nbCube :%d\n",root.nbCubes);
+    printf("NodeTree root.TLChildren.nbCube :%d\n",root.TLMapNode->nbCubes);
+    printf("NodeTree root.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->nbCubes);
+    //printf("NodeTree root.TLChildren.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->TLMapNode->nbCubes);
+    //printf("NodeTree root.TLChildren.TLChildren.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->TLMapNode->TLMapNode->nbCubes);
+    //printf("NodeTree root.TLChildren.TLChildren.TLChildren.TLChildren.TLChildren.nbCube :%d\n",root.TLMapNode->TLMapNode->TLMapNode->TLMapNode->TLMapNode->nbCubes);
     scene.map=root;
 
     while(loop)
@@ -136,21 +149,21 @@ int main(int argc, char** argv)
         glLoadIdentity();
 
         addGravity(&scene.player);
-        MapNode actualMapNode = findActualMapNode(scene.player,scene.map);
-        for (int i = 0; i < actualMapNode.nbCubes; i++)
+        MapNode* actualMapNode = findActualMapNode(scene.player,&scene.map);
+        for (int i = 0; i < actualMapNode->nbCubes; i++)
         {
-            if (checkCollision(scene.player, actualMapNode.tabCubes[i]) == 1)
+            if (checkCollision(scene.player, actualMapNode->tabCubes[i]) == 1)
             {
-                if (actualMapNode.tabCubes[i].y)
+                if (actualMapNode->tabCubes[i].y)
                 {
-                    scene.player.cube.y = actualMapNode.tabCubes[i].y + actualMapNode.tabCubes[i].height/2 + scene.player.cube.height/2;
+                    scene.player.cube.y = actualMapNode->tabCubes[i].y + actualMapNode->tabCubes[i].height/2 + scene.player.cube.height/2;
                     scene.player.isGrounded = 1;
                     scene.player.gravity = 0;
                     break;
                 }
-                else if (scene.player.cube.y < actualMapNode.tabCubes[i].y)
+                else if (scene.player.cube.y < actualMapNode->tabCubes[i].y)
                 {
-                    scene.player.cube.y = actualMapNode.tabCubes[i].y - actualMapNode.tabCubes[i].height/2 - scene.player.cube.height/2;
+                    scene.player.cube.y = actualMapNode->tabCubes[i].y - actualMapNode->tabCubes[i].height/2 - scene.player.cube.height/2;
                     scene.player.gravity = 0;
                 }
             }
@@ -213,11 +226,11 @@ int main(int argc, char** argv)
         if(keystates[SDL_SCANCODE_LEFT]) 
         {
             scene.player.cube.x -= scene.player.movementSpeed;
-            for (int i = 0; i < actualMapNode.nbCubes; i++)
+            for (int i = 0; i < actualMapNode->nbCubes; i++)
             {
-                if (checkCollision(scene.player, actualMapNode.tabCubes[i]) == 1)
+                if (checkCollision(scene.player, actualMapNode->tabCubes[i]) == 1)
                 {
-                    scene.player.cube.x = actualMapNode.tabCubes[i].x + actualMapNode.tabCubes[i].width/2 + scene.player.cube.width/2;
+                    scene.player.cube.x = actualMapNode->tabCubes[i].x + actualMapNode->tabCubes[i].width/2 + scene.player.cube.width/2;
                 }
             }
         }
@@ -225,11 +238,11 @@ int main(int argc, char** argv)
         if(keystates[SDL_SCANCODE_RIGHT]) 
         {
             scene.player.cube.x += scene.player.movementSpeed;
-            for (int i = 0; i < actualMapNode.nbCubes; i++)
+            for (int i = 0; i < actualMapNode->nbCubes; i++)
             {
-                if (checkCollision(scene.player, actualMapNode.tabCubes[i]) == 1)
+                if (checkCollision(scene.player, actualMapNode->tabCubes[i]) == 1)
                 {
-                    scene.player.cube.x = actualMapNode.tabCubes[i].x - actualMapNode.tabCubes[i].width/2 - scene.player.cube.width/2;
+                    scene.player.cube.x = actualMapNode->tabCubes[i].x - actualMapNode->tabCubes[i].width/2 - scene.player.cube.width/2;
                 }
             }
         }
@@ -250,7 +263,6 @@ int main(int argc, char** argv)
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
-    free(tabCube);
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);

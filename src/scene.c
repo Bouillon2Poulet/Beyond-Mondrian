@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "scene.h"
 
 Scene createScene()
@@ -26,7 +27,8 @@ void addCubeToScene(Scene* scene, Cube cube)
 void drawScene(Scene scene)
 {
     drawPlayer(scene.player);
-    MapNode actualNode = findActualMapNode(scene.player, scene.map);
+    MapNode actualNode = *findActualMapNode(scene.player, &scene.map);
+    printf("actualNode[0].x : %f",actualNode.tabCubes[0].x);
     for (int i = 0; i < actualNode.nbCubes; i++)
     {
         drawCube(actualNode.tabCubes[i]);

@@ -9,17 +9,22 @@ typedef struct MapNode{
     struct MapNode* BLMapNode; //Bottom Left
     struct MapNode* TRMapNode; //Top Right
     struct MapNode* BRMapNode; //Bottom Right
+    int hasChildren;
 
     //Map properties
-    int width;
-    int height;
+    int leftSide;
+    int rightSide;
+    int topSide;
+    int botSide;
+
+    //Cubes
     int nbCubes;
-    Cube tabCubes[10]; //10 cubes max. per leaf, 0 for parents
+    Cube tabCubes[4]; //4 cubes max per leaf;
 } MapNode;
 
-MapNode createMapNode (int width, int height);
-void buildMapTree (MapNode* mapNode);
+MapNode createMapNode (int left, int right, int top, int bot);
+void splitIntoFourChildren (MapNode* mapNode);
 void addCubeToMapTree (MapNode* mapNode, Cube cube);
-MapNode findActualMapNode (Player player, MapNode mapNode); 
+MapNode* findActualMapNode (Player player, MapNode* mapNode);
 
 #endif  
