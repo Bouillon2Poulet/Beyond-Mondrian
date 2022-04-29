@@ -27,6 +27,8 @@ void addCubeToScene(Scene* scene, Cube cube)
         scene->cubes[scene->cubesCount] = cube;
         scene->cubesCount++;
     }
+    scene->quadTree.cubes[scene->quadTree.nbCubes] = cube;
+    scene->quadTree.nbCubes = scene->cubesCount;
 }
 
 void switchCurrentPlayer(Scene* scene)
@@ -39,6 +41,11 @@ void switchCurrentPlayer(Scene* scene)
     {
         scene->currentPlayerIndex = 0;
     }
+}
+
+void addQuadTreeToScene(Scene* scene, QuadTree quadTree)
+{
+    scene->quadTree = quadTree;
 }
 
 void drawScene(Scene scene)

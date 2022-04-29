@@ -15,3 +15,8 @@ Modified by : Antoine
 
     - Added multiple players
     - Added camera
+
+Date : 29/04/2022
+Modified by : Antoine
+
+    - Added acceleration

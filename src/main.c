@@ -104,17 +104,31 @@ int main(int argc, char** argv)
     int loop = 1;
 
     Scene scene = createScene();
+    QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
+    addQuadTreeToScene(&scene, quadTree);
     Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
     Player player2 = createPlayer(2, 2, 0.5, 2, 1, 0, 1, 0);
     addPlayerToScene(&scene, player);
     addPlayerToScene(&scene, player2);
     Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
-    Cube cube1 = createCube(4, -1, 1, 1, 1, 0, 0, 1);
+    Cube cube1 = createCube(4, -2, 1, 1, 1, 0, 0, 1);
     Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
     addCubeToScene(&scene, cube);
     addCubeToScene(&scene, cube1);
     addCubeToScene(&scene, cube2);
 
+    Cube cube3 = createCube(-300, 300, 10, 1, 1, 0, 0, 1);
+    Cube cube4 = createCube(300, 300, 1, 1, 1, 0, 0, 1);
+    Cube cube5 = createCube(300, -300, 1, 1, 1, 0, 0, 1);
+    Cube cube6 = createCube(-300, -300, 1, 1, 1, 0, 0, 1);
+    addCubeToScene(&scene, cube3);
+    addCubeToScene(&scene, cube4);
+    addCubeToScene(&scene, cube5);
+    addCubeToScene(&scene, cube6);
+
+    generateQuadTree(&scene.quadTree);
+    QuadTree* currentPlayerQuadTree;
+    
     Camera camera = createCamera(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y);
 
     while(loop)
@@ -127,23 +141,25 @@ int main(int argc, char** argv)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
+        currentPlayerQuadTree = findPlayerQuadTree(&scene.quadTree, scene.players[scene.currentPlayerIndex]);
 
         for (int j = 0; j < scene.playersCount; j++)
         {
             addGravity(&scene.players[j]);
-            for (int i = 0; i < scene.cubesCount; i++)
+            QuadTree* playerQuadTree = findPlayerQuadTree(&scene.quadTree, scene.players[j]);
+            for (int i = 0; i < playerQuadTree->nbCubes; i++)
             {
-                if (checkCollision(scene.players[j], scene.cubes[i]) == 1)
+                if (checkCollision(scene.players[j], playerQuadTree->cubes[i]) == 1)
                 {
-                    if (scene.players[j].cube.y > scene.cubes[i].y)
+                    if (scene.players[j].cube.y > playerQuadTree->cubes[i].y)
                     {
-                        scene.players[j].cube.y = scene.cubes[i].y + scene.cubes[i].height/2 + scene.players[j].cube.height/2;
+                        scene.players[j].cube.y = playerQuadTree->cubes[i].y + playerQuadTree->cubes[i].height/2 + scene.players[j].cube.height/2;
                         scene.players[j].isGrounded = 1;
                         scene.players[j].gravity = 0;
                     }
-                    else if (scene.players[j].cube.y < scene.cubes[i].y)
+                    else if (scene.players[j].cube.y < playerQuadTree->cubes[i].y)
                     {
-                        scene.players[j].cube.y = scene.cubes[i].y - scene.cubes[i].height/2 - scene.players[j].cube.height/2;
+                        scene.players[j].cube.y = playerQuadTree->cubes[i].y - playerQuadTree->cubes[i].height/2 - scene.players[j].cube.height/2;
                         scene.players[j].gravity = 0;
                     }
                     break;
@@ -151,6 +167,7 @@ int main(int argc, char** argv)
                 scene.players[j].isGrounded = 0;
             }
         }
+        
         drawScene(scene);
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
@@ -210,24 +227,27 @@ int main(int argc, char** argv)
 
         if(keystates[SDL_SCANCODE_LEFT]) 
         {
-            scene.players[scene.currentPlayerIndex].cube.x -= scene.players[scene.currentPlayerIndex].movementSpeed;
-            for (int i = 0; i < scene.cubesCount; i++)
+            movePlayer(&scene.players[scene.currentPlayerIndex], -1);
+            for (int i = 0; i < currentPlayerQuadTree->nbCubes; i++)
             {
-                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.cubes[i]) == 1)
+                if (checkCollision(scene.players[scene.currentPlayerIndex], currentPlayerQuadTree->cubes[i]) == 1)
                 {
-                    scene.players[scene.currentPlayerIndex].cube.x = scene.cubes[i].x + scene.cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                    scene.players[scene.currentPlayerIndex].cube.x = 
+                    currentPlayerQuadTree->cubes[i].x + currentPlayerQuadTree->cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
                 }
             }
+            printf("%i", currentPlayerQuadTree->nbCubes);
         }
         
         if(keystates[SDL_SCANCODE_RIGHT]) 
         {
-            scene.players[scene.currentPlayerIndex].cube.x += scene.players[scene.currentPlayerIndex].movementSpeed;
-            for (int i = 0; i < scene.cubesCount; i++)
+            movePlayer(&scene.players[scene.currentPlayerIndex], 1);
+            for (int i = 0; i < currentPlayerQuadTree->nbCubes; i++)
             {
-                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.cubes[i]) == 1)
+                if (checkCollision(scene.players[scene.currentPlayerIndex], currentPlayerQuadTree->cubes[i]) == 1)
                 {
-                    scene.players[scene.currentPlayerIndex].cube.x = scene.cubes[i].x - scene.cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                    scene.players[scene.currentPlayerIndex].cube.x = 
+                    currentPlayerQuadTree->cubes[i].x - currentPlayerQuadTree->cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
                 }
             }
         }

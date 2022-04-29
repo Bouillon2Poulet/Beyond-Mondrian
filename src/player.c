@@ -11,6 +11,18 @@ Player createPlayer(float x, float y, float width, float height, int filled, flo
     return player;
 }
 
+void movePlayer(Player* player, int direction)
+{
+    if (direction == -1)
+    {
+        player->cube.x -= player->movementSpeed;
+    }
+    else if (direction == 1)
+    {
+        player->cube.x += player->movementSpeed;
+    }
+}
+
 void playerJump(Player* player)
 {
     player->gravity = -player->jumpPower;
