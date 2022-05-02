@@ -5,11 +5,12 @@
 #include "player.h"
 #include "quadTree.h"
 
-#define MAX_PLAYER_COUNT 2
+#define MAX_PLAYER_COUNT 3
 #define MAX_CUBE_COUNT 10
 
 typedef struct Scene {
     Player players[MAX_PLAYER_COUNT];
+    Cube playersEnd[MAX_PLAYER_COUNT];
     Cube cubes[MAX_CUBE_COUNT];
     int playersCount;
     int cubesCount;
@@ -19,7 +20,7 @@ typedef struct Scene {
 
 Scene createScene();
 
-void addPlayerToScene(Scene* scene, Player player);
+void addPlayerToScene(Scene* scene, Player player, float x, float y);
 
 void addCubeToScene(Scene* scene, Cube cube);
 
@@ -28,5 +29,9 @@ void switchCurrentPlayer(Scene* scene);
 void addQuadTreeToScene(Scene* scene, QuadTree quadTree);
 
 void drawScene(Scene scene);
+
+void drawHUD(Scene scene);
+
+void checkLevelState(Scene scene);
 
 #endif

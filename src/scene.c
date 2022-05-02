@@ -11,11 +11,12 @@ Scene createScene()
     return scene;
 }
 
-void addPlayerToScene(Scene* scene, Player player)
+void addPlayerToScene(Scene* scene, Player player, float x, float y)
 {
     if (scene->playersCount < MAX_PLAYER_COUNT)
     {
         scene->players[scene->playersCount] = player;
+        scene->playersEnd[scene->playersCount] = createCube(x, y, player.cube.width, player.cube.height, 0, 1, 1, 1);
         scene->playersCount++;
     }
 }
@@ -61,11 +62,53 @@ void drawScene(Scene scene)
         {
             glBegin(GL_TRIANGLE_FAN);
             glColor3f(1, 1, 1);
-            glVertex2f(scene.players[i].cube.x - 0.2, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.5);
-            glVertex2f(scene.players[i].cube.x + 0.2, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.5);
+            glVertex2f(scene.players[i].cube.x - 0.25, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.5);
+            glVertex2f(scene.players[i].cube.x + 0.25, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.5);
             glVertex2f(scene.players[i].cube.x, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.25);
             glEnd();
         }
         drawPlayer(scene.players[i]);
+        drawCube(scene.playersEnd[i]);
     }
+}
+
+void drawHUD(Scene scene)
+{
+    glScalef(50, 50, 0);
+    glTranslatef(19, -10, 0);
+    for (int i = scene.playersCount; i > 0; i--)
+    {
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(scene.players[scene.playersCount - i].startColors[0], scene.players[scene.playersCount - i].startColors[1], scene.players[scene.playersCount - i].startColors[2]);
+        glVertex2f(-0.5 - (i-1), 0.5);
+        glVertex2f(0.5 - (i-1), 0.5);
+        glVertex2f(0.5 - (i-1), -0.5);
+        glVertex2f(-0.5 - (i-1), -0.5);
+        glEnd();
+
+        if (scene.playersCount - i == scene.currentPlayerIndex)
+        {
+            glBegin(GL_TRIANGLE_FAN);
+            glColor3f(1, 1, 1);
+            glVertex2f(-0.25 - (i-1), 1);
+            glVertex2f(0.25 - (i-1), 1);
+            glVertex2f(0 - (i-1), 0.75);
+            glEnd();
+        }
+    }
+    glLoadIdentity();
+}
+
+void checkLevelState(Scene scene)
+{
+    for (int i = 0; i < scene.playersCount; i++)
+    {
+        if (scene.players[i].cube.red != 1 ||
+        scene.players[i].cube.green != 1 ||
+        scene.players[i].cube.blue != 1)
+        {
+            return;
+        }
+    }
+    printf("Level finished");
 }

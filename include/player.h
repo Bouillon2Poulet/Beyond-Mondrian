@@ -9,6 +9,7 @@ typedef struct Player {
     float jumpPower;
     float gravity;
     int isGrounded;
+    float startColors[3];
 } Player;
 
 Player createPlayer(float x, float y, float height, float width, int filled, float red, float green, float blue);
@@ -20,6 +21,8 @@ void playerJump(Player* player);
 void addGravity(Player* player);
 
 int checkCollision(Player player, Cube cube);
+
+void checkEndCollision(Player* player, Cube cube);
 
 void drawPlayer(Player player);
 

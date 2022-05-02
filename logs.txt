@@ -2,6 +2,7 @@ Date : 25/04/2022
 Modified by : Antoine
 
     - Added Player movements
+    - Added interpolation
     - Added gravity
     
 Date : 26/04/2022
@@ -19,4 +20,11 @@ Modified by : Antoine
 Date : 29/04/2022
 Modified by : Antoine
 
-    - Added acceleration
+    - Added Rom1's QuadTree
+
+Date : 02/05/2022
+Modified by : Antoine
+
+    - Added players end
+    - Added HUD
+    - Added Rom1's menu

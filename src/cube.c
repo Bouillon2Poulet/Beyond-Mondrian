@@ -23,7 +23,7 @@ void drawCube(Cube cube)
     }
     else
     {
-        glBegin(GL_LINE_STRIP);
+        glBegin(GL_LINE_LOOP);
     }
 
     glColor3f(cube.red, cube.green, cube.blue);

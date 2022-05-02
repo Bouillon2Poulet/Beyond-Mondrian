@@ -6,14 +6,16 @@
 #include <math.h>
 #include "scene.h"
 #include "camera.h"
+#include "menu.h"
 
+int gamestate = 0; //0 : menu, 1 : tuto, 2 : niveau 1
 /* Dimensions initiales et titre de la fenetre */
-static const unsigned int WINDOW_WIDTH = 800;
-static const unsigned int WINDOW_HEIGHT = 600;
+static const unsigned int WINDOW_WIDTH = 1920;
+static const unsigned int WINDOW_HEIGHT = 1080;
 static const char WINDOW_TITLE[] = "Project";
 
 /* Espace fenetre virtuelle */
-static const float GL_VIEW_SIZE = 15.;
+static const float GL_VIEW_SIZE = 1080.;
 
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -100,16 +102,27 @@ int main(int argc, char** argv)
 
     onWindowResized(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    /* Boucle principale */
-    int loop = 1;
+    /* Création du jeu */
 
+    //Menu
+    StartMenu startMenu = createStartMenu();
+
+    //Scène
     Scene scene = createScene();
+
+    //QuadTree
     QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
     addQuadTreeToScene(&scene, quadTree);
+
+    //Joueurs
     Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
-    Player player2 = createPlayer(2, 2, 0.5, 2, 1, 0, 1, 0);
-    addPlayerToScene(&scene, player);
-    addPlayerToScene(&scene, player2);
+    Player player2 = createPlayer(-2, 0, 0.5, 2, 1, 0, 1, 0);
+    Player player3 = createPlayer(2, 0, 2, 0.5, 1, 0.5, 0, 0.5);
+    addPlayerToScene(&scene, player, -4, -3);
+    addPlayerToScene(&scene, player2, 4, -0.5);
+    addPlayerToScene(&scene, player3, 3, -4.25);
+
+    //Cubes
     Cube cube = createCube(0, -5, 10, 1, 1, 0, 0, 1);
     Cube cube1 = createCube(4, -2, 1, 1, 1, 0, 0, 1);
     Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
@@ -117,19 +130,15 @@ int main(int argc, char** argv)
     addCubeToScene(&scene, cube1);
     addCubeToScene(&scene, cube2);
 
-    Cube cube3 = createCube(-300, 300, 10, 1, 1, 0, 0, 1);
-    Cube cube4 = createCube(300, 300, 1, 1, 1, 0, 0, 1);
-    Cube cube5 = createCube(300, -300, 1, 1, 1, 0, 0, 1);
-    Cube cube6 = createCube(-300, -300, 1, 1, 1, 0, 0, 1);
-    addCubeToScene(&scene, cube3);
-    addCubeToScene(&scene, cube4);
-    addCubeToScene(&scene, cube5);
-    addCubeToScene(&scene, cube6);
-
+    //Génération du QuadTree
     generateQuadTree(&scene.quadTree);
-    QuadTree* currentPlayerQuadTree;
+    QuadTree* currentPlayerQuadTree = NULL;
     
+    //Caméra
     Camera camera = createCamera(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y);
+    
+    /* Boucle principale */
+    int loop = 1;
 
     while(loop)
     {
@@ -140,38 +149,91 @@ int main(int argc, char** argv)
         glClear(GL_COLOR_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
-        currentPlayerQuadTree = findPlayerQuadTree(&scene.quadTree, scene.players[scene.currentPlayerIndex]);
-
-        for (int j = 0; j < scene.playersCount; j++)
+        switch(gamestate)
         {
-            addGravity(&scene.players[j]);
-            QuadTree* playerQuadTree = findPlayerQuadTree(&scene.quadTree, scene.players[j]);
-            for (int i = 0; i < playerQuadTree->nbCubes; i++)
-            {
-                if (checkCollision(scene.players[j], playerQuadTree->cubes[i]) == 1)
+            case 0:
+                updateMenu(&startMenu, startTime); 
+                drawMenu(startMenu);
+                break;
+            
+            case 1:
+                drawHUD(scene);
+                moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
+
+                currentPlayerQuadTree = findPlayerQuadTree(&scene.quadTree, scene.players[scene.currentPlayerIndex]);
+                
+                for (int j = 0; j < scene.playersCount; j++)
                 {
-                    if (scene.players[j].cube.y > playerQuadTree->cubes[i].y)
+                    addGravity(&scene.players[j]);
+                    checkEndCollision(&scene.players[j], scene.playersEnd[j]);
+
+                    QuadTree* playerQuadTree = findPlayerQuadTree(&scene.quadTree, scene.players[j]);
+                    for (int i = 0; i < playerQuadTree->nbCubes; i++)
                     {
-                        scene.players[j].cube.y = playerQuadTree->cubes[i].y + playerQuadTree->cubes[i].height/2 + scene.players[j].cube.height/2;
-                        scene.players[j].isGrounded = 1;
-                        scene.players[j].gravity = 0;
+                        if (checkCollision(scene.players[j], playerQuadTree->cubes[i]) == 1)
+                        {
+                            if (scene.players[j].cube.y > playerQuadTree->cubes[i].y)
+                            {
+                                scene.players[j].cube.y = playerQuadTree->cubes[i].y + playerQuadTree->cubes[i].height/2 + scene.players[j].cube.height/2;
+                                scene.players[j].isGrounded = 1;
+                                scene.players[j].gravity = 0;
+                            }
+                            else if (scene.players[j].cube.y < playerQuadTree->cubes[i].y)
+                            {
+                                scene.players[j].cube.y = playerQuadTree->cubes[i].y - playerQuadTree->cubes[i].height/2 - scene.players[j].cube.height/2;
+                                scene.players[j].gravity = 0;
+                            }
+                            break;
+                        }
+                        scene.players[j].isGrounded = 0;
                     }
-                    else if (scene.players[j].cube.y < playerQuadTree->cubes[i].y)
-                    {
-                        scene.players[j].cube.y = playerQuadTree->cubes[i].y - playerQuadTree->cubes[i].height/2 - scene.players[j].cube.height/2;
-                        scene.players[j].gravity = 0;
-                    }
-                    break;
                 }
-                scene.players[j].isGrounded = 0;
-            }
+
+                drawScene(scene);
+                checkLevelState(scene);
         }
         
-        drawScene(scene);
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
+
+        /* Contrôles */
+
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+
+        if(keystates[SDL_SCANCODE_LEFT] && gamestate != 0) 
+        {
+            movePlayer(&scene.players[scene.currentPlayerIndex], -1);
+            for (int i = 0; i < currentPlayerQuadTree->nbCubes; i++)
+            {
+                if (checkCollision(scene.players[scene.currentPlayerIndex], currentPlayerQuadTree->cubes[i]) == 1)
+                {
+                    scene.players[scene.currentPlayerIndex].cube.x = 
+                    currentPlayerQuadTree->cubes[i].x + currentPlayerQuadTree->cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                }
+            }
+        }
+        
+        if(keystates[SDL_SCANCODE_RIGHT] && gamestate != 0) 
+        {
+            movePlayer(&scene.players[scene.currentPlayerIndex], 1);
+            for (int i = 0; i < currentPlayerQuadTree->nbCubes; i++)
+            {
+                if (checkCollision(scene.players[scene.currentPlayerIndex], currentPlayerQuadTree->cubes[i]) == 1)
+                {
+                    scene.players[scene.currentPlayerIndex].cube.x = 
+                    currentPlayerQuadTree->cubes[i].x - currentPlayerQuadTree->cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                }
+            }
+        }
+
+        if(keystates[SDL_SCANCODE_SPACE] && gamestate != 0) 
+        {
+            if (scene.players[scene.currentPlayerIndex].isGrounded == 1)
+            {
+                playerJump(&scene.players[scene.currentPlayerIndex]);
+            }
+        }
 
         /* Boucle traitant les evenements */
         SDL_Event e;
@@ -214,49 +276,16 @@ int main(int argc, char** argv)
                 /* Touche clavier */
                 case SDL_KEYDOWN:
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
-                    if (e.key.keysym.sym == SDLK_a)
+                    if (e.key.keysym.sym == SDLK_a && gamestate != 0)
                     {
                         switchCurrentPlayer(&scene);
                     }
+                    if (gamestate == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
+                    {
+                        gamestate = 1;
+                    }
                 default:
                     break;
-            }
-        }
-
-        const Uint8* keystates = SDL_GetKeyboardState(NULL);
-
-        if(keystates[SDL_SCANCODE_LEFT]) 
-        {
-            movePlayer(&scene.players[scene.currentPlayerIndex], -1);
-            for (int i = 0; i < currentPlayerQuadTree->nbCubes; i++)
-            {
-                if (checkCollision(scene.players[scene.currentPlayerIndex], currentPlayerQuadTree->cubes[i]) == 1)
-                {
-                    scene.players[scene.currentPlayerIndex].cube.x = 
-                    currentPlayerQuadTree->cubes[i].x + currentPlayerQuadTree->cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
-                }
-            }
-            printf("%i", currentPlayerQuadTree->nbCubes);
-        }
-        
-        if(keystates[SDL_SCANCODE_RIGHT]) 
-        {
-            movePlayer(&scene.players[scene.currentPlayerIndex], 1);
-            for (int i = 0; i < currentPlayerQuadTree->nbCubes; i++)
-            {
-                if (checkCollision(scene.players[scene.currentPlayerIndex], currentPlayerQuadTree->cubes[i]) == 1)
-                {
-                    scene.players[scene.currentPlayerIndex].cube.x = 
-                    currentPlayerQuadTree->cubes[i].x - currentPlayerQuadTree->cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
-                }
-            }
-        }
-
-        if(keystates[SDL_SCANCODE_SPACE]) 
-        {
-            if (scene.players[scene.currentPlayerIndex].isGrounded == 1)
-            {
-                playerJump(&scene.players[scene.currentPlayerIndex]);
             }
         }
 
