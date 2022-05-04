@@ -5,8 +5,9 @@
 #include <stdio.h>
 #include <math.h>
 #include "scene.h"
-#include "camera.h"
 #include "menu.h"
+#include "camera.h"
+#include "levels.h"
 
 int gamestate = 0; //0 : menu, 1 : tuto, 2 : niveau 1
 
@@ -114,34 +115,11 @@ int main(int argc, char** argv)
     //QuadTree
     QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
     addQuadTreeToScene(&scene, quadTree);
-
-    //Joueurs
-    Player player = createPlayer(0, 0, 1, 1, 1, 1, 0, 0);
-    Player player2 = createPlayer(-2, 0, 0.5, 2, 1, 0, 1, 0);
-    Player player3 = createPlayer(2, 0, 2, 0.5, 1, 0.5, 0, 0.5);
-    addPlayerToScene(&scene, player, -4, -3);
-    addPlayerToScene(&scene, player2, 4, -0.5);
-    addPlayerToScene(&scene, player3, 3, -4.25);
-
-    //Cubes
-    Cube cube = createCube(3, -5, 10, 1, 1, 0, 0, 1);
-    Cube cube1 = createCube(4, -2, 1, 1, 1, 0, 0, 1);
-    Cube cube2 = createCube(-4, -4, 1, 1, 1, 0, 0, 1);
-    Cube cube3 = createCube(5, -0.5, 1, 1, 1, 0, 0, 1);
-    Cube cube4 = createCube(-5, 0, 1, 1, 1, 0, 0, 1);
-    addCubeToScene(&scene, cube);
-    addCubeToScene(&scene, cube1);
-    addCubeToScene(&scene, cube2);
-    addCubeToScene(&scene, cube3);
-    addCubeToScene(&scene, cube4);
-    
-    //Génération du QuadTree
-    generateQuadTree(&scene.quadTree);
     std::vector<QuadTree*> playerQuadTree;
-    
+
     //Caméra
     Camera camera = createCamera(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y);
-    
+
     /* Boucle principale */
     int loop = 1;
 
@@ -162,6 +140,7 @@ int main(int argc, char** argv)
                 break;
             
             case 1:
+            case 2:               
                 drawHUD(scene);
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
                 
@@ -202,9 +181,13 @@ int main(int argc, char** argv)
                 }
 
                 drawScene(scene);
-                checkLevelState(scene);
         }
         
+        if (gamestate == 1 && checkLevelState(scene) == 1) //F6 input was automatic, this aims to avoid skipping menu
+        {
+            createLevel2(&scene);
+            gamestate = 2;
+        }
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
@@ -304,6 +287,7 @@ int main(int argc, char** argv)
                     }
                     if (gamestate == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
                     {
+                        createLevel1(&scene);
                         gamestate = 1;
                     }
                 default:

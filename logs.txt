@@ -9,7 +9,7 @@ Date : 26/04/2022
 Modified by : Antoine
 
     - Removed interpolation
-    - Added collision
+    - Added collision with obstacles
     
 Date : 27/04/2022
 Modified by : Antoine
@@ -20,7 +20,7 @@ Modified by : Antoine
 Date : 29/04/2022
 Modified by : Antoine
 
-    - Added Rom1's QuadTree
+    - Added Rom1's QuadTree (still incomplete)
 
 Date : 02/05/2022
 Modified by : Antoine
@@ -28,3 +28,14 @@ Modified by : Antoine
     - Added players end
     - Added HUD
     - Added Rom1's menu
+    
+Date : 03/05/2022
+Modified by : Antoine
+
+    - Modified QuadTree (still incomplete)
+    
+Date : 04/05/2022
+Modified by : Antoine
+
+    - QuadTree finished
+    - Added levels system

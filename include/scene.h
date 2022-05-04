@@ -5,8 +5,8 @@
 #include "player.h"
 #include "quadTree.h"
 
-#define MAX_PLAYER_COUNT 3
-#define MAX_CUBE_COUNT 10
+#define MAX_PLAYER_COUNT 10
+#define MAX_CUBE_COUNT 100
 
 typedef struct Scene {
     Player players[MAX_PLAYER_COUNT];
@@ -32,6 +32,6 @@ void drawScene(Scene scene);
 
 void drawHUD(Scene scene);
 
-void checkLevelState(Scene scene);
+int checkLevelState(Scene scene);
 
 #endif

@@ -34,7 +34,7 @@ void addCubeToScene(Scene* scene, Cube cube)
 
 void switchCurrentPlayer(Scene* scene)
 {
-    if (scene->currentPlayerIndex + 1 < MAX_PLAYER_COUNT)
+    if (scene->currentPlayerIndex + 1 < scene->playersCount)
     {
         scene->currentPlayerIndex++;
     }
@@ -99,7 +99,7 @@ void drawHUD(Scene scene)
     glLoadIdentity();
 }
 
-void checkLevelState(Scene scene)
+int checkLevelState(Scene scene)
 {
     for (int i = 0; i < scene.playersCount; i++)
     {
@@ -107,8 +107,8 @@ void checkLevelState(Scene scene)
         scene.players[i].cube.green != 1 ||
         scene.players[i].cube.blue != 1)
         {
-            return;
+            return 0;
         }
     }
-    printf("Level finished");
+    return 1;
 }
