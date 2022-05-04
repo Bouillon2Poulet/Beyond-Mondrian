@@ -11,7 +11,7 @@ GLuint loadTextureStartMenu (int indexTexture, StartMenu menu)
 {
     ///SURFACE
     SDL_Surface* surface;
-    char* names[2]={"logo.png","textStartMenu.png"};
+    const char* names[2]={"logo.png","textStartMenu.png"};
     
     ///TEXTURE
     GLuint texture;

@@ -4,11 +4,11 @@
 QuadTree createQuadTree(int x, int y, int width, int height)
 {
     QuadTree quadTree;
-    quadTree.bbox.x = x;
-    quadTree.bbox.y = y;
-    quadTree.bbox.w = width;
-    quadTree.bbox.h = height;
-    quadTree.cubes = malloc(sizeof(Cube) * MAX_CUBE_COUNT);
+    quadTree.x = x;
+    quadTree.y = y;
+    quadTree.width = width;
+    quadTree.height = height;
+    quadTree.cubes = new Cube[MAX_CUBE_COUNT];
     quadTree.nbCubes = 0;
     quadTree.isLeaf = 1;
     return quadTree;
@@ -19,46 +19,43 @@ void splitQuadTree(QuadTree* quadTree)
     quadTree->isLeaf = 0;
 
     //TOP LEFT
-    QuadTree* quadTreeTL = malloc(sizeof(QuadTree));
-    *quadTreeTL = createQuadTree(quadTree->bbox.x, quadTree->bbox.y, quadTree->bbox.w/2, quadTree->bbox.h/2);
+    QuadTree* quadTreeTL = new QuadTree;
+    *quadTreeTL = createQuadTree(quadTree->x, quadTree->y, quadTree->width/2, quadTree->height/2);
     quadTree->nodes[0] = quadTreeTL;
 
     //TOP RIGHT
-    QuadTree* quadTreeTR = malloc(sizeof(QuadTree));
-    *quadTreeTR = createQuadTree(quadTree->bbox.x + quadTree->bbox.w/2, quadTree->bbox.y, quadTree->bbox.w/2, quadTree->bbox.h/2);
+    QuadTree* quadTreeTR = new QuadTree;
+    *quadTreeTR = createQuadTree(quadTree->x + quadTree->width/2, quadTree->y, quadTree->width/2, quadTree->height/2);
     quadTree->nodes[1] = quadTreeTR;
 
     //BOTTOM LEFT
-    QuadTree* quadTreeBL = malloc(sizeof(QuadTree));
-    *quadTreeBL = createQuadTree(quadTree->bbox.x, quadTree->bbox.y + quadTree->bbox.h/2, quadTree->bbox.w/2, quadTree->bbox.h/2);
+    QuadTree* quadTreeBL = new QuadTree;
+    *quadTreeBL = createQuadTree(quadTree->x, quadTree->y + quadTree->height/2, quadTree->width/2, quadTree->height/2);
     quadTree->nodes[2] = quadTreeBL;
 
     //BOTTOM RIGHT
-    QuadTree* quadTreeBR = malloc(sizeof(QuadTree));
-    *quadTreeBR = createQuadTree(quadTree->bbox.x + quadTree->bbox.w/2, quadTree->bbox.y + quadTree->bbox.h/2, quadTree->bbox.w/2, quadTree->bbox.h/2);
+    QuadTree* quadTreeBR = new QuadTree;
+    *quadTreeBR = createQuadTree(quadTree->x + quadTree->width/2, quadTree->y + quadTree->height/2, quadTree->width/2, quadTree->height/2);
     quadTree->nodes[3] = quadTreeBR;
 
     for (int i = 0; i < quadTree->nbCubes; i++)
     {
-        float x = quadTree->cubes[i].x + quadTree->bbox.w/2;
-        float y = quadTree->bbox.h/2 - quadTree->cubes[i].y;
-
-        if (x <= quadTree->bbox.x + quadTree->bbox.w/2 && y <= quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(quadTree->cubes[i], *quadTreeTL) == 1)
         {
             quadTreeTL->cubes[quadTreeTL->nbCubes] = quadTree->cubes[i];
             quadTreeTL->nbCubes += 1;
         }
-        if (x >= quadTree->bbox.x + quadTree->bbox.w/2 && y <= quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(quadTree->cubes[i], *quadTreeTR) == 1)
         {
             quadTreeTR->cubes[quadTreeTR->nbCubes] = quadTree->cubes[i];
             quadTreeTR->nbCubes += 1;
         }
-        if (x <= quadTree->bbox.x + quadTree->bbox.w/2 && y >= quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(quadTree->cubes[i], *quadTreeBL) == 1)
         {
             quadTreeBL->cubes[quadTreeBL->nbCubes] = quadTree->cubes[i];
             quadTreeBL->nbCubes += 1;
         }
-        if (x >= quadTree->bbox.x + quadTree->bbox.w/2 && y >= quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(quadTree->cubes[i], *quadTreeBR) == 1)
         {
             quadTreeBR->cubes[quadTreeBR->nbCubes] = quadTree->cubes[i];
             quadTreeBR->nbCubes += 1;
@@ -66,6 +63,24 @@ void splitQuadTree(QuadTree* quadTree)
     }
 
     free(quadTree->cubes);
+}
+
+int checkQuadTreeCollision(Cube cube, QuadTree quadTree)
+{
+    float x = cube.x + 1920/2; //Conversion coordonnées
+    float y = 1080/2 - cube.y;
+    
+    if (x - cube.width/2 <= quadTree.x + quadTree.width &&
+    x + cube.width/2 >= quadTree.x &&
+    y - cube.height/2 <= quadTree.y + quadTree.height &&
+    y + cube.height/2 >= quadTree.y)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void generateQuadTree(QuadTree* quadTree)
@@ -80,32 +95,30 @@ void generateQuadTree(QuadTree* quadTree)
     }
 }
 
-QuadTree* findPlayerQuadTree(QuadTree* quadTree, Player player)
+void findPlayerQuadTree(QuadTree* quadTree, Player player, std::vector<QuadTree*> &playerQuadTree)
 {
     if (quadTree->isLeaf == 0)
     {
-        float x = player.cube.x + quadTree->bbox.w/2;
-        float y = quadTree->bbox.h/2 - player.cube.y;
-
-        if (x < quadTree->bbox.x + quadTree->bbox.w/2 && y < quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[0]))
         {
-            return findPlayerQuadTree(quadTree->nodes[0], player);
+            findPlayerQuadTree(quadTree->nodes[0], player, playerQuadTree);
         }
-        else if (x > quadTree->bbox.x + quadTree->bbox.w/2 && y < quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[1]))
         {
-            return findPlayerQuadTree(quadTree->nodes[1], player);
+            findPlayerQuadTree(quadTree->nodes[1], player, playerQuadTree);
         }
-        else if (x < quadTree->bbox.x + quadTree->bbox.w/2 && y > quadTree->bbox.y + quadTree->bbox.h/2)
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[2]))
         {
-            return findPlayerQuadTree(quadTree->nodes[2], player);
+            findPlayerQuadTree(quadTree->nodes[2], player, playerQuadTree);
         }
-        else
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[3]))
         {
-            return findPlayerQuadTree(quadTree->nodes[3], player);
+            findPlayerQuadTree(quadTree->nodes[3], player, playerQuadTree);
         }
     }
     else
     {
-        return quadTree;
+        playerQuadTree.push_back(quadTree);
     }
 }
+
