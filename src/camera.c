@@ -14,6 +14,6 @@ void moveCamera(Camera* camera, Player player)
 {
     camera->x += (-player.cube.x - camera->x) * camera->speed;
     camera->y += (-player.cube.y - camera->y) * camera->speed;
-    glScalef(30, 30, 0);
+    glScalef(50, 50, 0);
     glTranslatef(camera->x, camera->y, 0);
 }
