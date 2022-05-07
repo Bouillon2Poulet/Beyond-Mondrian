@@ -287,8 +287,11 @@ int main(int argc, char** argv)
                     }
                     if (gamestate == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
                     {
-                        createLevel1(&scene);
-                        gamestate = 1;
+                        if (startTime>=9000)
+                        {
+                            createLevel1(&scene);
+                            gamestate = 1;
+                        }
                     }
                 default:
                     break;

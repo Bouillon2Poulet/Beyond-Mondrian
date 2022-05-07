@@ -11,7 +11,7 @@ GLuint loadTextureStartMenu (int indexTexture, StartMenu menu)
 {
     ///SURFACE
     SDL_Surface* surface;
-    const char* names[2]={"logo.png","textStartMenu.png"};
+    const char* names[6]={"logo.png","controls.png","rom1.png","antoine.png","mathurin.png","start.png"};
     
     ///TEXTURE
     GLuint texture;
@@ -79,9 +79,9 @@ GLuint drawCase(int w, int h)
 StartMenu createStartMenu()
 {
     StartMenu menu;
-    menu.nbTextures = 2; //To change for more textures
+    menu.nbTextures = 6; //To change for more textures
     menu.deltaTime=0;
-    glGenTextures(10, menu.textureTab);
+    glGenTextures(6, menu.textureTab);
     for (int i=0;i<menu.nbTextures;i++)
     {
         menu.textureTab[i] = loadTextureStartMenu(i,menu);
@@ -96,33 +96,130 @@ void updateMenu(StartMenu* menu, Uint32 deltaTime)
 
 void drawMenu(StartMenu menu)
 {
+    drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
+
+    //menu.deltaTime=90000;
+    glPushAttrib(GL_CURRENT_BIT);
+    if(menu.deltaTime>=3700)
+    {
+        drawCube(createCube(-600,85,1000,325,1,0,0,1));
+        if(menu.deltaTime>=4500)
+        {
+            drawCube(createCube(35,85,260,320,1,1,0,0));
+            if (menu.deltaTime>=4900)
+            {
+                drawCube(createCube(35,-325,260,500,1,1,1,0));
+                if (menu.deltaTime>=5500)
+                {
+                    drawCube(createCube(853,400,360,300,1,0,0,1)); 
+                    if (menu.deltaTime>=6600)
+                    {
+                        drawCube(createCube(853,85,360,320,1,1,0,0));
+                    }
+                }
+            }
+        }
+    }
+        drawLine(10,0,1,-2000,250,menu.deltaTime,5000); //first horizontal
+        drawLine(10,0,1,-3500,-80,menu.deltaTime,8000); //second horizontal
+        drawLine(10,1,-1,-98,3000,menu.deltaTime,5000); //first vertical
+        drawLine(10,1,1,170,-4000,menu.deltaTime,4250); //second vertical
+        drawLine(10,1,-1, 670,4750,menu.deltaTime,4825); //third vertical
+    glPopAttrib();
+  
+    if (menu.deltaTime>=1700)
+    {
+        displayImage(-520,370,menu.textureTab[0]);//logo.png
+        if (menu.deltaTime>=4800)
+        {
+            displayImage(190,315,menu.textureTab[3]);//antoine.png
+            if (menu.deltaTime>=5600)
+            {
+                displayImage(40,180,menu.textureTab[2]);//rom1.png
+                if (menu.deltaTime>=5900)
+                {
+                    displayImage(440,180,menu.textureTab[4]);//mathurin.png
+                    if (menu.deltaTime>=7500)
+                    {
+                        displayImage(610,-300,menu.textureTab[1]);//controls.png
+                        if (menu.deltaTime>=9000)
+                        {
+                            displayImage(-580,-310,menu.textureTab[5]);//start.png
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void displayImage(int x, int y, GLuint texture) //Display an image from center of screen
+{
     int caseID;
     int w,h;
-    drawCube(createCube(0,0,1920,1080,1,1,1,1)); //Background
-
     glPushMatrix();
-        glTranslatef(-250,0,0);
-        glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, menu.textureTab[0]);
-                glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w); //Get texture width -> w
-                glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
-                caseID = drawCase(w,h);
-                glCallList(caseID);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        glDisable(GL_TEXTURE_2D);
+    glTranslatef(x,y,0);
+    glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+            glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w); //Get texture width -> w
+            glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
+            caseID = drawCase(w,h);
+            glCallList(caseID);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
     glPopMatrix();
+}
 
+void drawLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime)
+{
+    if(time>=endTime)
+    {
+        time=endTime;
+    }
     glPushMatrix();
-        glTranslatef(300,0,0);
-        glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, menu.textureTab[1]);
-                glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w); //Get texture width -> w
-                glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
-                caseID = drawCase(w,h);
-                glCallList(caseID);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        glDisable(GL_TEXTURE_2D);
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(0,0,0);
+        int xA;
+        int yA;
+        int xB;
+        int yB;
+        int xC;
+        int yC;
+        int xD;
+        int yD;
+
+        //sens = 1 -> right//up
+        //sens = -1 -> left//down
+
+        switch (mode)
+        {
+        case 0: //Horizontal
+            xA=xStart;
+            yA=yStart+width/2;
+            xB=xStart;
+            yB=yStart-width/2;
+            xC=xB+sens*time;
+            yC=yB;
+            xD=xA+sens*time;
+            yD=yA;
+            break;
+        
+        default: //Vertical
+            xA=xStart-width/2;
+            yA=yStart;
+            xB=xStart+width/2;
+            yB=yStart;
+            xC=xB;
+            yC=yB+sens*time;
+            xD=xA;
+            yD=yA+sens*time;
+            break;
+        }
+        glVertex2f(xA,yA);
+        glVertex2f(xB,yB);
+        glVertex2f(xC,yC);
+        glVertex2f(xD,yD);
+
+        glEnd();
     glPopMatrix();
-    
-    return;
 }

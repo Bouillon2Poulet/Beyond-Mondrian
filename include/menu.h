@@ -21,5 +21,7 @@ GLuint drawCase(int w, int h);
 StartMenu createStartMenu();
 void updateMenu(StartMenu* menu, Uint32 deltaTime);
 void drawMenu(StartMenu menu);
+void displayImage(int x, int y, GLuint texture);
+void drawLine(int width, int mode, int sens, int xStart,int yStart, int time, int endCount);
 
 #endif
