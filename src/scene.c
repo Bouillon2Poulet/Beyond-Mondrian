@@ -58,22 +58,21 @@ void drawScene(Scene scene)
     
     for (int i = 0; i < scene.playersCount; i++)
     {
-        if (i == scene.currentPlayerIndex)
-        {
-            glBegin(GL_TRIANGLE_FAN);
-            glColor3f(1, 1, 1);
-            glVertex2f(scene.players[i].cube.x - 0.25, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.5);
-            glVertex2f(scene.players[i].cube.x + 0.25, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.5);
-            glVertex2f(scene.players[i].cube.x, scene.players[i].cube.y + scene.players[i].cube.height/2 + 0.25);
-            glEnd();
-        }
         drawPlayer(scene.players[i]);
         drawCube(scene.playersEnd[i]);
     }
+
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(1, 1, 1);
+    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x - 0.25, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.5);
+    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x + 0.25, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.5);
+    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.25);
+    glEnd();
 }
 
 void drawHUD(Scene scene)
 {
+    glLoadIdentity();
     glScalef(50, 50, 0);
     glTranslatef(19, -10, 0);
     for (int i = scene.playersCount; i > 0; i--)
@@ -96,7 +95,6 @@ void drawHUD(Scene scene)
             glEnd();
         }
     }
-    glLoadIdentity();
 }
 
 int checkLevelState(Scene scene)
