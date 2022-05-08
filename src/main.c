@@ -234,7 +234,7 @@ int main(int argc, char** argv)
                 if (scene.currentPlayerIndex != i && checkCollision(scene.players[scene.currentPlayerIndex], scene.players[i].cube) == 1)
                 {
                     scene.players[scene.currentPlayerIndex].cube.x = 
-                    scene.players[i].cube.x + scene.players[i].cube.width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                    scene.players[i].cube.x + scene.players[i].cube.width/2 + scene.players[scene.currentPlayerIndex].cube.width/2 + 0.01;;
                 }
             }
 
@@ -266,7 +266,7 @@ int main(int argc, char** argv)
                 if (scene.currentPlayerIndex != i && checkCollision(scene.players[scene.currentPlayerIndex], scene.players[i].cube) == 1)
                 {
                     scene.players[scene.currentPlayerIndex].cube.x = 
-                    scene.players[i].cube.x - scene.players[i].cube.width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                    scene.players[i].cube.x - scene.players[i].cube.width/2 - scene.players[scene.currentPlayerIndex].cube.width/2 - 0.01;
                 }
             }
 
