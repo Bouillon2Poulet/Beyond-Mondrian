@@ -12,54 +12,38 @@ void createLevel1(Scene* scene)
     addPlayerToScene(scene, player3, 21, 7.5);
 
     //Cubes
-
+    Cube tabCube[16];
     //Cadre dessus/dessous
-    Cube cube = createCube(12, -10, 30, 3, 1, 1, 1, 1);
-    Cube cube1 = createCube(12, 10, 30, 3, 1, 0, 0, 1);
+    tabCube[0] = createCube(12, -10, 30, 3, 1, 1, 1, 1);
+    tabCube[1] = createCube(12, 10, 30, 3, 1, 0, 0, 1);
 
     //Cadre Coté Gauche (jaune)
-    Cube cube2 = createCube(-1, -10, 5, 3, 1, 1, 1, 0);
-    Cube cube3 = createCube(-1, 10, 5, 3, 1, 1, 1, 0);
-    Cube cube4 = createCube(-3.4, 0, 0.2, 20, 1, 1, 1, 0);
+    tabCube[2] = createCube(-1, -10, 5, 3, 1, 1, 1, 0);
+    tabCube[3] = createCube(-1, 10, 5, 3, 1, 1, 1, 0);
+    tabCube[4] = createCube(-3.4, 0, 0.2, 20, 1, 1, 1, 0);
 
     //Cadre Coté Droit (rouge)
-    Cube cube5 = createCube(30, -7, 7, 9, 1, 1, 0, 0);
-    Cube cube6 = createCube(30, 6, 7, 11, 1, 1, 0, 0);
-    Cube cube7 = createCube(34, -2.6, 1.4, 0.2, 1, 1, 0, 0);
-    Cube cube8 = createCube(34.7, -1, 0.2, 3.4, 1, 1, 0, 0);
-    Cube cube9 = createCube(34, 0.6, 1.4, 0.2, 1, 1, 0, 0);
+    tabCube[5] = createCube(30, -7, 7, 9, 1, 1, 0, 0);
+    tabCube[6] = createCube(30, 6, 7, 11, 1, 1, 0, 0);
+    tabCube[7] = createCube(34, -2.6, 1.4, 0.2, 1, 1, 0, 0);
+    tabCube[8] = createCube(34.7, -1, 0.2, 3.4, 1, 1, 0, 0);
+    tabCube[9] = createCube(34, 0.6, 1.4, 0.2, 1, 1, 0, 0);
 
     //Elements du jeu
-    Cube cube10 = createCube(8, -7.5, 2, 2, 1, 1, 1, 1);
-    Cube cube11 = createCube(10.5, -5, 2, 2, 1, 1, 1, 1);
-    Cube cube12 = createCube(11.5, -7.5, 2, 3, 1, 1, 1, 1);
+    tabCube[10] = createCube(8, -7.5, 2, 2, 1, 1, 1, 1);
+    tabCube[11] = createCube(10.5, -5, 2, 2, 1, 1, 1, 1);
+    tabCube[12] = createCube(11.5, -7.5, 2, 3, 1, 1, 1, 1);
 
-    Cube cube13 = createCube(13, 2, 2, 0.2, 1, 1, 1, 1);
-    Cube cube14 = createCube(15, 3, 2, 0.2, 1, 1, 1, 1);
-    Cube cube15 = createCube(21, 7, 2, 0.2, 1, 1, 1, 1);
-
-
-
-    
+    tabCube[13] = createCube(13, 1, 2, 0.2, 1, 1, 1, 1);
+    tabCube[14] = createCube(15, 3, 2, 0.2, 1, 1, 1, 1);
+    tabCube[15] = createCube(21, 7, 2, 0.2, 1, 1, 1, 1);
 
 
-    addCubeToScene(scene, cube);
-    addCubeToScene(scene, cube1);
-    addCubeToScene(scene, cube2);
-    addCubeToScene(scene, cube3);
-    addCubeToScene(scene, cube4);
-    addCubeToScene(scene, cube5);
-    addCubeToScene(scene, cube6);
-    addCubeToScene(scene, cube7);
-    addCubeToScene(scene, cube8);
-    addCubeToScene(scene, cube9);
-    addCubeToScene(scene, cube10);
-    addCubeToScene(scene, cube11);
-    addCubeToScene(scene, cube12);
-    addCubeToScene(scene, cube13);
-    addCubeToScene(scene, cube14);
-    addCubeToScene(scene, cube15);
 
+    for (int i=0;i<16;i++)
+    {
+        addCubeToScene(scene,tabCube[i]);
+    }
 
     //Génération du QuadTree
     generateQuadTree(&scene->quadTree);
