@@ -9,12 +9,13 @@
 #include "camera.h"
 #include "levels.h"
 
-int gamestate = 0; //0 : menu, 1 : tuto, 2 : niveau 1
+int gameState = 5; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
+int windowState = 0; //0 : normal, 1 : fullscreen;
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1920;
 static const unsigned int WINDOW_HEIGHT = 1080;
-static const char WINDOW_TITLE[] = "Project";
+static const char WINDOW_TITLE[] = "Beyond Mondrian";
 
 /* Espace fenetre virtuelle */
 static const float GL_VIEW_SIZE = 1080.;
@@ -59,7 +60,7 @@ int main(int argc, char** argv)
     }
 
     /* Ouverture d'une fenetre et creation d'un contexte OpenGL */
-
+    SDL_ShowCursor(SDL_DISABLE);
     SDL_Window* window;
     {
         window = SDL_CreateWindow(
@@ -132,7 +133,7 @@ int main(int argc, char** argv)
         glClear(GL_COLOR_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        switch(gamestate)
+        switch(gameState)
         {
             case 0:
                 updateMenu(&startMenu, startTime); 
@@ -207,13 +208,15 @@ int main(int argc, char** argv)
                 }
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
                 drawScene(scene);
-                drawHUD(scene);
+                drawHUD(scene); break;
+            case 5 :
+            displayBackground(startTime); break;
         }
         
-        if (gamestate == 1 && checkLevelState(scene) == 1)
+        if (gameState == 1 && checkLevelState(scene) == 1)
         {
             createLevel2(&scene);
-            gamestate = 2;
+            gameState = 2;
         }
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
@@ -223,7 +226,7 @@ int main(int argc, char** argv)
 
         const Uint8* keystates = SDL_GetKeyboardState(NULL);
 
-        if(keystates[SDL_SCANCODE_LEFT] && gamestate != 0) 
+        if(keystates[SDL_SCANCODE_LEFT] && gameState != 0) 
         {
             movePlayer(&scene.players[scene.currentPlayerIndex], -1);
             
@@ -255,7 +258,7 @@ int main(int argc, char** argv)
             playerQuadTree.clear();
         }
         
-        if(keystates[SDL_SCANCODE_RIGHT] && gamestate != 0) 
+        if(keystates[SDL_SCANCODE_RIGHT] && gameState != 0) 
         {
             movePlayer(&scene.players[scene.currentPlayerIndex], 1);
 
@@ -287,7 +290,7 @@ int main(int argc, char** argv)
             playerQuadTree.clear();
         }
 
-        if(keystates[SDL_SCANCODE_SPACE] && gamestate != 0) 
+        if(keystates[SDL_SCANCODE_SPACE] && gameState != 0) 
         {
             if (scene.players[scene.currentPlayerIndex].isGrounded == 1)
             {
@@ -336,16 +339,30 @@ int main(int argc, char** argv)
                 /* Touche clavier */
                 case SDL_KEYDOWN:
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
-                    if (e.key.keysym.sym == SDLK_a && gamestate != 0)
+                    if (e.key.keysym.sym == SDLK_f)//Fullscreen
+                    {
+                        switch(windowState)
+                        {
+                            case 0:
+                                windowState=1;
+                                SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN);
+                                break;
+                            case 1:
+                                windowState=0;
+                                SDL_SetWindowFullscreen(window,0);
+                                break;
+                        }
+                    }
+                    if (e.key.keysym.sym == SDLK_a && gameState != 0)
                     {
                         switchCurrentPlayer(&scene);
                     }
-                    if (gamestate == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
+                    if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
                     {
                         if (startTime>=9000)
                         {
                             createLevel1(&scene);
-                            gamestate = 1;
+                            gameState = 1;
                         }
                     }
                 default:

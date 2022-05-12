@@ -98,6 +98,14 @@ void drawMenu(StartMenu menu)
 {
     drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
 
+    //Lines
+    backgroundLine lineTab[5];
+    lineTab[0]=createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
+    lineTab[1]=createBackgroundLine(10,0,1,-3500,-80,0,8000,0,0,0); //second horizontal
+    lineTab[2]=createBackgroundLine(10,1,-1,-98,3000,0,5000,0,0,0); //first vertical
+    lineTab[3]=createBackgroundLine(10,1,1,170,-4000,0,4250,0,0,0); //second vertical
+    lineTab[4]=createBackgroundLine(10,1,-1, 670,4750,0,4825,0,0,0); //third vertical
+
     //menu.deltaTime=90000;
     glPushAttrib(GL_CURRENT_BIT);
     if(menu.deltaTime>=3700)
@@ -120,11 +128,14 @@ void drawMenu(StartMenu menu)
             }
         }
     }
-        drawLine(10,0,1,-2000,250,menu.deltaTime,5000); //first horizontal
-        drawLine(10,0,1,-3500,-80,menu.deltaTime,8000); //second horizontal
-        drawLine(10,1,-1,-98,3000,menu.deltaTime,5000); //first vertical
-        drawLine(10,1,1,170,-4000,menu.deltaTime,4250); //second vertical
-        drawLine(10,1,-1, 670,4750,menu.deltaTime,4825); //third vertical
+
+        for (int i=0;i<5;i++)
+        {
+            updateBackgroundLine(&lineTab[i],menu.deltaTime);
+            drawLine(lineTab[i]);
+        }
+
+    
     glPopAttrib();
   
     if (menu.deltaTime>=1700)
@@ -170,15 +181,16 @@ void displayImage(int x, int y, GLuint texture) //Display an image from center o
     glPopMatrix();
 }
 
-void drawLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime)
+void drawLine(backgroundLine line)
 {
-    if(time>=endTime)
+    if(line.time>=line.endTime)
     {
-        time=endTime;
+        line.time=line.endTime;
     }
+
     glPushMatrix();
         glBegin(GL_TRIANGLE_FAN);
-        glColor3f(0,0,0);
+        glColor3f(line.r,line.g,line.b);
         int xA;
         int yA;
         int xB;
@@ -191,28 +203,28 @@ void drawLine(int width, int mode, int sens, int xStart,int yStart, int time, in
         //sens = 1 -> right//up
         //sens = -1 -> left//down
 
-        switch (mode)
+        switch (line.mode)
         {
         case 0: //Horizontal
-            xA=xStart;
-            yA=yStart+width/2;
-            xB=xStart;
-            yB=yStart-width/2;
-            xC=xB+sens*time;
+            xA=line.xStart;
+            yA=line.yStart+line.width/2;
+            xB=line.xStart;
+            yB=line.yStart-line.width/2;
+            xC=xB+line.sens*line.time;
             yC=yB;
-            xD=xA+sens*time;
+            xD=xA+line.sens*line.time;
             yD=yA;
             break;
         
         default: //Vertical
-            xA=xStart-width/2;
-            yA=yStart;
-            xB=xStart+width/2;
-            yB=yStart;
+            xA=line.xStart-line.width/2;
+            yA=line.yStart;
+            xB=line.xStart+line.width/2;
+            yB=line.yStart;
             xC=xB;
-            yC=yB+sens*time;
+            yC=yB+line.sens*line.time;
             xD=xA;
-            yD=yA+sens*time;
+            yD=yA+line.sens*line.time;
             break;
         }
         glVertex2f(xA,yA);
@@ -222,4 +234,25 @@ void drawLine(int width, int mode, int sens, int xStart,int yStart, int time, in
 
         glEnd();
     glPopMatrix();
+}
+
+backgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime, int r, int g, int b)
+{
+    backgroundLine newLine;
+    newLine.width=width;
+    newLine.mode=mode;
+    newLine.sens=sens,
+    newLine.xStart=xStart;
+    newLine.yStart=yStart;
+    newLine.time=time;
+    newLine.endTime=endTime;
+    newLine.r=r;
+    newLine.g=g;
+    newLine.b=b;
+    return newLine;
+}
+
+void updateBackgroundLine(backgroundLine* line, Uint32 deltatime)
+{
+    line->time=deltatime;
 }

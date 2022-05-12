@@ -1,4 +1,5 @@
 #include "levels.h"
+#include "menu.h"
 
 void createLevel1(Scene* scene)
 {
@@ -78,4 +79,18 @@ void createLevel2(Scene* scene)
     generateQuadTree(&newScene.quadTree);
 
     *scene = newScene;
+}
+
+void displayBackground(Uint32 currentTime)
+{
+    glPushMatrix();
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(1,1,1);
+        glVertex2f(-960,540);
+        glVertex2f(960,540);
+        glVertex2f(960,-540);
+        glVertex2f(-960,-540);
+        glEnd();
+    glPopMatrix();
+    return;
 }
