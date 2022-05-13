@@ -15,6 +15,19 @@ typedef struct StartMenu {
     int nbTextures;
 } StartMenu;
 
+typedef struct backgroundLine {
+    int width;
+    int mode;
+    int sens;
+    int xStart;
+    int yStart;
+    int time;
+    int endTime;
+    int r;
+    int g;
+    int b;
+} backgroundLine;
+
 GLuint loadTextureStartMenu (int indexTexture, StartMenu menu);
 SDL_Surface* IMG_Load(const char* filename);
 GLuint drawCase(int w, int h);
@@ -22,6 +35,8 @@ StartMenu createStartMenu();
 void updateMenu(StartMenu* menu, Uint32 deltaTime);
 void drawMenu(StartMenu menu);
 void displayImage(int x, int y, GLuint texture);
-void drawLine(int width, int mode, int sens, int xStart,int yStart, int time, int endCount);
+backgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime, int r, int g, int b);
+void updateBackgroundLine(backgroundLine* line, Uint32 deltatime);
+void drawLine(backgroundLine line);
 
 #endif
