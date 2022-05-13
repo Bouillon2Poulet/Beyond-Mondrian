@@ -1,7 +1,7 @@
 #include "quadTree.h"
 #include "scene.h"
 
-QuadTree createQuadTree(int x, int y, int width, int height)
+QuadTree createQuadTree(float x, float y, float width, float height)
 {
     QuadTree quadTree;
     quadTree.x = x;
@@ -70,10 +70,10 @@ int checkQuadTreeCollision(Cube cube, QuadTree quadTree)
     float x = cube.x + 1920/2; //Conversion coordonnées
     float y = 1080/2 - cube.y;
     
-    if (x - cube.width/2 <= quadTree.x + quadTree.width &&
-    x + cube.width/2 >= quadTree.x &&
-    y - cube.height/2 <= quadTree.y + quadTree.height &&
-    y + cube.height/2 >= quadTree.y)
+    if (x - cube.width/2 < quadTree.x + quadTree.width &&
+    x + cube.width/2 > quadTree.x &&
+    y - cube.height/2 < quadTree.y + quadTree.height &&
+    y + cube.height/2 > quadTree.y)
     {
         return 1;
     }
@@ -99,19 +99,19 @@ void findPlayerQuadTree(QuadTree* quadTree, Player player, std::vector<QuadTree*
 {
     if (quadTree->isLeaf == 0)
     {
-        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[0]))
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[0]) == 1)
         {
             findPlayerQuadTree(quadTree->nodes[0], player, playerQuadTree);
         }
-        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[1]))
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[1]) == 1)
         {
             findPlayerQuadTree(quadTree->nodes[1], player, playerQuadTree);
         }
-        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[2]))
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[2]) == 1)
         {
             findPlayerQuadTree(quadTree->nodes[2], player, playerQuadTree);
         }
-        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[3]))
+        if (checkQuadTreeCollision(player.cube, *quadTree->nodes[3]) == 1)
         {
             findPlayerQuadTree(quadTree->nodes[3], player, playerQuadTree);
         }

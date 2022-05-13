@@ -16,7 +16,7 @@ void addPlayerToScene(Scene* scene, Player player, float x, float y)
     if (scene->playersCount < MAX_PLAYER_COUNT)
     {
         scene->players[scene->playersCount] = player;
-        scene->playersEnd[scene->playersCount] = createCube(x, y, player.cube.width, player.cube.height, 0, 1, 1, 1);
+        scene->playersEnd[scene->playersCount] = createCube(x, y, player.cube.width, player.cube.height, 0, player.cube.red, player.cube.green, player.cube.blue);
         scene->playersCount++;
     }
 }
@@ -27,9 +27,9 @@ void addCubeToScene(Scene* scene, Cube cube)
     {
         scene->cubes[scene->cubesCount] = cube;
         scene->cubesCount++;
+        scene->quadTree.cubes[scene->quadTree.nbCubes] = cube;
+        scene->quadTree.nbCubes = scene->cubesCount;
     }
-    scene->quadTree.cubes[scene->quadTree.nbCubes] = cube;
-    scene->quadTree.nbCubes = scene->cubesCount;
 }
 
 void switchCurrentPlayer(Scene* scene)
@@ -51,6 +51,14 @@ void addQuadTreeToScene(Scene* scene, QuadTree quadTree)
 
 void drawScene(Scene scene)
 {
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(0.9, 0.9, 0.9);
+    glVertex2f(-960, 540);
+    glVertex2f(960, 540);
+    glVertex2f(960, -540);
+    glVertex2f(-960, -540);
+    glEnd();
+
     for (int i = 0; i < scene.cubesCount; i++)
     {
         drawCube(scene.cubes[i]);
@@ -63,10 +71,10 @@ void drawScene(Scene scene)
     }
 
     glBegin(GL_TRIANGLE_FAN);
-    glColor3f(1, 1, 1);
-    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x - 0.25, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.5);
-    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x + 0.25, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.5);
-    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.25);
+    glColor3f(0.5, 0.5, 0.5);
+    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x - 2.5, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 5);
+    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x + 2.5, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 5);
+    glVertex2f(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 2.5);
     glEnd();
 }
 
@@ -88,7 +96,7 @@ void drawHUD(Scene scene)
         if (scene.playersCount - i == scene.currentPlayerIndex)
         {
             glBegin(GL_TRIANGLE_FAN);
-            glColor3f(1, 1, 1);
+            glColor3f(0.5, 0.5, 0.5);
             glVertex2f(-0.25 - (i-1), 1);
             glVertex2f(0.25 - (i-1), 1);
             glVertex2f(0 - (i-1), 0.75);

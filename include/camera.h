@@ -3,7 +3,7 @@
 
 #include "player.h"
 
-#define ZOOM_ON_PLAYER 50
+#define ZOOM_ON_PLAYER 5
 
 typedef struct Camera {
     float x;
