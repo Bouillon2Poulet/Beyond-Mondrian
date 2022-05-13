@@ -81,7 +81,7 @@ void createLevel2(Scene* scene)
     *scene = newScene;
 }
 
-void displayBackground(Uint32 currentTime)
+void displayBackground(Scene scene, Uint32 currentTime)
 {
     glPushMatrix();
         glBegin(GL_TRIANGLE_FAN);
@@ -92,13 +92,15 @@ void displayBackground(Uint32 currentTime)
         glVertex2f(-960,-540);
         glEnd();
     glPopMatrix();
+
+    //printf("????\n");
+    
+    for (int i=0;i<1;i++)
+    {
+        updateBackgroundLine(&scene.background[i],currentTime);
+        //printf("??????\n");
+        drawLine(scene.background[i]);
+        //printf("?????????\n");
+    }
     return;
-}
-
-backgroundLine randomNewLine()
-{
-    Créer tableau de lignes (10 lignes max à l'écran)
-    si random -> random newLignes
-    si time=endTime, supprimer ligne
-
 }

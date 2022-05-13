@@ -6,6 +6,7 @@
 #include "menu.h"
 #include "cube.h"
 #include "lodepng.h"
+#include "line.h"
 
 GLuint loadTextureStartMenu (int indexTexture, StartMenu menu)
 {
@@ -99,7 +100,7 @@ void drawMenu(StartMenu menu)
     drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
 
     //Lines
-    backgroundLine lineTab[5];
+    BackgroundLine lineTab[5];
     lineTab[0]=createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
     lineTab[1]=createBackgroundLine(10,0,1,-3500,-80,0,8000,0,0,0); //second horizontal
     lineTab[2]=createBackgroundLine(10,1,-1,-98,3000,0,5000,0,0,0); //first vertical
@@ -179,80 +180,4 @@ void displayImage(int x, int y, GLuint texture) //Display an image from center o
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
     glPopMatrix();
-}
-
-void drawLine(backgroundLine line)
-{
-    if(line.time>=line.endTime)
-    {
-        line.time=line.endTime;
-    }
-
-    glPushMatrix();
-        glBegin(GL_TRIANGLE_FAN);
-        glColor3f(line.r,line.g,line.b);
-        int xA;
-        int yA;
-        int xB;
-        int yB;
-        int xC;
-        int yC;
-        int xD;
-        int yD;
-
-        //sens = 1 -> right//up
-        //sens = -1 -> left//down
-
-        switch (line.mode)
-        {
-        case 0: //Horizontal
-            xA=line.xStart;
-            yA=line.yStart+line.width/2;
-            xB=line.xStart;
-            yB=line.yStart-line.width/2;
-            xC=xB+line.sens*line.time;
-            yC=yB;
-            xD=xA+line.sens*line.time;
-            yD=yA;
-            break;
-        
-        default: //Vertical
-            xA=line.xStart-line.width/2;
-            yA=line.yStart;
-            xB=line.xStart+line.width/2;
-            yB=line.yStart;
-            xC=xB;
-            yC=yB+line.sens*line.time;
-            xD=xA;
-            yD=yA+line.sens*line.time;
-            break;
-        }
-        glVertex2f(xA,yA);
-        glVertex2f(xB,yB);
-        glVertex2f(xC,yC);
-        glVertex2f(xD,yD);
-
-        glEnd();
-    glPopMatrix();
-}
-
-backgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime, int r, int g, int b)
-{
-    backgroundLine newLine;
-    newLine.width=width;
-    newLine.mode=mode;
-    newLine.sens=sens,
-    newLine.xStart=xStart;
-    newLine.yStart=yStart;
-    newLine.time=time;
-    newLine.endTime=endTime;
-    newLine.r=r;
-    newLine.g=g;
-    newLine.b=b;
-    return newLine;
-}
-
-void updateBackgroundLine(backgroundLine* line, Uint32 deltatime)
-{
-    line->time=deltatime;
 }

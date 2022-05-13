@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "scene.h"
 #include "menu.h"
 #include "camera.h"
 #include "levels.h"
+#include "scene.h"
 
 int gameState = 5; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
 int windowState = 0; //0 : normal, 1 : fullscreen;
@@ -112,6 +112,7 @@ int main(int argc, char** argv)
 
     //Scène
     Scene scene = createScene();
+    fillSceneLineTab(&scene);
 
     //QuadTree
     QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
@@ -210,7 +211,8 @@ int main(int argc, char** argv)
                 drawScene(scene);
                 drawHUD(scene); break;
             case 5 :
-            displayBackground(startTime); break;
+            printf("??\n");
+            displayBackground(scene, startTime); break;
         }
         
         if (gameState == 1 && checkLevelState(scene) == 1)
