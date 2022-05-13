@@ -94,3 +94,11 @@ void displayBackground(Uint32 currentTime)
     glPopMatrix();
     return;
 }
+
+backgroundLine randomNewLine()
+{
+    Créer tableau de lignes (10 lignes max à l'écran)
+    si random -> random newLignes
+    si time=endTime, supprimer ligne
+
+}
