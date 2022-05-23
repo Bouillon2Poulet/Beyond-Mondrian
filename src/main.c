@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <stdlib.h>
@@ -8,9 +9,11 @@
 #include "camera.h"
 #include "levels.h"
 #include "scene.h"
+#include "audio.h"
 
-int gameState = 5; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
+int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
 int windowState = 0; //0 : normal, 1 : fullscreen;
+
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1920;
@@ -57,6 +60,14 @@ int main(int argc, char** argv)
 
         SDL_Quit();
         return EXIT_FAILURE;
+    }
+
+    // Initialisation de SDL_Mixer
+    if (Mix_OpenAudio(96000, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) < 0)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erreur initialisation SDL_mixer : %s", Mix_GetError());
+        SDL_Quit();
+        return -1;
     }
 
     /* Ouverture d'une fenetre et creation d'un contexte OpenGL */
@@ -106,13 +117,16 @@ int main(int argc, char** argv)
     onWindowResized(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     /* Création du jeu */
-
+    //Audio
+    Mix_Music* musicMenu;
+    loadMusic(&musicMenu);
+    Mix_PlayMusic(musicMenu, -1);
     //Menu
     StartMenu startMenu = createStartMenu();
 
     //Scène
     Scene scene = createScene();
-    fillSceneLineTab(&scene);
+    //fillSceneLineTab(&scene);
 
     //QuadTree
     QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
@@ -137,6 +151,10 @@ int main(int argc, char** argv)
         switch(gameState)
         {
             case 0:
+                if(musicMenu==NULL)
+                {
+                    printf("!\n");
+                }
                 updateMenu(&startMenu, startTime); 
                 drawMenu(startMenu);
                 break;
@@ -211,8 +229,8 @@ int main(int argc, char** argv)
                 drawScene(scene);
                 drawHUD(scene); break;
             case 5 :
-            printf("??\n");
-            displayBackground(scene, startTime); break;
+            //printf("??\n");
+            displayBackground(&scene, startTime); break;
         }
         
         if (gameState == 1 && checkLevelState(scene) == 1)
@@ -384,6 +402,8 @@ int main(int argc, char** argv)
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
+    Mix_FreeMusic(musicMenu);
+    Mix_CloseAudio();
     SDL_Quit();
 
     return EXIT_SUCCESS;

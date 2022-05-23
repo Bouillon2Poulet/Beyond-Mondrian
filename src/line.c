@@ -8,10 +8,10 @@
 
 void drawLine(BackgroundLine line)
 {
-    if(line.time>=line.endTime)
-    {
-        line.time=line.endTime;
-    }
+    // if(line.time>=line.endTime)
+    // {
+    //     line.time=line.endTime;
+    // }
 
     glPushMatrix();
         glBegin(GL_TRIANGLE_FAN);
@@ -82,7 +82,7 @@ void updateBackgroundLine(BackgroundLine* line, Uint32 deltatime)
     line->time=deltatime;
 }
 
-BackgroundLine randomNewLine()
+BackgroundLine randomNewLine(Uint32 currentTime)
 {
     printf("RandomNewLine\n");
     /*Créer tableau de lignes (10 lignes max à l'écran)
@@ -93,17 +93,24 @@ BackgroundLine randomNewLine()
 
     srand(time(NULL)); //init random seed
     //Position
-    randomLine.width=(rand() % 5)+5; //random width between 0 and 5
+    randomLine.width=(rand() % 5)+5; //random width between 5 and 10
     printf("width:%d\n",randomLine.width);
     randomLine.mode=rand() % 2; //random 
     printf("mode:%d\n",randomLine.mode);
-    randomLine.sens=(rand() % 3)-2; //random sens between -1 and 1
+    randomLine.sens=0;
+    while (randomLine.sens!=-1 && randomLine.sens!=1)
+    {
+        randomLine.sens=(rand() % 3)-2; //random sens between -1 and 1
+    }
+
     printf("sens:%d\n",randomLine.sens);
     randomLine.xStart=(rand() % 3000)+2000; //random xStart between 2000 and 5000
     randomLine.yStart=(rand() % 3000)+2000; //random xStart between 2000 and 5000
-    randomLine.time=(rand() % 3000)+2000; //random xStart between 2000 and 5000
+    randomLine.time=currentTime;
+    printf("time:%d\n",randomLine.time);
     if (randomLine.mode==0)
     {
+        randomLine.yStart=(rand() % 540); //random xStart between 0 and 960
         switch (randomLine.sens)
         {
             case -1 : break;
@@ -113,6 +120,7 @@ BackgroundLine randomNewLine()
     }
     else
     {
+        randomLine.xStart=(rand() % 960); //random xStart between 0 and 540
         switch(randomLine.sens)
         {
             case -1 : break;
@@ -121,21 +129,29 @@ BackgroundLine randomNewLine()
         }
     }
 
-    randomLine.endTime=(rand() % 7000)+2000; //random endTime between 2000 and 5000
-    float colour =(rand() % 1)/2; //random red value between 0 and 1
+    randomLine.endTime=randomLine.time+(rand() % 3000)+7000; //random endTime between 2000 and 5000
+    printf("randomLine.endTime=%d\n",randomLine.endTime);
+    float colour =((rand() % 1)/2)+0.5; //random red value between 0.5 and 1
     randomLine.r=colour;
     randomLine.g=colour;
     randomLine.b=colour;
+    printf("randomLine.b=%f\n",randomLine.b);
 
     return randomLine;
 }
 
-void fillSceneLineTab(Scene* scene)
+// void fillSceneLineTab(Scene* scene)
+// {
+//     int nbLine = (rand()%10)+30; //between 30 and 40
+//     for (int i=0;i<nbLine;i++)
+//     {
+//         scene->background[i]=randomNewLine();
+//         printf("scene.background[%d].width : %d\n",i,scene->background->width);
+//     }
+// }
+
+void addRandomLineToScene (Scene* scene, Uint32 currentTime)
 {
-    int nbLine = (rand()%10)+30; //between 30 and 40
-    for (int i=0;i<nbLine;i++)
-    {
-        scene->background[i]=randomNewLine();
-        printf("scene.background[%d].width : %d\n",i,scene->background->width);
-    }
+    scene->background[scene->lineCount] = randomNewLine(currentTime);
+    scene->lineCount++;
 }

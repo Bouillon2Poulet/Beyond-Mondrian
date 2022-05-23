@@ -22,6 +22,7 @@ typedef struct BackgroundLine {
 BackgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime, float r, float g, float b);
 void updateBackgroundLine(BackgroundLine* line, Uint32 deltatime);
 void drawLine(BackgroundLine line);
-BackgroundLine randomNewLine();
+BackgroundLine randomNewLine(Uint32 currentTime);
 void fillSceneLineTab(Scene* scene);
+void addRandomLineToScene (Scene* scene, Uint32 currentTime);
 #endif

@@ -8,6 +8,7 @@ Scene createScene()
     scene.playersCount = 0;
     scene.cubesCount = 0;
     scene.currentPlayerIndex = 0;
+    scene.lineCount = 0;
     return scene;
 }
 

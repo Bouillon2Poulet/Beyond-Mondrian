@@ -81,7 +81,7 @@ void createLevel2(Scene* scene)
     *scene = newScene;
 }
 
-void displayBackground(Scene scene, Uint32 currentTime)
+void displayBackground(Scene* scene, Uint32 currentTime)
 {
     glPushMatrix();
         glBegin(GL_TRIANGLE_FAN);
@@ -93,14 +93,34 @@ void displayBackground(Scene scene, Uint32 currentTime)
         glEnd();
     glPopMatrix();
 
+    //BackgroundLine newBackgroundLine = createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
     //printf("????\n");
-    
-    for (int i=0;i<1;i++)
+    if(currentTime%60==0)
     {
-        updateBackgroundLine(&scene.background[i],currentTime);
-        //printf("??????\n");
-        drawLine(scene.background[i]);
-        //printf("?????????\n");
+        printf("\nnum.%d",scene->lineCount);
+        //addRandomLineToScene(scene, currentTime);
+        scene->background[scene->lineCount]=randomNewLine(currentTime);
+        printf("time: %d\n",scene->background[scene->lineCount].time);
+        printf("endTime: %d\n\n",scene->background[scene->lineCount].endTime);
+        scene->lineCount++;
     }
+    //updateBackgroundLine(&newBackgroundLine, currentTime);
+    
+
+    for (int i=0;i<=scene->lineCount;i++)
+    {
+        updateBackgroundLine(&scene->background[i],currentTime);
+        drawLine(scene->background[i]);
+    }
+
+    // printf("scene.background[0].b = %f\n",scene->background[0].b);
+    // printf("celle qui marche : 10,0,1,-2000,250,0,5000,0,0,0\n");
+    // printf("celle qui marche pas : %d,%d,%d,%d,%d,%d,%d,%f,%f,%f\n",scene->background[0].width, scene->background[0].mode, scene->background[0].sens, scene->background[0].xStart, scene->background[0].yStart,scene->background[0].time, scene->background[0].endTime, scene->background[0].r, scene->background[0].g, scene->background[0].b);
+    // updateBackgroundLine(&scene->background[0], currentTime);
+    // printf("background[0].sens=%d",scene->background[0].sens);
+    // printf("background[0].mode=%d",scene->background[0].mode);
+    // printf("background[0].xStart=%d",scene->background[0].xStart);
+    // printf("background[0].yStart=%d",scene->background[0].yStart);
+    // drawLine(scene->background[0]);
     return;
 }
