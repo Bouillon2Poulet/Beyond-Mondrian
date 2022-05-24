@@ -39,3 +39,8 @@ Modified by : Antoine
 
     - QuadTree finished
     - Added levels system
+    
+Date : 08/05/2022
+Modified by : Antoine
+
+    - Added collision between players

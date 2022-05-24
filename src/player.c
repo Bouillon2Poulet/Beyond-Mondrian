@@ -4,8 +4,8 @@ Player createPlayer(float x, float y, float width, float height, int filled, flo
 {
     Player player;
     player.cube = createCube(x, y, width, height, filled, red, green, blue);
-    player.movementSpeed = 0.15;
-    player.jumpPower = 0.3;
+    player.movementSpeed = 1.5;
+    player.jumpPower = 3;
     player.gravity = 0;
     player.isGrounded = 0;
     player.startColors[0] = player.cube.red;
@@ -33,7 +33,7 @@ void playerJump(Player* player)
 
 void addGravity(Player* player)
 {
-    player->gravity += 0.01;
+    player->gravity += 0.1;
     player->cube.y -= player->gravity;
 }
 

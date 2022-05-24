@@ -19,7 +19,7 @@ typedef struct QuadTree {
     int isLeaf;
 } QuadTree;
 
-QuadTree createQuadTree(int x, int y, int width, int height);
+QuadTree createQuadTree(float x, float y, float width, float height);
 
 void splitQuadTree(QuadTree* quadTree);
 

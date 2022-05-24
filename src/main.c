@@ -176,16 +176,19 @@ int main(int argc, char** argv)
             case 2:               
                 for (int j = 0; j < scene.playersCount; j++)
                 {
-                    addGravity(&scene.players[j]);
+                    if (scene.players[j].isGrounded == 0)
+                    {
+                        addGravity(&scene.players[j]);
+                    }
                     checkEndCollision(&scene.players[j], scene.playersEnd[j]);
                     findPlayerQuadTree(&scene.quadTree, scene.players[j], playerQuadTree);
-
+                    
                     /* Collisions joueurs */
 
                     int temp = 0;
                     for (int i = 0; i < scene.playersCount; i++)
                     {
-                        if (j != i && checkCollision(scene.players[j], scene.players[i].cube) == 1)
+                        if (j != i && scene.players[j].isGrounded == 0 && checkCollision(scene.players[j], scene.players[i].cube) == 1)
                         {
                             temp = 1;
                             if (scene.players[j].cube.y > scene.players[i].cube.y)
@@ -212,7 +215,7 @@ int main(int argc, char** argv)
                         {
                             for (int i = 0; i < quadTree->nbCubes; i++)
                             {
-                                if (checkCollision(scene.players[j], quadTree->cubes[i]) == 1)
+                                if (scene.players[j].isGrounded == 0 && checkCollision(scene.players[j], quadTree->cubes[i]) == 1)
                                 {
                                     temp = 1;
                                     if (scene.players[j].cube.y > quadTree->cubes[i].y)
@@ -264,6 +267,8 @@ int main(int argc, char** argv)
 
         if(keystates[SDL_SCANCODE_LEFT] && gameState != 0) 
         {
+            int temp1 = 0;
+
             movePlayer(&scene.players[scene.currentPlayerIndex], -1);
             
             /* Collisions joueurs */
@@ -273,22 +278,30 @@ int main(int argc, char** argv)
                 if (scene.currentPlayerIndex != i && checkCollision(scene.players[scene.currentPlayerIndex], scene.players[i].cube) == 1)
                 {
                     scene.players[scene.currentPlayerIndex].cube.x = 
-                    scene.players[i].cube.x + scene.players[i].cube.width/2 + scene.players[scene.currentPlayerIndex].cube.width/2 + 0.01;;
+                    scene.players[i].cube.x + scene.players[i].cube.width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                    break;
                 }
             }
 
             /* Collisions obstacles */
 
             findPlayerQuadTree(&scene.quadTree, scene.players[scene.currentPlayerIndex], playerQuadTree);
+
             for (auto quadTree : playerQuadTree)
             {
                 for (int i = 0; i < quadTree->nbCubes; i++)
                 {
                     if (checkCollision(scene.players[scene.currentPlayerIndex], quadTree->cubes[i]) == 1)
                     {
+                        temp1 = 1;
                         scene.players[scene.currentPlayerIndex].cube.x = 
                         quadTree->cubes[i].x + quadTree->cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                        break;
                     }
+                }
+                if (temp1 == 1)
+                {
+                    break;
                 }
             }
             playerQuadTree.clear();
@@ -296,6 +309,8 @@ int main(int argc, char** argv)
         
         if(keystates[SDL_SCANCODE_RIGHT] && gameState != 0) 
         {
+            int temp1 = 0;
+
             movePlayer(&scene.players[scene.currentPlayerIndex], 1);
 
             /* Collisions joueurs */
@@ -305,7 +320,8 @@ int main(int argc, char** argv)
                 if (scene.currentPlayerIndex != i && checkCollision(scene.players[scene.currentPlayerIndex], scene.players[i].cube) == 1)
                 {
                     scene.players[scene.currentPlayerIndex].cube.x = 
-                    scene.players[i].cube.x - scene.players[i].cube.width/2 - scene.players[scene.currentPlayerIndex].cube.width/2 - 0.01;
+                    scene.players[i].cube.x - scene.players[i].cube.width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                    break;
                 }
             }
 
@@ -318,9 +334,15 @@ int main(int argc, char** argv)
                 {
                     if (checkCollision(scene.players[scene.currentPlayerIndex], quadTree->cubes[i]) == 1)
                     {
+                        temp1 = 1;
                         scene.players[scene.currentPlayerIndex].cube.x = 
                         quadTree->cubes[i].x - quadTree->cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                        break;
                     }
+                }
+                if (temp1 == 1)
+                {
+                    break;
                 }
             }
             playerQuadTree.clear();
@@ -399,7 +421,7 @@ int main(int argc, char** argv)
                     }
                     if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
                     {
-                        if (startTime>=9000)
+                        if (startTime>=900)
                         {
                             createLevel1(&scene);
                             gameState = 1;
