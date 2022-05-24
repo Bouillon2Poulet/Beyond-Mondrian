@@ -7,6 +7,7 @@ Scene createScene()
     Scene scene;
     scene.playersCount = 0;
     scene.cubesCount = 0;
+    scene.movingCubesCount = 0;
     scene.currentPlayerIndex = 0;
     return scene;
 }
@@ -29,6 +30,15 @@ void addCubeToScene(Scene* scene, Cube cube)
         scene->cubesCount++;
         scene->quadTree.cubes[scene->quadTree.nbCubes] = cube;
         scene->quadTree.nbCubes = scene->cubesCount;
+    }
+}
+
+void addMovingCubeToScene(Scene* scene, MovingCube movingCube)
+{
+    if (scene->cubesCount < MAX_MOVINGCUBE_COUNT)
+    {
+        scene->movingCubes[scene->movingCubesCount] = movingCube;
+        scene->movingCubesCount++;
     }
 }
 
@@ -62,6 +72,11 @@ void drawScene(Scene scene)
     for (int i = 0; i < scene.cubesCount; i++)
     {
         drawCube(scene.cubes[i]);
+    }
+
+    for (int i = 0; i < scene.movingCubesCount; i++)
+    {
+        drawCube(scene.movingCubes[i].cube);
     }
     
     for (int i = 0; i < scene.playersCount; i++)

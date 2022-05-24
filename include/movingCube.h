@@ -5,14 +5,16 @@
 
 typedef struct MovingCube {
     Cube cube;
-    float movementSpeed;
     float x1;
     float y1;
     float x2;
     float y2;
+    float speed;
     int directionPoint;
 } MovingCube;
 
-MovingCube createMovingCube(float x, float y, float width, float height, int filled, float red, float green, float blue, float x1, float y1, float x2, float y2, float movementSpeed, float directionPoint);
+MovingCube createMovingCube(float x, float y, float height, float width, int filled, float red, float green, float blue, float x1, float y1, float x2, float y2, int directionPoint);
+
+void moveCube(MovingCube* movingCube);
 
 #endif

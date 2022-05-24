@@ -9,7 +9,7 @@
 #include "camera.h"
 #include "levels.h"
 
-int gameState = 5; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
+int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
 int windowState = 0; //0 : normal, 1 : fullscreen;
 
 /* Dimensions initiales et titre de la fenetre */
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     std::vector<QuadTree*> playerQuadTree;
 
     //Caméra
-    Camera camera = createCamera(scene.players[scene.currentPlayerIndex].cube.x, scene.players[scene.currentPlayerIndex].cube.y);
+    Camera camera = createCamera(0, 0);
 
     /* Boucle principale */
     int loop = 1;
@@ -151,6 +151,11 @@ int main(int argc, char** argv)
                     checkEndCollision(&scene.players[j], scene.playersEnd[j]);
                     findPlayerQuadTree(&scene.quadTree, scene.players[j], playerQuadTree);
                     
+                    for (int k = 0; k < scene.movingCubesCount; k++)
+                    {
+                        moveCube(&scene.movingCubes[k]);
+                    }
+
                     /* Collisions joueurs */
 
                     int temp = 0;
@@ -207,6 +212,30 @@ int main(int argc, char** argv)
                             }
                         }
                         playerQuadTree.clear();
+                    }
+                    
+                    /* Collisions obstacles qui bougent */
+
+                    if (temp == 0)
+                    {
+                        for (int i = 0; i < scene.movingCubesCount; i++)
+                        {
+                            if (checkCollision(scene.players[j], scene.movingCubes[i].cube) == 1)
+                            {
+                                if (scene.players[j].cube.y > scene.movingCubes[i].cube.y)
+                                {
+                                    scene.players[j].cube.y = scene.movingCubes[i].cube.y + scene.movingCubes[i].cube.height/2 + scene.players[j].cube.height/2;
+                                    scene.players[j].isGrounded = 1;
+                                    scene.players[j].gravity = 0;
+                                }
+                                else if (scene.players[j].cube.y < scene.movingCubes[i].cube.y)
+                                {
+                                    scene.players[j].cube.y = scene.movingCubes[i].cube.y - scene.movingCubes[i].cube.height/2 - scene.players[j].cube.height/2;
+                                    scene.players[j].gravity = 0;
+                                }
+                                break;
+                            }
+                        }
                     }
                 }
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
