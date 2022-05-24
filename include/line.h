@@ -2,6 +2,7 @@
 #define LINE_H
 
 #include <SDL2/SDL.h>
+#include <GL/glu.h>
 struct Scene;
 
 typedef struct BackgroundLine {
@@ -10,8 +11,9 @@ typedef struct BackgroundLine {
     int sens;
     int xStart;
     int yStart;
-    int time;
-    int endTime;
+    int speedFactor;
+    Uint32 time;
+    Uint32 endTime;
     float r;
     float g;
     float b;
@@ -20,9 +22,10 @@ typedef struct BackgroundLine {
 #include "scene.h"
 
 BackgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime, float r, float g, float b);
-void updateBackgroundLine(BackgroundLine* line, Uint32 deltatime);
+void updateBackgroundLine(BackgroundLine* line);
 void drawLine(BackgroundLine line);
-BackgroundLine randomNewLine(Uint32 currentTime);
+BackgroundLine randomNewLine();
 void fillSceneLineTab(Scene* scene);
-void addRandomLineToScene (Scene* scene, Uint32 currentTime);
+void addRandomLineToScene (Scene* scene);
+void displayLineInfo (BackgroundLine line);
 #endif

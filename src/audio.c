@@ -1,9 +1,13 @@
 #include <SDL2/SDL.h> 
 #include <SDL2/SDL_mixer.h>
 
-void loadMusic(Mix_Music** music) 
+void loadMusic(Mix_Music** music,int index) 
 {
-    *music = Mix_LoadMUS("./assets/audio/menu.mp3");
+    const char* names[2] = {"menu.mp3","jump.mp3"};
+    char fileName[150];
+    sprintf(fileName,"assets/audio/%s",names[index]);
+
+    *music = Mix_LoadMUS(fileName);
 
     if (music == NULL)
     {

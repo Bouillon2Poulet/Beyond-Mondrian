@@ -8,10 +8,10 @@
 
 void drawLine(BackgroundLine line)
 {
-    // if(line.time>=line.endTime)
-    // {
-    //     line.time=line.endTime;
-    // }
+    if (line.time>=line.endTime)
+    {
+        line.time=line.endTime;
+    }
 
     glPushMatrix();
         glBegin(GL_TRIANGLE_FAN);
@@ -77,18 +77,13 @@ BackgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,in
     return newLine;
 }
 
-void updateBackgroundLine(BackgroundLine* line, Uint32 deltatime)
+void updateBackgroundLine(BackgroundLine* line)
 {
-    line->time=deltatime;
+    line->time+=line->speedFactor;
 }
 
-BackgroundLine randomNewLine(Uint32 currentTime)
+BackgroundLine randomNewLine()
 {
-    printf("RandomNewLine\n");
-    /*Créer tableau de lignes (10 lignes max à l'écran)
-    si random -> random newLignes
-    si time=endTime, supprimer ligne';*/
-
     BackgroundLine randomLine;
 
     srand(time(NULL)); //init random seed
@@ -98,19 +93,18 @@ BackgroundLine randomNewLine(Uint32 currentTime)
     randomLine.mode=rand() % 2; //random 
     printf("mode:%d\n",randomLine.mode);
     randomLine.sens=0;
+    randomLine.speedFactor=(rand()%3)+2; //random speedFactor between
     while (randomLine.sens!=-1 && randomLine.sens!=1)
     {
-        randomLine.sens=(rand() % 3)-2; //random sens between -1 and 1
+        randomLine.sens=(rand() % 4)-2; //random sens between -1 and 1
     }
 
     printf("sens:%d\n",randomLine.sens);
-    randomLine.xStart=(rand() % 3000)+2000; //random xStart between 2000 and 5000
-    randomLine.yStart=(rand() % 3000)+2000; //random xStart between 2000 and 5000
-    randomLine.time=currentTime;
-    printf("time:%d\n",randomLine.time);
+    randomLine.xStart=1000;
+    randomLine.yStart=800;
     if (randomLine.mode==0)
     {
-        randomLine.yStart=(rand() % 540); //random xStart between 0 and 960
+        randomLine.yStart=(rand() % 1080)-540; //random xStart between 0 and 960
         switch (randomLine.sens)
         {
             case -1 : break;
@@ -120,7 +114,7 @@ BackgroundLine randomNewLine(Uint32 currentTime)
     }
     else
     {
-        randomLine.xStart=(rand() % 960); //random xStart between 0 and 540
+        randomLine.xStart=(rand() % 1920)-920; //random xStart between 0 and 540
         switch(randomLine.sens)
         {
             case -1 : break;
@@ -128,10 +122,15 @@ BackgroundLine randomNewLine(Uint32 currentTime)
             default : printf("error sens new random line\n"); 
         }
     }
-
-    randomLine.endTime=randomLine.time+(rand() % 3000)+7000; //random endTime between 2000 and 5000
+    randomLine.time=0;
+    printf("time:%d\n",randomLine.time);
+    randomLine.endTime=(rand() % 3000)+7000; //random endTime between 2000 and 5000
     printf("randomLine.endTime=%d\n",randomLine.endTime);
-    float colour =((rand() % 1)/2)+0.5; //random red value between 0.5 and 1
+    int a = (rand() % 20) + 70;
+    float b = a;
+    float colour =b/100; //random red value between 0.5 and 1
+    printf("colour:%d",a);
+    printf("colour:%f",colour);
     randomLine.r=colour;
     randomLine.g=colour;
     randomLine.b=colour;
@@ -140,18 +139,18 @@ BackgroundLine randomNewLine(Uint32 currentTime)
     return randomLine;
 }
 
-// void fillSceneLineTab(Scene* scene)
-// {
-//     int nbLine = (rand()%10)+30; //between 30 and 40
-//     for (int i=0;i<nbLine;i++)
-//     {
-//         scene->background[i]=randomNewLine();
-//         printf("scene.background[%d].width : %d\n",i,scene->background->width);
-//     }
-// }
-
-void addRandomLineToScene (Scene* scene, Uint32 currentTime)
+void addRandomLineToScene (Scene* scene)
 {
-    scene->background[scene->lineCount] = randomNewLine(currentTime);
+    scene->background[scene->lineCount] = randomNewLine();
     scene->lineCount++;
+}
+
+void displayLineInfo (BackgroundLine line)
+{
+    printf("\n//Line//\n");
+    printf("-width:%d\n",line.width);
+    printf("-time:%d\n",line.time);
+    printf("-endTime:%d\n",line.endTime);
+    printf("-speedFactor:%d\n",line.speedFactor);
+    printf("-rvb:%f,%f,%f\n",line.r,line.g,line.b);
 }

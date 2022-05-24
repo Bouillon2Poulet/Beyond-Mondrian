@@ -2,14 +2,12 @@
 #include <GL/glu.h>
 #include "scene.h"
 
-Scene createScene()
+void initScene(Scene* scene)
 {
-    Scene scene;
-    scene.playersCount = 0;
-    scene.cubesCount = 0;
-    scene.currentPlayerIndex = 0;
-    scene.lineCount = 0;
-    return scene;
+    scene->playersCount = 0;
+    scene->cubesCount = 0;
+    scene->currentPlayerIndex = 0;
+    scene->lineCount = 0;
 }
 
 void addPlayerToScene(Scene* scene, Player player, float x, float y)
@@ -63,7 +61,7 @@ void drawScene(Scene scene)
         drawCube(scene.playersEnd[i]);
     }
 
-    glBegin(GL_TRIANGLE_FAN);
+    glBegin(GL_TRIANGLE_FAN); //Triangle currentPlayer
     glColor3f(1, 1, 1);
     glVertex2f(scene.players[scene.currentPlayerIndex].cube.x - 0.25, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.5);
     glVertex2f(scene.players[scene.currentPlayerIndex].cube.x + 0.25, scene.players[scene.currentPlayerIndex].cube.y + scene.players[scene.currentPlayerIndex].cube.height/2 + 0.5);

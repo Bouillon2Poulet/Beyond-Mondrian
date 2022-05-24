@@ -81,47 +81,40 @@ StartMenu createStartMenu()
 {
     StartMenu menu;
     menu.nbTextures = 6; //To change for more textures
-    menu.deltaTime=0;
     glGenTextures(6, menu.textureTab);
     for (int i=0;i<menu.nbTextures;i++)
     {
         menu.textureTab[i] = loadTextureStartMenu(i,menu);
     }
+
+    //Lines Menu
+    menu.tabLines[0]=createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
+    menu.tabLines[1]=createBackgroundLine(10,0,1,-3500,-80,0,8000,0,0,0); //second horizontal
+    menu.tabLines[2]=createBackgroundLine(10,1,-1,-98,3000,0,5000,0,0,0); //first vertical
+    menu.tabLines[3]=createBackgroundLine(10,1,1,170,-4000,0,4250,0,0,0); //second vertical
+    menu.tabLines[4]=createBackgroundLine(10,1,-1, 670,4750,0,4825,0,0,0); //third vertical
     return menu;
 }
 
-void updateMenu(StartMenu* menu, Uint32 deltaTime)
-{
-    menu->deltaTime=deltaTime;
-}
-
-void drawMenu(StartMenu menu)
+void drawMenu(StartMenu* menu)
 {
     drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
 
-    //Lines
-    BackgroundLine lineTab[5];
-    lineTab[0]=createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
-    lineTab[1]=createBackgroundLine(10,0,1,-3500,-80,0,8000,0,0,0); //second horizontal
-    lineTab[2]=createBackgroundLine(10,1,-1,-98,3000,0,5000,0,0,0); //first vertical
-    lineTab[3]=createBackgroundLine(10,1,1,170,-4000,0,4250,0,0,0); //second vertical
-    lineTab[4]=createBackgroundLine(10,1,-1, 670,4750,0,4825,0,0,0); //third vertical
-
-    //menu.deltaTime=90000;
+    //SDL_GetTicks()=90000;
     glPushAttrib(GL_CURRENT_BIT);
-    if(menu.deltaTime>=3700)
+    if(SDL_GetTicks()>=3700)
     {
         drawCube(createCube(-600,85,1000,325,1,0,0,1));
-        if(menu.deltaTime>=4500)
+        if(SDL_GetTicks()>=4500)
         {
             drawCube(createCube(35,85,260,320,1,1,0,0));
-            if (menu.deltaTime>=4900)
+            if (SDL_GetTicks()>=4900)
             {
                 drawCube(createCube(35,-325,260,500,1,1,1,0));
-                if (menu.deltaTime>=5500)
+                if (SDL_GetTicks()>=5500)
                 {
                     drawCube(createCube(853,400,360,300,1,0,0,1)); 
-                    if (menu.deltaTime>=6600)
+                    if (SDL_GetTicks()>=6600)
                     {
                         drawCube(createCube(853,85,360,320,1,1,0,0));
                     }
@@ -132,31 +125,34 @@ void drawMenu(StartMenu menu)
 
         for (int i=0;i<5;i++)
         {
-            updateBackgroundLine(&lineTab[i],menu.deltaTime);
-            drawLine(lineTab[i]);
+            printf("\nDRAWLINE//\n");
+            menu->tabLines[i].time=SDL_GetTicks();
+            printf("menu->tabLines[%d].time:%d\n",i,menu->tabLines[i].time);
+            printf("menu->tabLines[%d].endTime:%d\n",i,menu->tabLines[i].endTime);
+            drawLine(menu->tabLines[i]);
         }
 
     
     glPopAttrib();
   
-    if (menu.deltaTime>=1700)
+    if (SDL_GetTicks()>=1700)
     {
-        displayImage(-520,370,menu.textureTab[0]);//logo.png
-        if (menu.deltaTime>=4800)
+        displayImage(-520,370,menu->textureTab[0]);//logo.png
+        if (SDL_GetTicks()>=4800)
         {
-            displayImage(190,315,menu.textureTab[3]);//antoine.png
-            if (menu.deltaTime>=5600)
+            displayImage(460,315,menu->textureTab[3]);//antoine.png
+            if (SDL_GetTicks()>=5600)
             {
-                displayImage(40,180,menu.textureTab[2]);//rom1.png
-                if (menu.deltaTime>=5900)
+                displayImage(40,180,menu->textureTab[2]);//rom1.png
+                if (SDL_GetTicks()>=5900)
                 {
-                    displayImage(440,180,menu.textureTab[4]);//mathurin.png
-                    if (menu.deltaTime>=7500)
+                    displayImage(440,180,menu->textureTab[4]);//mathurin.png
+                    if (SDL_GetTicks()>=7500)
                     {
-                        displayImage(610,-300,menu.textureTab[1]);//controls.png
-                        if (menu.deltaTime>=9000)
+                        displayImage(610,-300,menu->textureTab[1]);//controls.png
+                        if (SDL_GetTicks()>=9000)
                         {
-                            displayImage(-580,-310,menu.textureTab[5]);//start.png
+                            displayImage(-580,-310,menu->textureTab[5]);//start.png
                         }
                     }
                 }

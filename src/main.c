@@ -118,14 +118,27 @@ int main(int argc, char** argv)
 
     /* Création du jeu */
     //Audio
-    Mix_Music* musicMenu;
-    loadMusic(&musicMenu);
-    Mix_PlayMusic(musicMenu, -1);
+    // Mix_Music* musicMenu;
+    // Mix_Music* jumpSound;
+
+    Mix_AllocateChannels(2); // Allouer 2 cannaux 
+    Mix_Volume(0, MIX_MAX_VOLUME); // Mets le son a 100% en volume pour le premier cannaux
+    Mix_Volume(1, MIX_MAX_VOLUME / 2); // Mets le son a 50% en volume pour le deuxième cannaux 
+
+    // loadMusic(&musicMenu,0);
+    // loadMusic(&jumpSound,1);
+
+    Mix_Chunk* soundA = Mix_LoadWAV("assets/audio/menu.wav");
+    Mix_Chunk* soundB = Mix_LoadWAV("assets/audio/jump.wav");
+
     //Menu
     StartMenu startMenu = createStartMenu();
 
     //Scène
-    Scene scene = createScene();
+    Scene scene, scene2;
+    initScene(&scene); //Changes on createScene that seemed to not affect value
+    initScene(&scene2); //Test in gameState 5
+
     //fillSceneLineTab(&scene);
 
     //QuadTree
@@ -138,7 +151,7 @@ int main(int argc, char** argv)
 
     /* Boucle principale */
     int loop = 1;
-
+    
     while(loop)
     {
         /* Recuperation du temps au debut de la boucle */
@@ -151,12 +164,12 @@ int main(int argc, char** argv)
         switch(gameState)
         {
             case 0:
-                if(musicMenu==NULL)
+                while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
                 {
-                    printf("!\n");
+                    Mix_PlayChannel(0, soundA, -1); // Joue soundA infini fois sur le canal 1
                 }
-                updateMenu(&startMenu, startTime); 
-                drawMenu(startMenu);
+                printf("?\n");
+                drawMenu(&startMenu);
                 break;
             
             case 1:
@@ -225,12 +238,15 @@ int main(int argc, char** argv)
                         playerQuadTree.clear();
                     }
                 }
+                glLoadIdentity();
+                glScalef(1.2, 1.2, 0);
+                displayBackground(&scene2, startTime);
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
                 drawScene(scene);
-                drawHUD(scene); break;
+                drawHUD(scene);
+                break;
             case 5 :
-            //printf("??\n");
-            displayBackground(&scene, startTime); break;
+            displayBackground(&scene2, startTime); break;
         }
         
         if (gameState == 1 && checkLevelState(scene) == 1)
@@ -377,6 +393,10 @@ int main(int argc, char** argv)
                     {
                         switchCurrentPlayer(&scene);
                     }
+                    if (e.key.keysym.sym == SDLK_SPACE && gameState > 0) //Jump sound
+                    {
+                        Mix_PlayChannel(1, soundB, 0); // Joue soundA infini fois sur le canal 1
+                    }
                     if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
                     {
                         if (startTime>=9000)
@@ -402,7 +422,9 @@ int main(int argc, char** argv)
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
-    Mix_FreeMusic(musicMenu);
+    //Mix_FreeMusic(musicMenu);
+    Mix_FreeChunk(soundA); // Libére la mémoire allouer pour le son
+    Mix_FreeChunk(soundB);
     Mix_CloseAudio();
     SDL_Quit();
 

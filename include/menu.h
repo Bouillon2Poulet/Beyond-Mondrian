@@ -6,21 +6,21 @@
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "line.h"
 
 #define MAX_TEXTURE_COUNT 10
 
 typedef struct StartMenu {
-    Uint32 deltaTime;
     GLuint textureTab[MAX_TEXTURE_COUNT];
     int nbTextures;
+    BackgroundLine tabLines[5];
 } StartMenu;
 
 GLuint loadTextureStartMenu (int indexTexture, StartMenu menu);
 SDL_Surface* IMG_Load(const char* filename);
 GLuint drawCase(int w, int h);
 StartMenu createStartMenu();
-void updateMenu(StartMenu* menu, Uint32 deltaTime);
-void drawMenu(StartMenu menu);
+void drawMenu(StartMenu* menu);
 void displayImage(int x, int y, GLuint texture);
 
 #endif

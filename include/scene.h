@@ -17,11 +17,11 @@ typedef struct Scene {
     int cubesCount;
     int currentPlayerIndex;
     QuadTree quadTree;
-    BackgroundLine background[100]; //45 lines max
+    BackgroundLine background[50]; //50 lines max
     int lineCount;
 } Scene;
 
-Scene createScene();
+void initScene(Scene* scene);
 
 void addPlayerToScene(Scene* scene, Player player, float x, float y);
 
