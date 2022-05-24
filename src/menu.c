@@ -6,6 +6,7 @@
 #include "menu.h"
 #include "cube.h"
 #include "lodepng.h"
+#include "line.h"
 
 GLuint loadTextureStartMenu (int indexTexture, StartMenu menu)
 {
@@ -80,47 +81,40 @@ StartMenu createStartMenu()
 {
     StartMenu menu;
     menu.nbTextures = 6; //To change for more textures
-    menu.deltaTime=0;
     glGenTextures(6, menu.textureTab);
     for (int i=0;i<menu.nbTextures;i++)
     {
         menu.textureTab[i] = loadTextureStartMenu(i,menu);
     }
+
+    //Lines Menu
+    menu.tabLines[0]=createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
+    menu.tabLines[1]=createBackgroundLine(10,0,1,-3500,-80,0,8000,0,0,0); //second horizontal
+    menu.tabLines[2]=createBackgroundLine(10,1,-1,-98,3000,0,5000,0,0,0); //first vertical
+    menu.tabLines[3]=createBackgroundLine(10,1,1,170,-4000,0,4250,0,0,0); //second vertical
+    menu.tabLines[4]=createBackgroundLine(10,1,-1, 670,4750,0,4825,0,0,0); //third vertical
     return menu;
 }
 
-void updateMenu(StartMenu* menu, Uint32 deltaTime)
-{
-    menu->deltaTime=deltaTime;
-}
-
-void drawMenu(StartMenu menu)
+void drawMenu(StartMenu* menu)
 {
     drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
 
-    //Lines
-    backgroundLine lineTab[5];
-    lineTab[0]=createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
-    lineTab[1]=createBackgroundLine(10,0,1,-3500,-80,0,8000,0,0,0); //second horizontal
-    lineTab[2]=createBackgroundLine(10,1,-1,-98,3000,0,5000,0,0,0); //first vertical
-    lineTab[3]=createBackgroundLine(10,1,1,170,-4000,0,4250,0,0,0); //second vertical
-    lineTab[4]=createBackgroundLine(10,1,-1, 670,4750,0,4825,0,0,0); //third vertical
-
-    //menu.deltaTime=90000;
+    //SDL_GetTicks()=90000;
     glPushAttrib(GL_CURRENT_BIT);
-    if(menu.deltaTime>=3700)
+    if(SDL_GetTicks()>=3700)
     {
         drawCube(createCube(-600,85,1000,325,1,0,0,1));
-        if(menu.deltaTime>=4500)
+        if(SDL_GetTicks()>=4500)
         {
             drawCube(createCube(35,85,260,320,1,1,0,0));
-            if (menu.deltaTime>=4900)
+            if (SDL_GetTicks()>=4900)
             {
                 drawCube(createCube(35,-325,260,500,1,1,1,0));
-                if (menu.deltaTime>=5500)
+                if (SDL_GetTicks()>=5500)
                 {
                     drawCube(createCube(853,400,360,300,1,0,0,1)); 
-                    if (menu.deltaTime>=6600)
+                    if (SDL_GetTicks()>=6600)
                     {
                         drawCube(createCube(853,85,360,320,1,1,0,0));
                     }
@@ -131,31 +125,31 @@ void drawMenu(StartMenu menu)
 
         for (int i=0;i<5;i++)
         {
-            updateBackgroundLine(&lineTab[i],menu.deltaTime);
-            drawLine(lineTab[i]);
+            menu->tabLines[i].time=SDL_GetTicks();
+            drawLine(menu->tabLines[i]);
         }
 
     
     glPopAttrib();
   
-    if (menu.deltaTime>=1700)
+    if (SDL_GetTicks()>=1700)
     {
-        displayImage(-520,370,menu.textureTab[0]);//logo.png
-        if (menu.deltaTime>=4800)
+        displayImage(-520,370,menu->textureTab[0]);//logo.png
+        if (SDL_GetTicks()>=4800)
         {
-            displayImage(190,315,menu.textureTab[3]);//antoine.png
-            if (menu.deltaTime>=5600)
+            displayImage(460,315,menu->textureTab[3]);//antoine.png
+            if (SDL_GetTicks()>=5600)
             {
-                displayImage(40,180,menu.textureTab[2]);//rom1.png
-                if (menu.deltaTime>=5900)
+                displayImage(40,180,menu->textureTab[2]);//rom1.png
+                if (SDL_GetTicks()>=5900)
                 {
-                    displayImage(440,180,menu.textureTab[4]);//mathurin.png
-                    if (menu.deltaTime>=7500)
+                    displayImage(440,180,menu->textureTab[4]);//mathurin.png
+                    if (SDL_GetTicks()>=7500)
                     {
-                        displayImage(610,-300,menu.textureTab[1]);//controls.png
-                        if (menu.deltaTime>=9000)
+                        displayImage(610,-300,menu->textureTab[1]);//controls.png
+                        if (SDL_GetTicks()>=9000)
                         {
-                            displayImage(-580,-310,menu.textureTab[5]);//start.png
+                            displayImage(-580,-310,menu->textureTab[5]);//start.png
                         }
                     }
                 }
@@ -179,80 +173,4 @@ void displayImage(int x, int y, GLuint texture) //Display an image from center o
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
     glPopMatrix();
-}
-
-void drawLine(backgroundLine line)
-{
-    if(line.time>=line.endTime)
-    {
-        line.time=line.endTime;
-    }
-
-    glPushMatrix();
-        glBegin(GL_TRIANGLE_FAN);
-        glColor3f(line.r,line.g,line.b);
-        int xA;
-        int yA;
-        int xB;
-        int yB;
-        int xC;
-        int yC;
-        int xD;
-        int yD;
-
-        //sens = 1 -> right//up
-        //sens = -1 -> left//down
-
-        switch (line.mode)
-        {
-        case 0: //Horizontal
-            xA=line.xStart;
-            yA=line.yStart+line.width/2;
-            xB=line.xStart;
-            yB=line.yStart-line.width/2;
-            xC=xB+line.sens*line.time;
-            yC=yB;
-            xD=xA+line.sens*line.time;
-            yD=yA;
-            break;
-        
-        default: //Vertical
-            xA=line.xStart-line.width/2;
-            yA=line.yStart;
-            xB=line.xStart+line.width/2;
-            yB=line.yStart;
-            xC=xB;
-            yC=yB+line.sens*line.time;
-            xD=xA;
-            yD=yA+line.sens*line.time;
-            break;
-        }
-        glVertex2f(xA,yA);
-        glVertex2f(xB,yB);
-        glVertex2f(xC,yC);
-        glVertex2f(xD,yD);
-
-        glEnd();
-    glPopMatrix();
-}
-
-backgroundLine createBackgroundLine(int width, int mode, int sens, int xStart,int yStart, int time, int endTime, int r, int g, int b)
-{
-    backgroundLine newLine;
-    newLine.width=width;
-    newLine.mode=mode;
-    newLine.sens=sens,
-    newLine.xStart=xStart;
-    newLine.yStart=yStart;
-    newLine.time=time;
-    newLine.endTime=endTime;
-    newLine.r=r;
-    newLine.g=g;
-    newLine.b=b;
-    return newLine;
-}
-
-void updateBackgroundLine(backgroundLine* line, Uint32 deltatime)
-{
-    line->time=deltatime;
 }

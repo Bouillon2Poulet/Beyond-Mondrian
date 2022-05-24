@@ -2,14 +2,13 @@
 #include <GL/glu.h>
 #include "scene.h"
 
-Scene createScene()
+void initScene(Scene* scene)
 {
-    Scene scene;
-    scene.playersCount = 0;
-    scene.cubesCount = 0;
-    scene.movingCubesCount = 0;
-    scene.currentPlayerIndex = 0;
-    return scene;
+    scene->playersCount = 0;
+    scene->cubesCount = 0;
+    scene->currentPlayerIndex = 0;
+    scene->movingCubesCount = 0;
+    scene->lineCount = 0;
 }
 
 void addPlayerToScene(Scene* scene, Player player, float x, float y)
@@ -61,14 +60,6 @@ void addQuadTreeToScene(Scene* scene, QuadTree quadTree)
 
 void drawScene(Scene scene)
 {
-    glBegin(GL_TRIANGLE_FAN);
-    glColor3f(0.9, 0.9, 0.9);
-    glVertex2f(-960, 540);
-    glVertex2f(960, 540);
-    glVertex2f(960, -540);
-    glVertex2f(-960, -540);
-    glEnd();
-
     for (int i = 0; i < scene.cubesCount; i++)
     {
         drawCube(scene.cubes[i]);

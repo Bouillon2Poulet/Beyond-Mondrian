@@ -1,16 +1,19 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "scene.h"
 #include "menu.h"
 #include "camera.h"
 #include "levels.h"
+#include "scene.h"
+#include "audio.h"
 
 int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
 int windowState = 0; //0 : normal, 1 : fullscreen;
+
 
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1920;
@@ -57,6 +60,14 @@ int main(int argc, char** argv)
 
         SDL_Quit();
         return EXIT_FAILURE;
+    }
+
+    // Initialisation de SDL_Mixer
+    if (Mix_OpenAudio(96000, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) < 0)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erreur initialisation SDL_mixer : %s", Mix_GetError());
+        SDL_Quit();
+        return -1;
     }
 
     /* Ouverture d'une fenetre et creation d'un contexte OpenGL */
@@ -106,12 +117,28 @@ int main(int argc, char** argv)
     onWindowResized(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     /* Création du jeu */
+    //Audio
+    // Mix_Music* musicMenu;
+    // Mix_Music* jumpSound;
+
+    Mix_AllocateChannels(2); // Allouer 2 cannaux 
+    Mix_Volume(0, MIX_MAX_VOLUME); // Mets le son a 100% en volume pour le premier cannaux
+    Mix_Volume(1, MIX_MAX_VOLUME / 2); // Mets le son a 50% en volume pour le deuxième cannaux 
+
+    // loadMusic(&musicMenu,0);
+    // loadMusic(&jumpSound,1);
+
+    Mix_Chunk* soundA = Mix_LoadWAV("assets/audio/menu.wav");
+    Mix_Chunk* soundB = Mix_LoadWAV("assets/audio/jump.wav");
 
     //Menu
     StartMenu startMenu = createStartMenu();
 
     //Scène
-    Scene scene = createScene();
+    Scene scene, scene2;
+    initScene(&scene); //Changes on createScene that seemed to not affect value
+    initScene(&scene2); //Test in gameState 5
+    scene2.lineCount=0;
 
     //QuadTree
     QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
@@ -123,7 +150,7 @@ int main(int argc, char** argv)
 
     /* Boucle principale */
     int loop = 1;
-
+    
     while(loop)
     {
         /* Recuperation du temps au debut de la boucle */
@@ -136,8 +163,12 @@ int main(int argc, char** argv)
         switch(gameState)
         {
             case 0:
-                updateMenu(&startMenu, startTime); 
-                drawMenu(startMenu);
+                while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
+                {
+                    Mix_PlayChannel(0, soundA, -1); // Joue soundA infini fois sur le canal 1
+                }
+                printf("?\n");
+                drawMenu(&startMenu);
                 break;
             
             case 1:
@@ -238,11 +269,15 @@ int main(int argc, char** argv)
                         }
                     }
                 }
+                glLoadIdentity();
+                glScalef(1.2, 1.2, 0);
+                displayBackground(&scene2, SDL_GetTicks());
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
                 drawScene(scene);
-                drawHUD(scene); break;
+                drawHUD(scene);
+                break;
             case 5 :
-            displayBackground(startTime); break;
+            displayBackground(&scene2, startTime); break;
         }
         
         if (gameState == 1 && checkLevelState(scene) == 1)
@@ -408,6 +443,10 @@ int main(int argc, char** argv)
                     {
                         switchCurrentPlayer(&scene);
                     }
+                    if (e.key.keysym.sym == SDLK_SPACE && gameState > 0) //Jump sound
+                    {
+                        Mix_PlayChannel(1, soundB, 0); // Joue soundA infini fois sur le canal 1
+                    }
                     if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
                     {
                         if (startTime>=900)
@@ -433,6 +472,10 @@ int main(int argc, char** argv)
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
+    //Mix_FreeMusic(musicMenu);
+    Mix_FreeChunk(soundA); // Libére la mémoire allouer pour le son
+    Mix_FreeChunk(soundB);
+    Mix_CloseAudio();
     SDL_Quit();
 
     return EXIT_SUCCESS;

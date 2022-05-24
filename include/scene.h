@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "line.h"
 #include "cube.h"
 #include "movingCube.h"
 #include "player.h"
@@ -21,9 +22,11 @@ typedef struct Scene {
     int movingCubesCount;
     int currentPlayerIndex;
     QuadTree quadTree;
+    BackgroundLine background[20]; //20 lines max
+    int lineCount;
 } Scene;
 
-Scene createScene();
+void initScene(Scene* scene);
 
 void addPlayerToScene(Scene* scene, Player player, float x, float y);
 

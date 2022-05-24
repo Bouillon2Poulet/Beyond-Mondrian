@@ -52,7 +52,8 @@ void createLevel1(Scene* scene)
 
 void createLevel2(Scene* scene)
 {
-    Scene newScene = createScene();
+    Scene newScene;
+    initScene(&newScene);
     
     QuadTree quadTree = createQuadTree(0, 0, 1920, 1080);
     addQuadTreeToScene(&newScene, quadTree);
@@ -81,16 +82,32 @@ void createLevel2(Scene* scene)
     *scene = newScene;
 }
 
-void displayBackground(Uint32 currentTime)
+void displayBackground(Scene* scene, Uint32 currentTime)
 {
-    glPushMatrix();
+    glPushMatrix(); //Background
         glBegin(GL_TRIANGLE_FAN);
         glColor3f(1,1,1);
-        glVertex2f(-960,540);
-        glVertex2f(960,540);
-        glVertex2f(960,-540);
-        glVertex2f(-960,-540);
+        glVertex2f(-1200,600);
+        glVertex2f(1200,600);
+        glVertex2f(1200,-600);
+        glVertex2f(-1200,-600);
         glEnd();
     glPopMatrix();
-    return;
+
+    if(currentTime%60==0)
+    {
+        int index = scene->lineCount;
+        if(scene->lineCount%20==0)
+        {
+            index = scene->lineCount%20;
+        }
+        scene->background[index]=randomNewLine();
+        scene->lineCount++;
+    }
+
+    for (int i=0;i<scene->lineCount;i++)
+    {
+        updateBackgroundLine(&scene->background[i]);
+        drawLine(scene->background[i]);
+    }
 }
