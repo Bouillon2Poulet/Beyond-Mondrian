@@ -89,9 +89,7 @@ BackgroundLine randomNewLine()
     srand(time(NULL)); //init random seed
     //Position
     randomLine.width=(rand() % 5)+5; //random width between 5 and 10
-    printf("width:%d\n",randomLine.width);
     randomLine.mode=rand() % 2; //random 
-    printf("mode:%d\n",randomLine.mode);
     randomLine.sens=0;
     randomLine.speedFactor=(rand()%3)+2; //random speedFactor between
     while (randomLine.sens!=-1 && randomLine.sens!=1)
@@ -99,7 +97,6 @@ BackgroundLine randomNewLine()
         randomLine.sens=(rand() % 4)-2; //random sens between -1 and 1
     }
 
-    printf("sens:%d\n",randomLine.sens);
     randomLine.xStart=1000;
     randomLine.yStart=800;
     if (randomLine.mode==0)
@@ -114,7 +111,7 @@ BackgroundLine randomNewLine()
     }
     else
     {
-        randomLine.xStart=(rand() % 1920)-920; //random xStart between 0 and 540
+        randomLine.xStart=(rand() % 2500)-1250; //random xStart between 0 and 540
         switch(randomLine.sens)
         {
             case -1 : break;
@@ -125,16 +122,12 @@ BackgroundLine randomNewLine()
     randomLine.time=0;
     printf("time:%d\n",randomLine.time);
     randomLine.endTime=(rand() % 3000)+7000; //random endTime between 2000 and 5000
-    printf("randomLine.endTime=%d\n",randomLine.endTime);
     int a = (rand() % 20) + 70;
     float b = a;
-    float colour =b/100; //random red value between 0.5 and 1
-    printf("colour:%d",a);
-    printf("colour:%f",colour);
+    float colour =b/100;
     randomLine.r=colour;
     randomLine.g=colour;
     randomLine.b=colour;
-    printf("randomLine.b=%f\n",randomLine.b);
 
     return randomLine;
 }

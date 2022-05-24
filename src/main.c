@@ -138,8 +138,7 @@ int main(int argc, char** argv)
     Scene scene, scene2;
     initScene(&scene); //Changes on createScene that seemed to not affect value
     initScene(&scene2); //Test in gameState 5
-
-    //fillSceneLineTab(&scene);
+    scene2.lineCount=0;
 
     //QuadTree
     QuadTree quadTree = createQuadTree(0, 0, WINDOW_WIDTH,  WINDOW_HEIGHT);
@@ -243,7 +242,7 @@ int main(int argc, char** argv)
                 }
                 glLoadIdentity();
                 glScalef(1.2, 1.2, 0);
-                displayBackground(&scene2, startTime);
+                displayBackground(&scene2, SDL_GetTicks());
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
                 drawScene(scene);
                 drawHUD(scene);

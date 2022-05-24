@@ -50,13 +50,13 @@ void addQuadTreeToScene(Scene* scene, QuadTree quadTree)
 
 void drawScene(Scene scene)
 {
-    glBegin(GL_TRIANGLE_FAN);
-    glColor3f(0.9, 0.9, 0.9);
-    glVertex2f(-960, 540);
-    glVertex2f(960, 540);
-    glVertex2f(960, -540);
-    glVertex2f(-960, -540);
-    glEnd();
+    // glBegin(GL_TRIANGLE_FAN);
+    // glColor3f(0.9, 0.9, 0.9);
+    // glVertex2f(-960, 540);
+    // glVertex2f(960, 540);
+    // glVertex2f(960, -540);
+    // glVertex2f(-960, -540);
+    // glEnd();
 
     for (int i = 0; i < scene.cubesCount; i++)
     {

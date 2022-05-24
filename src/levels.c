@@ -91,27 +91,19 @@ void displayBackground(Scene* scene, Uint32 currentTime)
         glEnd();
     glPopMatrix();
 
-
-    BackgroundLine newBackgroundLine = createBackgroundLine(10,0,1,-2000,250,0,5000,0,0,0); //first horizontal 
-    newBackgroundLine.speedFactor=3;
     if(currentTime%60==0)
     {
         int index = scene->lineCount;
-
-        if(scene->lineCount%50==0)
+        printf("scene->lineCount:%d",scene->lineCount);
+        if(scene->lineCount%20==0)
         {
-            index = scene->lineCount%50;
+            index = scene->lineCount%20;
         }
-        
-        printf("\nnum.%d",scene->lineCount);
-        //addRandomLineToScene(scene, currentTime);
         scene->background[index]=randomNewLine();
         displayLineInfo(scene->background[scene->lineCount]);
         scene->lineCount++;
     }
-    printf("linecount:%d\n",scene->lineCount);
-    updateBackgroundLine(&newBackgroundLine);
-    drawLine(newBackgroundLine);
+
     for (int i=0;i<scene->lineCount;i++)
     {
         updateBackgroundLine(&scene->background[i]);

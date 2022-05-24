@@ -125,10 +125,7 @@ void drawMenu(StartMenu* menu)
 
         for (int i=0;i<5;i++)
         {
-            printf("\nDRAWLINE//\n");
             menu->tabLines[i].time=SDL_GetTicks();
-            printf("menu->tabLines[%d].time:%d\n",i,menu->tabLines[i].time);
-            printf("menu->tabLines[%d].endTime:%d\n",i,menu->tabLines[i].endTime);
             drawLine(menu->tabLines[i]);
         }
 

@@ -17,7 +17,7 @@ typedef struct Scene {
     int cubesCount;
     int currentPlayerIndex;
     QuadTree quadTree;
-    BackgroundLine background[50]; //50 lines max
+    BackgroundLine background[20]; //20 lines max
     int lineCount;
 } Scene;
 
