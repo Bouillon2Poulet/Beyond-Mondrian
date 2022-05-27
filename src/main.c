@@ -271,13 +271,13 @@ int main(int argc, char** argv)
                 }
                 glLoadIdentity();
                 glScalef(1.2, 1.2, 0);
-                displayBackground(&scene2, SDL_GetTicks());
+                displayBackground(&scene2, SDL_GetTicks(), gameState);
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
                 drawScene(scene);
                 drawHUD(scene);
                 break;
             case 5 :
-            displayBackground(&scene2, startTime); break;
+            displayBackground(&scene2,SDL_GetTicks(), gameState); break;
         }
         
         if (gameState == 1 && checkLevelState(scene) == 1)
