@@ -11,6 +11,8 @@ Player createPlayer(float x, float y, float width, float height, int filled, flo
     player.startColors[0] = player.cube.red;
     player.startColors[1] = player.cube.green;
     player.startColors[2] = player.cube.blue;
+    player.startPositions[0] = player.cube.x;
+    player.startPositions[1] = player.cube.y;
     return player;
 }
 

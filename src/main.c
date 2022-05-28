@@ -10,8 +10,9 @@
 #include "levels.h"
 #include "scene.h"
 #include "audio.h"
+#include <algorithm>
 
-int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1 // 5 : test
+int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1
 int windowState = 0; //0 : normal, 1 : fullscreen;
 
 
@@ -172,66 +173,98 @@ int main(int argc, char** argv)
                 break;
             
             case 1:
-            case 2:               
+            case 2:
+                for (int k = 0; k < scene.movingCubesCount; k++)
+                {
+                    moveCube(&scene.movingCubes[k]);
+                }
+
                 for (int j = 0; j < scene.playersCount; j++)
                 {
-                    if (scene.players[j].isGrounded == 0)
-                    {
-                        addGravity(&scene.players[j]);
-                    }
+                    addGravity(&scene.players[j]);
                     checkEndCollision(&scene.players[j], scene.playersEnd[j]);
                     findPlayerQuadTree(&scene.quadTree, scene.players[j], playerQuadTree);
-                    
-                    for (int k = 0; k < scene.movingCubesCount; k++)
-                    {
-                        moveCube(&scene.movingCubes[k]);
-                    }
 
-                    /* Collisions joueurs */
+                    /* Collisions obstacles qui bougent */
 
                     int temp = 0;
-                    for (int i = 0; i < scene.playersCount; i++)
+
+                    for (int i = 0; i < scene.movingCubesCount; i++)
                     {
-                        if (j != i && scene.players[j].isGrounded == 0 && checkCollision(scene.players[j], scene.players[i].cube) == 1)
+                        if (checkCollision(scene.players[j], scene.movingCubes[i].cube) == 1)
                         {
                             temp = 1;
-                            if (scene.players[j].cube.y > scene.players[i].cube.y)
+                            if (scene.players[j].cube.y > scene.movingCubes[i].cube.y)
                             {
-                                scene.players[j].cube.y = scene.players[i].cube.y + scene.players[i].cube.height/2 + scene.players[j].cube.height/2;
+                                scene.movingCubes[i].players.push_back(&scene.players[j]);
+                                scene.players[j].cube.y = scene.movingCubes[i].cube.y + scene.movingCubes[i].cube.height/2 + scene.players[j].cube.height/2;
                                 scene.players[j].isGrounded = 1;
                                 scene.players[j].gravity = 0;
                             }
-                            else if (scene.players[j].cube.y < scene.players[i].cube.y)
+                            else if (scene.players[j].cube.y < scene.movingCubes[i].cube.y)
                             {
-                                scene.players[j].cube.y = scene.players[i].cube.y - scene.players[i].cube.height/2 - scene.players[j].cube.height/2;
+                                scene.players[j].cube.y = scene.movingCubes[i].cube.y - scene.movingCubes[i].cube.height/2 - scene.players[j].cube.height/2;
                                 scene.players[j].gravity = 0;
                             }
                             break;
                         }
-                        scene.players[j].isGrounded = 0;
                     }
+                    
+                    /* Collisions joueurs */
+
+                    if (temp == 0)
+                    {
+                        for (int i = 0; i < scene.playersCount; i++)
+                        {
+                            if (j != i && checkCollision(scene.players[j], scene.players[i].cube) == 1)
+                            {
+                                temp = 1;
+                                if (scene.players[j].cube.y > scene.players[i].cube.y)
+                                {
+                                    scene.players[j].cube.y = scene.players[i].cube.y + scene.players[i].cube.height/2 + scene.players[j].cube.height/2;
+                                    scene.players[j].isGrounded = 1;
+                                }
+                                else if (scene.players[j].cube.y < scene.players[i].cube.y)
+                                {
+                                    scene.players[j].cube.y = scene.players[i].cube.y - scene.players[i].cube.height/2 - scene.players[j].cube.height/2;
+                                    scene.players[i].isGrounded = 1;
+                                }
+                                scene.players[j].gravity = 0;
+                                break;
+                            }
+                        }
+                    }
+                    
 
                     /* Collisions obstacles */
-
+                    
                     if (temp == 0)
                     {
                         for (auto quadTree : playerQuadTree)
                         {
                             for (int i = 0; i < quadTree->nbCubes; i++)
                             {
-                                if (scene.players[j].isGrounded == 0 && checkCollision(scene.players[j], quadTree->cubes[i]) == 1)
+                                if (checkCollision(scene.players[j], quadTree->cubes[i]) == 1)
                                 {
-                                    temp = 1;
-                                    if (scene.players[j].cube.y > quadTree->cubes[i].y)
+                                    if (quadTree->cubes[i].red == 1 && quadTree->cubes[i].green == 0 && quadTree->cubes[i].blue == 0)
                                     {
-                                        scene.players[j].cube.y = quadTree->cubes[i].y + quadTree->cubes[i].height/2 + scene.players[j].cube.height/2;
-                                        scene.players[j].isGrounded = 1;
-                                        scene.players[j].gravity = 0;
+                                        scene.players[j].cube.x = scene.players[j].startPositions[0];
+                                        scene.players[j].cube.y = scene.players[j].startPositions[1];
                                     }
-                                    else if (scene.players[j].cube.y < quadTree->cubes[i].y)
+                                    else
                                     {
-                                        scene.players[j].cube.y = quadTree->cubes[i].y - quadTree->cubes[i].height/2 - scene.players[j].cube.height/2;
-                                        scene.players[j].gravity = 0;
+                                        temp = 1;
+                                        if (scene.players[j].cube.y > quadTree->cubes[i].y)
+                                        {
+                                            scene.players[j].cube.y = quadTree->cubes[i].y + quadTree->cubes[i].height/2 + scene.players[j].cube.height/2;
+                                            scene.players[j].isGrounded = 1;
+                                            scene.players[j].gravity = 0;
+                                        }
+                                        else if (scene.players[j].cube.y < quadTree->cubes[i].y)
+                                        {
+                                            scene.players[j].cube.y = quadTree->cubes[i].y - quadTree->cubes[i].height/2 - scene.players[j].cube.height/2;
+                                            scene.players[j].gravity = 0;
+                                        }
                                     }
                                     break;
                                 }
@@ -244,46 +277,26 @@ int main(int argc, char** argv)
                         }
                         playerQuadTree.clear();
                     }
-                    
-                    /* Collisions obstacles qui bougent */
-
-                    if (temp == 0)
-                    {
-                        for (int i = 0; i < scene.movingCubesCount; i++)
-                        {
-                            if (checkCollision(scene.players[j], scene.movingCubes[i].cube) == 1)
-                            {
-                                if (scene.players[j].cube.y > scene.movingCubes[i].cube.y)
-                                {
-                                    scene.players[j].cube.y = scene.movingCubes[i].cube.y + scene.movingCubes[i].cube.height/2 + scene.players[j].cube.height/2;
-                                    scene.players[j].isGrounded = 1;
-                                    scene.players[j].gravity = 0;
-                                }
-                                else if (scene.players[j].cube.y < scene.movingCubes[i].cube.y)
-                                {
-                                    scene.players[j].cube.y = scene.movingCubes[i].cube.y - scene.movingCubes[i].cube.height/2 - scene.players[j].cube.height/2;
-                                    scene.players[j].gravity = 0;
-                                }
-                                break;
-                            }
-                        }
-                    }
                 }
+
                 glLoadIdentity();
-                glScalef(1.2, 1.2, 0);
-                displayBackground(&scene2, SDL_GetTicks(), gameState);
                 moveCamera(&camera, scene.players[scene.currentPlayerIndex]);
+                glPushMatrix();
+                glScalef(0.6, 0.6, 0);
+                displayBackground(&scene2, SDL_GetTicks(), gameState);
+                glPopMatrix();
                 drawScene(scene);
                 drawHUD(scene);
                 break;
-            case 5 :
-            displayBackground(&scene2,SDL_GetTicks(), gameState); break;
         }
         
-        if (gameState == 1 && checkLevelState(scene) == 1)
+        if (checkLevelState(scene) == 1 && gameState > 0 && gameState < 3)
         {
-            createLevel2(&scene);
-            gameState = 2;
+            if (gameState == 1)
+            {
+                createLevel2(&scene);
+            }
+            gameState++;
         }
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
@@ -321,10 +334,18 @@ int main(int argc, char** argv)
                 {
                     if (checkCollision(scene.players[scene.currentPlayerIndex], quadTree->cubes[i]) == 1)
                     {
-                        temp1 = 1;
-                        scene.players[scene.currentPlayerIndex].cube.x = 
-                        quadTree->cubes[i].x + quadTree->cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
-                        break;
+                        if (quadTree->cubes[i].red == 1 && quadTree->cubes[i].green == 0 && quadTree->cubes[i].blue == 0)
+                        {
+                            scene.players[scene.currentPlayerIndex].cube.x = scene.players[scene.currentPlayerIndex].startPositions[0];
+                            scene.players[scene.currentPlayerIndex].cube.y = scene.players[scene.currentPlayerIndex].startPositions[1];
+                        }
+                        else
+                        {
+                            temp1 = 1;
+                            scene.players[scene.currentPlayerIndex].cube.x = 
+                            quadTree->cubes[i].x + quadTree->cubes[i].width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                            break;
+                        }
                     }
                 }
                 if (temp1 == 1)
@@ -333,6 +354,18 @@ int main(int argc, char** argv)
                 }
             }
             playerQuadTree.clear();
+
+            /* Collisions obstacles qui bougent */
+
+            for (int i = 0; i < scene.movingCubesCount; i++)
+            {
+                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.movingCubes[i].cube) == 1)
+                {
+                    scene.players[scene.currentPlayerIndex].cube.x = 
+                    scene.movingCubes[i].cube.x + scene.movingCubes[i].cube.width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
+                    break;
+                }
+            }
         }
         
         if(keystates[SDL_SCANCODE_RIGHT] && gameState != 0) 
@@ -362,9 +395,18 @@ int main(int argc, char** argv)
                 {
                     if (checkCollision(scene.players[scene.currentPlayerIndex], quadTree->cubes[i]) == 1)
                     {
-                        temp1 = 1;
-                        scene.players[scene.currentPlayerIndex].cube.x = 
-                        quadTree->cubes[i].x - quadTree->cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                        if (quadTree->cubes[i].red == 1 && quadTree->cubes[i].green == 0 && quadTree->cubes[i].blue == 0)
+                        {
+                            scene.players[scene.currentPlayerIndex].cube.x = scene.players[scene.currentPlayerIndex].startPositions[0];
+                            scene.players[scene.currentPlayerIndex].cube.y = scene.players[scene.currentPlayerIndex].startPositions[1];
+                        }
+                        else
+                        {
+                            temp1 = 1;
+                            scene.players[scene.currentPlayerIndex].cube.x = 
+                            quadTree->cubes[i].x - quadTree->cubes[i].width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                        }
+                        
                         break;
                     }
                 }
@@ -374,6 +416,18 @@ int main(int argc, char** argv)
                 }
             }
             playerQuadTree.clear();
+
+            /* Collisions obstacles qui bougent */
+
+            for (int i = 0; i < scene.movingCubesCount; i++)
+            {
+                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.movingCubes[i].cube) == 1)
+                {
+                    scene.players[scene.currentPlayerIndex].cube.x = 
+                    scene.movingCubes[i].cube.x - scene.movingCubes[i].cube.width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
+                    break;
+                }
+            }
         }
 
         if(keystates[SDL_SCANCODE_SPACE] && gameState != 0) 

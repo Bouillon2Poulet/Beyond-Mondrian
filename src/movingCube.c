@@ -21,14 +21,22 @@ void moveCube(MovingCube* movingCube)
             if (movingCube->cube.x < movingCube->x1)
             {
                 movingCube->cube.x += movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.x += movingCube->speed;
+                }
                 if (movingCube->cube.x > movingCube->x1)
                 {
                     movingCube->cube.x = movingCube->x1;
                 }
             } 
-            else 
+            else if (movingCube->cube.x > movingCube->x1)
             {
                 movingCube->cube.x -= movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.x -= movingCube->speed;
+                }
                 if (movingCube->cube.x < movingCube->x1)
                 {
                     movingCube->cube.x = movingCube->x1;
@@ -38,6 +46,10 @@ void moveCube(MovingCube* movingCube)
             if (movingCube->cube.y < movingCube->y1)
             {
                 movingCube->cube.y += movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.y += movingCube->speed;
+                }
                 if (movingCube->cube.y > movingCube->y1)
                 {
                     movingCube->cube.y = movingCube->y1;
@@ -46,6 +58,10 @@ void moveCube(MovingCube* movingCube)
             else 
             {
                 movingCube->cube.y -= movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.y -= movingCube->speed;
+                }
                 if (movingCube->cube.y < movingCube->y1)
                 {
                     movingCube->cube.y = movingCube->y1;
@@ -62,14 +78,22 @@ void moveCube(MovingCube* movingCube)
             if (movingCube->cube.x < movingCube->x2)
             {
                 movingCube->cube.x += movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.x += movingCube->speed;
+                }
                 if (movingCube->cube.x > movingCube->x2)
                 {
                     movingCube->cube.x = movingCube->x2;
                 }
             } 
-            else 
+            else if (movingCube->cube.x > movingCube->x2)
             {
                 movingCube->cube.x -= movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.x -= movingCube->speed;
+                }
                 if (movingCube->cube.x < movingCube->x2)
                 {
                     movingCube->cube.x = movingCube->x2;
@@ -79,6 +103,10 @@ void moveCube(MovingCube* movingCube)
             if (movingCube->cube.y < movingCube->y2)
             {
                 movingCube->cube.y += movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.y += movingCube->speed;
+                }
                 if (movingCube->cube.y > movingCube->y2)
                 {
                     movingCube->cube.y = movingCube->y2;
@@ -87,6 +115,10 @@ void moveCube(MovingCube* movingCube)
             else 
             {
                 movingCube->cube.y -= movingCube->speed;
+                for (auto &player : movingCube->players)
+                {
+                    player->cube.y -= movingCube->speed;
+                }
                 if (movingCube->cube.y < movingCube->y2)
                 {
                     movingCube->cube.y = movingCube->y2;
@@ -102,4 +134,5 @@ void moveCube(MovingCube* movingCube)
         default:
             break;
     }
+    movingCube->players.clear();
 }

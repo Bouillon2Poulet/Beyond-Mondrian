@@ -7,12 +7,9 @@ void createLevel1(Scene* scene)
     Player player = createPlayer(0, 0, 10, 10, 1, 1, 0, 0);
     Player player2 = createPlayer(-20, 0, 5, 20, 1, 1, 1, 0);
     Player player3 = createPlayer(20, 0, 20, 5, 1, 0, 0, 1);
-    addPlayerToScene(scene, player, 340, -20);
-    addPlayerToScene(scene, player2, 100, -75);
-    addPlayerToScene(scene, player3, 210, 75);
-
-    MovingCube movingCube = createMovingCube(5, -30, 5, 5, 1, 0, 0, 0, 5, -40, 5, -20, 1);
-    addMovingCubeToScene(scene, movingCube);
+    addPlayerToScene(scene, player, 341, -20);
+    addPlayerToScene(scene, player2, 102, -75);
+    addPlayerToScene(scene, player3, 210, 73.5);
 
     //Cubes
     Cube tabCube[16];
@@ -63,6 +60,11 @@ void createLevel2(Scene* scene)
     Player player2 = createPlayer(-2, 0, 0.5, 2, 1, 0, 1, 0);
     addPlayerToScene(&newScene, player, -4, -3);
     addPlayerToScene(&newScene, player2, 4, -0.5);
+
+    /*
+    MovingCube movingCube = createMovingCube(5, -30, 5, 20, 1, 0.3, 0.2, 0.2, 5, -30, 20, -30, 1);
+    addMovingCubeToScene(scene, movingCube);
+    */
 
     //Cubes
     Cube cube = createCube(3, -5, 10, 1, 1, 0, 0, 1);

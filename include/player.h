@@ -10,6 +10,7 @@ typedef struct Player {
     float gravity;
     int isGrounded;
     float startColors[3];
+    float startPositions[2];
 } Player;
 
 Player createPlayer(float x, float y, float height, float width, int filled, float red, float green, float blue);

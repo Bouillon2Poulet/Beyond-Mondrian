@@ -151,11 +151,11 @@ void displayBackground(Scene* scene, Uint32 currentTime, int gameState)
 {
     glPushMatrix(); //Background
         glBegin(GL_TRIANGLE_FAN);
-        glColor3f(1,1,1);
-        glVertex2f(-1200,600);
-        glVertex2f(1200,600);
-        glVertex2f(1200,-600);
-        glVertex2f(-1200,-600);
+        glColor3f(0.9,0.9,0.9);
+        glVertex2f(-1920,1080);
+        glVertex2f(1920,1080);
+        glVertex2f(1920,-1080);
+        glVertex2f(-1920,-1080);
         glEnd();
     glPopMatrix();
 
