@@ -6,7 +6,7 @@
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "line.h"
+#include "background.h"
 
 #define MAX_TEXTURE_COUNT 10
 

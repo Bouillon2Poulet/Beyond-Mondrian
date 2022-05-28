@@ -6,7 +6,7 @@
 #include "menu.h"
 #include "cube.h"
 #include "lodepng.h"
-#include "line.h"
+#include "background.h"
 
 GLuint loadTextureStartMenu (int indexTexture, StartMenu menu)
 {
