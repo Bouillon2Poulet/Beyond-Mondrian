@@ -13,7 +13,6 @@
 int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1
 int windowState = 0; //0 : normal, 1 : fullscreen;
 
-
 /* Dimensions initiales et titre de la fenetre */
 static const unsigned int WINDOW_WIDTH = 1920;
 static const unsigned int WINDOW_HEIGHT = 1080;
@@ -176,6 +175,7 @@ int main(int argc, char** argv)
             
             case 1:
             case 2:
+            case 3:
                 for (int k = 0; k < scene.movingCubesCount; k++)
                 {
                     moveCube(&scene.movingCubes[k]);
@@ -301,11 +301,15 @@ int main(int argc, char** argv)
                 break;
         }
         
-        if (checkLevelState(scene) == 1 && gameState > 0 && gameState < 3)
+        if (checkLevelState(scene) == 1 && gameState > 0 && gameState < 4)
         {
             if (gameState == 1)
             {
                 createLevel2(&scene);
+            }
+            if (gameState == 2)
+            {
+                //createLevel3(&scene);
             }
             gameState++;
         }
@@ -445,6 +449,7 @@ int main(int argc, char** argv)
         {
             if (scene.players[scene.currentPlayerIndex].isGrounded == 1)
             {
+                Mix_PlayChannel(1, jumpSound, 0);
                 playerJump(&scene.players[scene.currentPlayerIndex]);
             }
         }
@@ -508,23 +513,13 @@ int main(int argc, char** argv)
                     {
                         switchCurrentPlayer(&scene);
                     }
-                    if (e.key.keysym.sym == SDLK_SPACE && gameState > 0) //Jump sound
-                    {
-                        Mix_PlayChannel(1, jumpSound, 0); // Joue mainTheme infini fois sur le canal 1
-                    }
                     if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping screen
                     {
                         if (startTime>=900)
                         {
                             createLevel1(&scene);
-                            gameState = 2;
+                            gameState = 1;
                         }
-                    }
-                    if (e.key.keysym.sym == SDLK_F9) //Test end
-                    {
-                        gameState = 4;
-                        Mix_Pause(0);
-                        Mix_PlayChannel(1, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
                     }
                 default:
                     break;
