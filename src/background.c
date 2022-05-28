@@ -88,20 +88,21 @@ BackgroundLine randomNewLine()
 
     srand(time(NULL)); //init random seed
     //Position
-    randomLine.width=(rand() % 5)+15; //random width between 5 and 10
-    randomLine.mode=rand() % 2; //random 
+    randomLine.width=(rand() % 5)+15; //random width between 15 and 20
+    randomLine.speedFactor=(rand()%3)+2; //random speedFactor between 2 and 5
+    randomLine.xStart=1000;
+    randomLine.yStart=800;
+
     randomLine.sens=0;
-    randomLine.speedFactor=(rand()%3)+2; //random speedFactor between
     while (randomLine.sens!=-1 && randomLine.sens!=1)
     {
         randomLine.sens=(rand() % 4)-2; //random sens between -1 and 1
     }
 
-    randomLine.xStart=1000;
-    randomLine.yStart=800;
+    randomLine.mode=rand() % 2; //random mode
     if (randomLine.mode==0)
     {
-        randomLine.yStart=(rand() % 1080)-540; //random xStart between 0 and 960
+        randomLine.yStart=(rand() % 1080)-540; //random xStart between -540 and +540
         switch (randomLine.sens)
         {
             case -1 : break;
@@ -111,7 +112,7 @@ BackgroundLine randomNewLine()
     }
     else
     {
-        randomLine.xStart=(rand() % 2500)-1250; //random xStart between 0 and 540
+        randomLine.xStart=(rand() % 1920)-960; //random xStart between -960 and 960
         switch(randomLine.sens)
         {
             case -1 : break;
@@ -119,9 +120,11 @@ BackgroundLine randomNewLine()
             default : printf("error sens new random line\n"); 
         }
     }
+
     randomLine.time=0;
-    randomLine.endTime=(rand() % 3000)+7000; //random endTime between 2000 and 5000
-    int a = (rand() % 20) + 85;
+    randomLine.endTime=(rand() % 3000)+7000; //random endTime between 7000 and 10000
+    
+    int a = (rand() % 20) + 85; //random grey between 0.85 et 0.95
     float b = a;
     float colour =b/100;
     randomLine.r=colour;
@@ -168,7 +171,7 @@ void displayBackground(Scene* scene, Uint32 currentTime, int gameState)
 
     int start=scene->lineCount%nbLinesMax;
     int loop=(scene->lineCount/nbLinesMax)-1;
-    if(currentTime%60==0 && gameState!=0) //Each 10 frames
+    if(currentTime%60==0 && gameState!=0) //Each 60 frames
     {
         if(scene->lineCount>=nbLinesMax) //If more than 20 lines, restart from first
         {

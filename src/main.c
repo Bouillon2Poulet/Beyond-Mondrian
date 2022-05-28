@@ -5,12 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "menu.h"
+#include "screen.h"
 #include "camera.h"
 #include "levels.h"
 #include "scene.h"
-#include "audio.h"
-#include <algorithm>
 
 int gameState = 0; //0 : menu, 1 : tuto, 2 : niveau 1
 int windowState = 0; //0 : normal, 1 : fullscreen;
@@ -119,21 +117,26 @@ int main(int argc, char** argv)
 
     /* Création du jeu */
     //Audio
-    // Mix_Music* musicMenu;
+    // Mix_Music* mainTheme;
     // Mix_Music* jumpSound;
 
     Mix_AllocateChannels(2); // Allouer 2 cannaux 
     Mix_Volume(0, MIX_MAX_VOLUME); // Mets le son a 100% en volume pour le premier cannaux
     Mix_Volume(1, MIX_MAX_VOLUME / 2); // Mets le son a 50% en volume pour le deuxième cannaux 
 
-    // loadMusic(&musicMenu,0);
+    // loadMusic(&mainTheme,0);
     // loadMusic(&jumpSound,1);
 
-    Mix_Chunk* soundA = Mix_LoadWAV("assets/audio/menu.wav");
-    Mix_Chunk* soundB = Mix_LoadWAV("assets/audio/jump.wav");
+    Mix_Chunk* mainTheme = Mix_LoadWAV("assets/audio/main.wav");
+    Mix_Chunk* jumpSound = Mix_LoadWAV("assets/audio/jump.wav");
+    Mix_Chunk* endTheme = Mix_LoadWAV("assets/audio/end.wav");
 
-    //Menu
-    StartMenu startMenu = createStartMenu();
+
+    //Start and end screens
+    Screen startScreen = createScreen(0);
+    Screen endScreen = createScreen(1);
+
+
 
     //Scène
     Scene scene, scene2;
@@ -166,10 +169,9 @@ int main(int argc, char** argv)
             case 0:
                 while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
                 {
-                    Mix_PlayChannel(0, soundA, -1); // Joue soundA infini fois sur le canal 1
+                    Mix_PlayChannel(0, mainTheme, -1); // Joue mainTheme infini fois sur le canal 1
                 }
-                printf("?\n");
-                drawMenu(&startMenu);
+                drawScreen(&startScreen);
                 break;
             
             case 1:
@@ -287,6 +289,15 @@ int main(int argc, char** argv)
                 glPopMatrix();
                 drawScene(scene);
                 drawHUD(scene);
+                break;
+            case 4 :
+                while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
+                {
+                    printf(":::::::::::::::\n");
+                    Mix_PlayChannel(0, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
+                }
+                printf("?\n");
+                drawScreen(&endScreen);
                 break;
         }
         
@@ -499,15 +510,21 @@ int main(int argc, char** argv)
                     }
                     if (e.key.keysym.sym == SDLK_SPACE && gameState > 0) //Jump sound
                     {
-                        Mix_PlayChannel(1, soundB, 0); // Joue soundA infini fois sur le canal 1
+                        Mix_PlayChannel(1, jumpSound, 0); // Joue mainTheme infini fois sur le canal 1
                     }
-                    if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping menu
+                    if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping screen
                     {
                         if (startTime>=900)
                         {
                             createLevel1(&scene);
-                            gameState = 1;
+                            gameState = 2;
                         }
+                    }
+                    if (e.key.keysym.sym == SDLK_F9) //Test end
+                    {
+                        gameState = 4;
+                        Mix_Pause(0);
+                        Mix_PlayChannel(1, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
                     }
                 default:
                     break;
@@ -526,9 +543,9 @@ int main(int argc, char** argv)
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
-    //Mix_FreeMusic(musicMenu);
-    Mix_FreeChunk(soundA); // Libére la mémoire allouer pour le son
-    Mix_FreeChunk(soundB);
+    //Mix_FreeMusic(mainTheme);
+    Mix_FreeChunk(mainTheme); // Libére la mémoire allouer pour le son
+    Mix_FreeChunk(jumpSound);
     Mix_CloseAudio();
     SDL_Quit();
 

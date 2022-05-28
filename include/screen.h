@@ -1,5 +1,5 @@
-#ifndef MENU_H
-#define MENU_H
+#ifndef SCREEN_H
+#define SCREEN_H
 
 #include <SDL2/SDL.h>
 #include <GL/gl.h>
@@ -10,17 +10,18 @@
 
 #define MAX_TEXTURE_COUNT 10
 
-typedef struct StartMenu {
+typedef struct Screen {
     GLuint textureTab[MAX_TEXTURE_COUNT];
+    int type; //0 for start screen, 1 for end screen
     int nbTextures;
     BackgroundLine tabLines[5];
-} StartMenu;
+} Screen;
 
-GLuint loadTextureStartMenu (int indexTexture, StartMenu menu);
+GLuint loadTextureScreen (int indexTexture, Screen screen);
 SDL_Surface* IMG_Load(const char* filename);
 GLuint drawCase(int w, int h);
-StartMenu createStartMenu();
-void drawMenu(StartMenu* menu);
+Screen createScreen(int mode);
+void drawScreen(Screen* screen);
 void displayImage(int x, int y, GLuint texture);
 
 #endif
