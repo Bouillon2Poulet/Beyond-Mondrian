@@ -27,7 +27,7 @@ Modified by : Antoine
 
     - Added players end
     - Added HUD
-    - Added Rom1's menu
+    - Added Rom1's screen
     
 Date : 03/05/2022
 Modified by : Antoine
