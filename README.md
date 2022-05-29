@@ -79,9 +79,9 @@ npm sudo apt update
 
 In order to compile our source code, we'll need to install :
 * gcc compiler and make
-  ```sh
-  npm sudo apt install build-essential
-  ```
+```sh
+npm sudo apt install build-essential
+```
 
 * OpenGL library
 ```sh
@@ -96,17 +96,17 @@ npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2
 
 ### Installation
 1. Clone the repo
-   ```sh
-   git clone https://github.com/Bouillon2Poulet/TeamGolem
-   ```
+  ```sh
+  git clone https://github.com/Bouillon2Poulet/TeamGolem
+  ```
 
 2. Make clean and make main
 * at the root of the TeamGolem folder :
-  ```sh
-  make clean
-  ```
-  ```sh
-  make main
+```sh
+make clean
+```
+```sh
+make main
   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -131,27 +131,30 @@ For those who may want to fork our game in order to create their own, we will de
 
 ### Window and scene
 The window is create thanks to SDL2 lib as we can see in main with :
-  ```c
-  SDL_Window* window;
-  ```
+```c
+#include <SDL2/SDL.h>
+SDL_Window* window;
+```
 It will also help us by giving us time since the window opened with :
-  ```c
-  SDL_GetTicks();
-  ```
+```c
+SDL_GetTicks();
+```
 
 We do draw our scenes and cubes thanks to OpenGL lib<br>
 * Setup
-  ```c
-  glClear(GL_COLOR_BUFFER_BIT);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  ```
+```c
+#include <GL/gl.h>
+#include <GL/glu.h>
+glClear(GL_COLOR_BUFFER_BIT);
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+```
 * Draw
-  ```c
-  glBegin(GL_TRIANGLE_FAN);
-  glColor3f(float r, float g, float b);
-  glVertex2f(int x, int y);
-  ```
+```c
+glBegin(GL_TRIANGLE_FAN);
+glColor3f(float r, float g, float b);
+glVertex2f(int x, int y);
+```
 
 Players and obstacles are based on Cube struct.
 Decorative lines are based on Line struct.
@@ -198,13 +201,13 @@ Textures are loaded from ./assets/textImages folder with
   ```
 that returns an SDL_Surface binded to a GLuint Texture :
   ```c
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    return texture;
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  return texture;
   ```
 
 The SDL_Surface itself it generated thanks with SDL_Surface* IMG_Load(). It uses lodepng.c which allows us to use png but this is kind of black magic :smile:
