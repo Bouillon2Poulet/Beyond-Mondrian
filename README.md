@@ -12,7 +12,6 @@
   <h3 align="center">README</h3>
   <p align="center">
     A guide to install and use <i>Beyond Mondrian</i><br>
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>View a demo»</strong></a> <!--Mettre bon lien-->
   </p>
 </div>
 
