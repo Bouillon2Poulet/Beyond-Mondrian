@@ -277,10 +277,13 @@ Mix_PlayChannel(0, mainTheme, int nbLoop);
 <!-- POST MORTEM -->
 ## Post Mortem
 
-We took a lot of pleasure working on this project. Some team members were used to game engine, yet it still very interessting to work with a low-level language in order to make a video game. We splitted the work well, each member had his speciality and we managed to merge our different commit without that much problem.<br>
+We took a lot of pleasure working on this project. Some team members were used to game engine, yet it still very interessting to work with a low-level language in order to make a video game.<br>We splitted the work well, each member had his speciality and we managed to merge our different commit without that much problem.<br>
 This project was realy challenging, we encountered some difficulties on collisions and animations especially. Adding audio and textures was not that hard and it was realy fun to custom the game our way !<br>
-We're also very proud of the game design, we provide 3 levels with a good evolution of the difficuly curve.
-
+We're also very proud of the game design, we provide 3 levels with a good evolution of the difficuly curve.<br>
+<br>
+Yet, we are not fully satisfied by our collision system because it's not 100% perfect.
+Nevertheless, we worked on it so hard to be the best game possible that we're realy happy to finaly be able to present it !
+<br><br>
 <div align="center">
   <a href="">
     <img src="assets/textImage/end.png" alt="Logo" width="468" height="250">
