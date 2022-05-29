@@ -124,3 +124,206 @@ int checkLevelState(Scene scene)
     }
     return 1;
 }
+
+void checkGravityCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
+{
+    for (int k = 0; k < scene->movingCubesCount; k++)
+    {
+        moveCube(&scene->movingCubes[k]);
+    }
+
+    for (int j = 0; j < scene->playersCount; j++)
+    {
+        addGravity(&scene->players[j]);
+        checkEndCollision(&scene->players[j], scene->playersEnd[j]);
+        findPlayerQuadTree(&scene->quadTree, scene->players[j], playerQuadTree);
+
+        /* Collisions obstacles qui bougent */
+
+        int temp = 0;
+
+        for (int i = 0; i < scene->movingCubesCount; i++)
+        {
+            if (checkCollision(scene->players[j], scene->movingCubes[i].cube) == 1)
+            {
+                temp = 1;
+                if (scene->players[j].cube.y > scene->movingCubes[i].cube.y)
+                {
+                    scene->movingCubes[i].players.push_back(&scene->players[j]);
+                    scene->players[j].cube.y = scene->movingCubes[i].cube.y + scene->movingCubes[i].cube.height/2 + scene->players[j].cube.height/2;
+                    scene->players[j].isGrounded = 1;
+                    scene->players[j].gravity = 0;
+                }
+                else if (scene->players[j].cube.y < scene->movingCubes[i].cube.y)
+                {
+                    scene->players[j].cube.y = scene->movingCubes[i].cube.y - scene->movingCubes[i].cube.height/2 - scene->players[j].cube.height/2;
+                    scene->players[j].gravity = 0.5;
+                    scene->players[j].isGrounded = 0;
+                }
+                break;
+            }
+        }
+                    
+        /* Collisions joueurs */
+
+        if (temp == 0)
+        {
+            for (int i = 0; i < scene->playersCount; i++)
+            {
+                if (j != i && checkCollision(scene->players[j], scene->players[i].cube) == 1)
+                {
+                    temp = 1;
+                    if (scene->players[j].cube.y > scene->players[i].cube.y)
+                    {
+                        scene->players[j].cube.y = scene->players[i].cube.y + scene->players[i].cube.height/2 + scene->players[j].cube.height/2;
+                        scene->players[j].isGrounded = 1;
+                    }
+                    else if (scene->players[j].cube.y < scene->players[i].cube.y)
+                    {
+                        scene->players[j].cube.y = scene->players[i].cube.y - scene->players[i].cube.height/2 - scene->players[j].cube.height/2;
+                        scene->players[i].isGrounded = 1;
+                    }
+                    scene->players[j].gravity = 0;
+                    break;
+                }
+            }
+        }
+        
+        /* Collisions obstacles */
+                    
+        if (temp == 0)
+        {
+            for (auto quadTree : playerQuadTree)
+            {
+                for (int i = 0; i < quadTree->nbCubes; i++)
+                {
+                    if (checkCollision(scene->players[j], quadTree->cubes[i]) == 1)
+                    {
+                        if (quadTree->cubes[i].isSpike == 1)
+                        {
+                            scene->players[j].cube.x = scene->players[j].startPositions[0];
+                            scene->players[j].cube.y = scene->players[j].startPositions[1];
+                        }
+                        else
+                        {
+                            temp = 1;
+                            if (scene->players[j].cube.y > quadTree->cubes[i].y)
+                            {
+                                scene->players[j].cube.y = quadTree->cubes[i].y + quadTree->cubes[i].height/2 + scene->players[j].cube.height/2;
+                                scene->players[j].isGrounded = 1;
+                                scene->players[j].gravity = 0;
+                            }
+                            else if (scene->players[j].cube.y < quadTree->cubes[i].y)
+                            {
+                                scene->players[j].cube.y = quadTree->cubes[i].y - quadTree->cubes[i].height/2 - scene->players[j].cube.height/2;
+                                scene->players[j].gravity = 0;
+                            }
+                        }
+                        break;
+                    }
+                    scene->players[j].isGrounded = 0;
+                }
+                if (temp == 1)
+                {
+                    break;
+                }
+            }
+            playerQuadTree.clear();
+        }
+    }
+}
+
+void checkLeftCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
+{
+    int temp1 = 0;
+
+    /* Collisions joueurs */
+
+            for (int i = 0; i < scene->playersCount; i++)
+            {
+                if (scene->currentPlayerIndex != i && checkCollision(scene->players[scene->currentPlayerIndex], scene->players[i].cube) == 1)
+                {
+                    scene->players[scene->currentPlayerIndex].cube.x = 
+                    scene->players[i].cube.x + scene->players[i].cube.width/2 + scene->players[scene->currentPlayerIndex].cube.width/2;
+                    break;
+                }
+            }
+
+            /* Collisions obstacles */
+
+            findPlayerQuadTree(&scene->quadTree, scene->players[scene->currentPlayerIndex], playerQuadTree);
+
+            for (auto quadTree : playerQuadTree)
+            {
+                for (int i = 0; i < quadTree->nbCubes; i++)
+                {
+                    if (checkCollision(scene->players[scene->currentPlayerIndex], quadTree->cubes[i]) == 1)
+                    {
+                        if (quadTree->cubes[i].isSpike == 1)
+                        {
+                            scene->players[scene->currentPlayerIndex].cube.x = scene->players[scene->currentPlayerIndex].startPositions[0];
+                            scene->players[scene->currentPlayerIndex].cube.y = scene->players[scene->currentPlayerIndex].startPositions[1];
+                        }
+                        else
+                        {
+                            temp1 = 1;
+                            scene->players[scene->currentPlayerIndex].cube.x = 
+                            quadTree->cubes[i].x + quadTree->cubes[i].width/2 + scene->players[scene->currentPlayerIndex].cube.width/2;
+                            break;
+                        }
+                    }
+                }
+                if (temp1 == 1)
+                {
+                    break;
+                }
+            }
+            playerQuadTree.clear();
+}
+
+void checkRightCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
+{
+    int temp1 = 0;
+
+    /* Collisions joueurs */
+
+    for (int i = 0; i < scene->playersCount; i++)
+    {
+        if (scene->currentPlayerIndex != i && checkCollision(scene->players[scene->currentPlayerIndex], scene->players[i].cube) == 1)
+        {
+            scene->players[scene->currentPlayerIndex].cube.x = 
+            scene->players[i].cube.x - scene->players[i].cube.width/2 - scene->players[scene->currentPlayerIndex].cube.width/2;
+            break;
+        }
+    }
+
+    /* Collisions obstacles */
+
+    findPlayerQuadTree(&scene->quadTree, scene->players[scene->currentPlayerIndex], playerQuadTree);
+    for (auto quadTree : playerQuadTree)
+    {
+        for (int i = 0; i < quadTree->nbCubes; i++)
+        {
+            if (checkCollision(scene->players[scene->currentPlayerIndex], quadTree->cubes[i]) == 1)
+            {
+                if (quadTree->cubes[i].isSpike == 1)
+                {
+                    scene->players[scene->currentPlayerIndex].cube.x = scene->players[scene->currentPlayerIndex].startPositions[0];
+                    scene->players[scene->currentPlayerIndex].cube.y = scene->players[scene->currentPlayerIndex].startPositions[1];
+                }
+                else
+                {
+                    temp1 = 1;
+                    scene->players[scene->currentPlayerIndex].cube.x = 
+                    quadTree->cubes[i].x - quadTree->cubes[i].width/2 - scene->players[scene->currentPlayerIndex].cube.width/2;
+                }
+                break;
+            }
+        }
+        if (temp1 == 1)
+        {
+            break;
+        }
+    }
+    playerQuadTree.clear();
+}

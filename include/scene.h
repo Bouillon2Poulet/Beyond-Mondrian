@@ -44,4 +44,10 @@ void drawHUD(Scene scene);
 
 int checkLevelState(Scene scene);
 
+void checkGravityCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree);
+
+void checkLeftCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree);
+
+void checkRightCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree);
+
 #endif
