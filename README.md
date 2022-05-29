@@ -162,9 +162,9 @@ Decorative lines are based on Line struct.
 
 ### Quadtree and collisions
 The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtree">Quadtree</a> which allows to calculate collisions only with near objects.<br>
-<a href="https://en.wikipedia.org/wiki/Quadtree">
-<img src="https://www.researchgate.net/profile/Patrick-Guidotti/publication/2560370/figure/fig3/AS:669330421325826@1536592216141/Point-quadtree-example-with-a-fan-out-of-4-also-at-the-leaf-level-up-to-4-elements-per.png" alt="Quadtree picture" width="723" height="307">
-</a>
+  <a href="https://github.com/Bouillon2Poulet/TeamGolem">
+    <img src="assets/textImage/logo.png" alt="Logo" width="703" height="141">
+  </a>
 
 The source code of the Quadtree is homemade, it's all in the quadtree.c file.
 *Struct
