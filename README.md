@@ -103,7 +103,7 @@ npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2
    ```
 
 2. Make clean and make main
-* at the root of the TeamGolem file :
+* at the root of the TeamGolem folder :
   ```sh
   make clean
   ```
@@ -118,12 +118,74 @@ npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2
 ## Play
 
 In order to play to <i>Beyond Mondrian</i>, you will have to execute from terminal the bin/main.out file.
-at the root of the TeamGolem file :
+at the root of the TeamGolem folder :
   ```sh
   ./bin/main.out
   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+
+<!-- QUICK GUIDE TO DEVELOPERS-->
+## Quick guide to developers
+
+For those who may want to fork our game in order to create their own, we will describe shortly in this part how our game actualy works !
+
+### Window and scene
+The window is create thanks to SDL2 lib as we can see in main with :
+  ```sh
+  SDL_Window* window;
+  ```
+It will also help us by giving us time since the window opened with :
+  ```sh
+  SDL_GetTicks();
+  ```
+
+We do draw our scenes and cubes thanks to OpenGL lib
+*Setup
+  ```sh
+  glClear(GL_COLOR_BUFFER_BIT);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  ```
+*Draw
+  ```sh
+  glBegin(GL_TRIANGLE_FAN);
+  glColor3f(float r, float g, float b);
+  glVertex2f(int x, int y);
+  ```
+
+Players and obstacles are based on Cube struct.
+Decorative lines are based on Line struct.
+
+### Players
+
+### Camera
+
+### Quadtree and collisions
+
+### Textures
+Textures are loaded from ./assets/textImages folder with
+
+  ```c
+  (screen.c) loadTextureScreen(int indexTexture, Screen screen)
+  ```
+that returns an SDL_Surface binded to a GLuint Texture :
+  ```c
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return texture;
+  ```
+
+### Audio
+
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 <!-- CONTACT -->
