@@ -1,5 +1,5 @@
 <div id="top"></div>
-
+<br><br>
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -72,16 +72,32 @@ Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
+First of all, let's upgrade our all outdated packages with :
+* npm
+```sh
+npm sudo apt update
+```
 
-This is an example of how to list things you need to use the software and how to install them.
+In order to compile our source code, we'll need to install :
+<h3>gcc compiler and make</h3>
 * npm
   ```sh
-  npm install npm@latest -g
+  npm sudo apt install build-essential
   ```
+
+<h3>OpenGL library</h3>
+* npm
+```sh
+npm sudo apt-get install freeglut3-dev
+```
+
+<h3>SDL2 and all its libraries</h3>
+* npm
+```sh
+npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0
+```
+
 
 ### Installation
 
