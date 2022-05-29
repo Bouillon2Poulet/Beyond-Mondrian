@@ -1,51 +1,18 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
+<br><br>
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/Bouillon2Poulet/TeamGolem">
+    <img src="assets/textImage/logo.png" alt="Logo" width="703" height="141">
   </a>
+  <h3 align="center">Bouillon2Poulet - Rambogoss - SlayerOfShadow</h3>
+  <br>
 
-  <h3 align="center">Best-README-Template</h3>
-
+  <h3 align="center">README</h3>
   <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    A guide to install and use <i>Beyond Mondrian</i><br>
+    <a href="https://github.com/othneildrew/Best-README-Template"><strong>View a demo»</strong></a> <!--Mettre bon lien-->
   </p>
 </div>
 
@@ -66,14 +33,11 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#play">Play</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
+    <li><a href="#quick-guide-to-developers">Quick guide to developers</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -82,126 +46,188 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+We worked as a team of 3 on this "Thomas was alone" like game. <i>Beyond Mondrian</i> uses basic functionalities of  Mike Bithell's original game and takes them further by adding new stuffs such as levels, moving platform, musics and visual elements.
+Created for an IMAC school project, we are proud to present you the fruit of a one month labour :smile:
+We also want to shout out Steeve and Enguerrand who has been great helps during the development.
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+This README will help you through installation and use of <i>Beyond Mondrian</i>. It has been done thanks to <a href="https://github.com/othneildrew/Best-README-Template">othneildrew's Best README Template</a>, big up :smile:
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 ### Built With
+Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to do the same as long as we don't realy know how it will react on other OS.
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [C](https://www.learn-c.org/)
+* [gcc](https://gcc.gnu.org/)
+* [make](https://linuxhint.com/install-make-ubuntu/)
+* [OpenGL](https://www.opengl.org/)
+* [SDL2](https://www.libsdl.org/download-2.0.php)
+* [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
+* First of all, let's upgrade our all outdated packages with :
+```sh
+npm sudo apt update
+```
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+In order to compile our source code, we'll need to install :
+* gcc compiler and make
+```sh
+npm sudo apt install build-essential
+```
+
+* OpenGL library
+```sh
+npm sudo apt-get install freeglut3-dev
+```
+
+* SDL2 and all its libraries
+```sh
+npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0
+```
+
 
 ### Installation
+1. Clone the repo
+  ```sh
+  git clone https://github.com/Bouillon2Poulet/TeamGolem
+  ```
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+2. Make clean and make main
+* at the root of the TeamGolem folder :
+```sh
+make clean
+```
+```sh
+make main
+  ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-<!-- USAGE EXAMPLES -->
-## Usage
+## Play
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+In order to play to <i>Beyond Mondrian</i>, you will have to execute from terminal the bin/main.out file.
+at the root of the TeamGolem folder :
+  ```sh
+  ./bin/main.out
+  ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+<!-- QUICK GUIDE TO DEVELOPERS-->
+## Quick guide to developers
 
-<!-- CONTRIBUTING -->
-## Contributing
+For those who may want to fork our game in order to create their own, we will describe shortly in this part how our game actualy works !
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### Window and scene
+The window is create thanks to SDL2 lib as we can see in main with :
+```c
+#include <SDL2/SDL.h>
+SDL_Window* window;
+```
+It will also help us by giving us time since the window opened with :
+```c
+SDL_GetTicks();
+```
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+We do draw our scenes and cubes thanks to OpenGL lib<br>
+* Setup
+```c
+#include <GL/gl.h>
+#include <GL/glu.h>
+glClear(GL_COLOR_BUFFER_BIT);
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+```
+* Draw
+```c
+glBegin(GL_TRIANGLE_FAN);
+glColor3f(float r, float g, float b);
+glVertex2f(int x, int y);
+```
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Players and obstacles are based on Cube struct.
+Decorative lines are based on Line struct.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+### Players
 
+### Camera
 
+### Quadtree and collisions
+The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtree">Quadtree</a> which allows to calculate collisions only with near objects.<br>
+  <a href="https://en.wikipedia.org/wiki/Quadtree">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Quadtree_arbre.png/400px-Quadtree_arbre.png" alt="QuadtreePicture" width="400" height="206">
+  </a>
 
-<!-- LICENSE -->
-## License
+The source code of the Quadtree is homemade, it's all in the quadtree.c file.
+* Struct
+```c
+typedef struct QuadTree {
+    float x;
+    float y;
+    float width;
+    float height;
+    struct QuadTree* nodes[4];
+    Cube* cubes;
+    int nbCubes;
+    int isLeaf;
+} QuadTree;
+```
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+* Functions
+```c
+QuadTree createQuadTree(float x, float y, float width, float height);
+void splitQuadTree(QuadTree* quadTree);
+int checkQuadTreeCollision(Cube cube, QuadTree quadTree);
+void generateQuadTree(QuadTree* quadTree);
+void findPlayerQuadTree(QuadTree* quadTree, Player player, std::vector<QuadTree*> &playerQuadTree);
+```
+
+### Textures
+Textures are loaded from ./assets/textImages folder with
+
+  ```c
+  (screen.c) loadTextureScreen(int indexTexture, Screen screen)
+  ```
+that returns an SDL_Surface binded to a GLuint Texture :
+  ```c
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  return texture;
+  ```
+
+The SDL_Surface itself it generated thanks with SDL_Surface* IMG_Load(). It uses lodepng.c which allows us to use png but this is kind of black magic :smile:
+
+### Audio
+The audio is managed with SDL_mixer. You can find a tutorial <a href="https://soundprogramming.net/programming/tutorial-using-sdl2-and-sdl_mixer-to-play-samples/">here</a>.
+To sum up, it's all about :
+* Allocate channels
+```c
+#include <SDL2/SDL_mixer.h>
+Mix_AllocateChannels(int nbChannel);
+```
+* Create Mix_Chunk
+```c
+Mix_Chunk* mainTheme = Mix_LoadWAV("assets/audio/main.wav");
+```
+* Play chunk on channel
+```c
+Mix_PlayChannel(0, mainTheme, int nbLoop);
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -210,44 +236,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Bouillon2Poulet - [@your_instagram](https://www.instagram.com/consomme2poyo/?hl=af) - romain.serres@edu.univ-eiffel.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
