@@ -139,14 +139,14 @@ It will also help us by giving us time since the window opened with :
   SDL_GetTicks();
   ```
 
-We do draw our scenes and cubes thanks to OpenGL lib
-*Setup
+We do draw our scenes and cubes thanks to OpenGL lib<br>
+* Setup
   ```c
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   ```
-*Draw
+* Draw
   ```c
   glBegin(GL_TRIANGLE_FAN);
   glColor3f(float r, float g, float b);
@@ -167,7 +167,7 @@ The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtr
   </a>
 
 The source code of the Quadtree is homemade, it's all in the quadtree.c file.
-*Struct
+* Struct
 ```c
 typedef struct QuadTree {
     float x;
@@ -181,7 +181,7 @@ typedef struct QuadTree {
 } QuadTree;
 ```
 
-*Functions
+* Functions
 ```c
 QuadTree createQuadTree(float x, float y, float width, float height);
 void splitQuadTree(QuadTree* quadTree);
