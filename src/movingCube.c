@@ -1,4 +1,5 @@
 #include "movingCube.h"
+#include <algorithm>
 
 MovingCube createMovingCube(float x, float y, float height, float width, int filled, float red, float green, float blue, float x1, float y1, float x2, float y2, int directionPoint)
 {
@@ -13,7 +14,7 @@ MovingCube createMovingCube(float x, float y, float height, float width, int fil
     return movingCube;
 }
 
-void moveCube(MovingCube* movingCube)
+void moveCube(MovingCube* movingCube, Player* scenePlayers, int playersCount)
 {
     switch (movingCube->directionPoint)
     {
@@ -40,6 +41,28 @@ void moveCube(MovingCube* movingCube)
                 if (movingCube->cube.x < movingCube->x1)
                 {
                     movingCube->cube.x = movingCube->x1;
+                }
+            }
+
+            for (int i = 0; i < playersCount; i++)
+            {
+                if (std::find(movingCube->players.begin(), movingCube->players.end(), &scenePlayers[i]) != movingCube->players.end())
+                {
+                    break;
+                }
+                else
+                {
+                    if (checkCollision(scenePlayers[i], movingCube->cube) == 1)
+                    {
+                        if (scenePlayers[i].cube.x < movingCube->cube.x)
+                        {
+                            scenePlayers[i].cube.x = movingCube->cube.x - movingCube->cube.width/2 - scenePlayers[i].cube.width/2;
+                        }
+                        else
+                        {
+                            scenePlayers[i].cube.x = movingCube->cube.x + movingCube->cube.width/2 + scenePlayers[i].cube.width/2;
+                        }
+                    }
                 }
             }
 
@@ -97,6 +120,28 @@ void moveCube(MovingCube* movingCube)
                 if (movingCube->cube.x < movingCube->x2)
                 {
                     movingCube->cube.x = movingCube->x2;
+                }
+            }
+
+            for (int i = 0; i < playersCount; i++)
+            {
+                if (std::find(movingCube->players.begin(), movingCube->players.end(), &scenePlayers[i]) != movingCube->players.end())
+                {
+                    break;
+                }
+                else
+                {
+                    if (checkCollision(scenePlayers[i], movingCube->cube) == 1)
+                    {
+                        if (scenePlayers[i].cube.x < movingCube->cube.x)
+                        {
+                            scenePlayers[i].cube.x = movingCube->cube.x - movingCube->cube.width/2 - scenePlayers[i].cube.width/2;
+                        }
+                        else
+                        {
+                            scenePlayers[i].cube.x = movingCube->cube.x + movingCube->cube.width/2 + scenePlayers[i].cube.width/2;
+                        }
+                    }
                 }
             }
 

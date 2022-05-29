@@ -122,8 +122,8 @@ void createLevel3(Scene* scene)
     addPlayerToScene(&newScene, player2, 110, -64.5);
     addPlayerToScene(&newScene, player3, -43, -40);
 
-    MovingCube movingCube = createMovingCube(20, 5, 5, 10, 1, 0, 0, 0, 20, -30, 20, 60, 1);
-    MovingCube movingCube2 = createMovingCube(80, 125, 5, 10, 1, 0, 0, 0, 80, 70, 80, 160, 2);
+    MovingCube movingCube = createMovingCube(20, 20, 5, 10, 1, 0, 0, 0, 20, -20, 20, 60, 1);
+    MovingCube movingCube2 = createMovingCube(80, 110, 5, 10, 1, 0, 0, 0, 80, 70, 80, 150, 2);
     addMovingCubeToScene(&newScene, movingCube);
     addMovingCubeToScene(&newScene, movingCube2);
 

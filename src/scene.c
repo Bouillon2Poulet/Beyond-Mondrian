@@ -129,7 +129,7 @@ void checkGravityCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
 {
     for (int k = 0; k < scene->movingCubesCount; k++)
     {
-        moveCube(&scene->movingCubes[k]);
+        moveCube(&scene->movingCubes[k], scene->players, scene->playersCount);
     }
 
     for (int j = 0; j < scene->playersCount; j++)
@@ -216,7 +216,7 @@ void checkGravityCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
                             else if (scene->players[j].cube.y < quadTree->cubes[i].y)
                             {
                                 scene->players[j].cube.y = quadTree->cubes[i].y - quadTree->cubes[i].height/2 - scene->players[j].cube.height/2;
-                                scene->players[j].gravity = 0;
+                                scene->players[j].gravity = 0.5;
                             }
                         }
                         break;
