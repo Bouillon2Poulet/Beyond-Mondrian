@@ -46,8 +46,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 We worked as a team of 3 on this "Thomas was alone" like game. <i>Beyond Mondrian</i> uses basic functionalities of  Mike Bithell's original game and takes them further by adding new stuffs such as levels, moving platform, musics and visual elements.
 Created for an IMAC school project, we are proud to present you the fruit of a one month labour :smile:
 We also want to shout out Steeve and Enguerrand who has been great helps during the development.
@@ -164,7 +162,7 @@ Decorative lines are based on Line struct.
 
 ### Quadtree and collisions
 The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtree">Quadtree</a> which allows to calculate collisions only with near objects.<br>
-<img src="https://www.researchgate.net/profile/Patrick-Guidotti/publication/2560370/figure/fig3/AS:669330421325826@1536592216141/Point-quadtree-example-with-a-fan-out-of-4-also-at-the-leaf-level-up-to-4-elements-per.png"" alt="Quadtree" width="723" height="307">
+<img src="https://www.researchgate.net/profile/Patrick-Guidotti/publication/2560370/figure/fig3/AS:669330421325826@1536592216141/Point-quadtree-example-with-a-fan-out-of-4-also-at-the-leaf-level-up-to-4-elements-per.png" alt="Quadtree picture" width="723" height="307">
 
 The source code of the Quadtree is homemade, it's all in the quadtree.c file.
 *Struct
