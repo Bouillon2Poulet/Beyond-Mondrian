@@ -154,7 +154,7 @@ void displayBackground(Scene* scene, Uint32 currentTime, int gameState)
 {
     glPushMatrix(); //Background
         glBegin(GL_TRIANGLE_FAN);
-        glColor3f(0.9,0.9,0.9);
+        glColor3f(0.97,0.97,0.97);
         glVertex2f(-1920,1080);
         glVertex2f(1920,1080);
         glVertex2f(1920,-1080);

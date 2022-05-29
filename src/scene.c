@@ -101,7 +101,7 @@ void drawHUD(Scene scene)
 
         if (scene.playersCount - i == scene.currentPlayerIndex)
         {
-            glBegin(GL_TRIANGLE_FAN);
+            glBegin(GL_TRIANGLE_FAN); //Triangle current player
             glColor3f(0.5, 0.5, 0.5);
             glVertex2f(-0.25 - (i-1), 1);
             glVertex2f(0.25 - (i-1), 1);
