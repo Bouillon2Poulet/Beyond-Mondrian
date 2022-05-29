@@ -186,6 +186,24 @@ if(keystates[SDL_SCANCODE_RIGHT] && gameState != 0)
 
 ### Camera
 
+The game comes up with a smooth camera directly aiming at the current player.
+
+```c
+camera.speed = 0.1;
+```
+
+The camera always follow the current player and the more he's far away from it the more the camera will move fast to him.
+
+```c
+void moveCamera(Camera* camera, Player player)
+{
+    camera->x += (-player.cube.x - camera->x) * camera->speed;
+    camera->y += (-player.cube.y - camera->y) * camera->speed;
+    glScalef(ZOOM_ON_PLAYER, ZOOM_ON_PLAYER, 0);
+    glTranslatef(camera->x, camera->y, 0);
+}
+```
+
 ### Quadtree and collisions
 The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtree">Quadtree</a> which allows to calculate collisions only with near objects.<br>
   <a href="https://en.wikipedia.org/wiki/Quadtree">
