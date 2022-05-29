@@ -57,7 +57,7 @@ This README will help you through installation and use of <i>Beyond Mondrian</i>
 
 
 ### Built With
-Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to do the same as long as we don't realy know how it will react on other OS.
+Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to do the same as long as we don't realry know how it will react on other OS.
 
 * [C](https://www.learn-c.org/)
 * [gcc](https://gcc.gnu.org/)
@@ -277,11 +277,11 @@ Mix_PlayChannel(0, mainTheme, int nbLoop);
 ## Post Mortem
 
 We took a lot of pleasure working on this project. Some team members were used to game engine, yet it still very interessting to work with a low-level language in order to make a video game.<br>We splitted the work well, each member had his speciality and we managed to merge our different commit without that much problem.<br>
-This project was realy challenging, we encountered some difficulties on collisions and animations especially. Adding audio and textures was not that hard and it was realy fun to custom the game our way !<br>
+This project was really challenging, we encountered some difficulties on collisions and animations especially. Adding audio and textures was not that hard and it was really fun to custom the game our way !<br>
 We're also very proud of the game design, we provide 3 levels with a good evolution of the difficuly curve.<br>
 <br>
 Yet, we are not fully satisfied by our collision system because it's not 100% perfect.
-Nevertheless, we worked on it so hard to be the best game possible that we're realy happy to finaly be able to present it !
+Nevertheless, we worked on it so hard to be the best game possible that we're really happy to finaly be able to present it !
 <br><br>
 <div align="center">
   <a href="">
@@ -296,7 +296,7 @@ Nevertheless, we worked on it so hard to be the best game possible that we're re
 <!-- CONTACT -->
 ## Contact
 
-Bouillon2Poulet - [@your_instagram](https://www.instagram.com/consomme2poyo/?hl=af) - romain.serres@edu.univ-eiffel.com
+Bouillon2Poulet - [@instagram](https://www.instagram.com/consomme2poyo/?hl=af) - romain.serres@edu.univ-eiffel.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
