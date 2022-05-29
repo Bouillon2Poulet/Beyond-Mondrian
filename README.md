@@ -30,15 +30,15 @@
 <br />
 <div align="center">
   <a href="https://github.com/Bouillon2Poulet/TeamGolem">
-    <img src="assets/textImages/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/textImage/logo.png" alt="Logo" width="80" height="80">
   </a>
-
-  <h3 align="center">README</h3>
   <h3 align="center">Bouillon2Poulet - Rambogoss - SlayerOfShadow</h3>
+  <br>
+  <h3 align="center">README</h3>
 
 
   <p align="center">
-    A guide to install and use the <i>Beyond Mondrian</i>
+    A guide to install and use <i>Beyond Mondrian</i>
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>View a demo»</strong></a> <!--Mettre bon lien-->
   </p>
