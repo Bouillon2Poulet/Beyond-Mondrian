@@ -161,7 +161,48 @@ Decorative lines are based on Line struct.
 
 ### Players
 
+Since the game is meant to be played with multiple players each one having a different shape in order to solve the level, we had to implement a system that allow us to switch from players at anytime of the game.
+
+```c
+checkGravityCollisions(&scene, playerQuadTree);
+```
+
+All the players are affected by gravity, this means that every frame we have to check the collisions on the y axis with all of them meanwhile the collisions on the x axis can only
+be checked for the current player and when he's moving horizontally (this gives us some optimisation).
+
+```c
+if(keystates[SDL_SCANCODE_LEFT] && gameState != 0) 
+{
+    movePlayer(&scene.players[scene.currentPlayerIndex], -1);
+    checkLeftCollisions(&scene, playerQuadTree);
+}
+        
+if(keystates[SDL_SCANCODE_RIGHT] && gameState != 0) 
+{
+    movePlayer(&scene.players[scene.currentPlayerIndex], 1);
+    checkRightCollisions(&scene, playerQuadTree);
+}
+```
+
 ### Camera
+
+The game comes up with a smooth camera directly aiming at the current player.
+
+```c
+camera.speed = 0.1;
+```
+
+The camera always follow the current player and the more he's far away from it the more the camera will move fast to him.
+
+```c
+void moveCamera(Camera* camera, Player player)
+{
+    camera->x += (-player.cube.x - camera->x) * camera->speed;
+    camera->y += (-player.cube.y - camera->y) * camera->speed;
+    glScalef(ZOOM_ON_PLAYER, ZOOM_ON_PLAYER, 0);
+    glTranslatef(camera->x, camera->y, 0);
+}
+```
 
 ### Quadtree and collisions
 The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtree">Quadtree</a> which allows to calculate collisions only with near objects.<br>
