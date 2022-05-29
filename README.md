@@ -30,16 +30,14 @@
 <br />
 <div align="center">
   <a href="https://github.com/Bouillon2Poulet/TeamGolem">
-    <img src="assets/textImage/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/textImage/logo.png" alt="Logo" width="703" height="141">
   </a>
   <h3 align="center">Bouillon2Poulet - Rambogoss - SlayerOfShadow</h3>
   <br>
+
   <h3 align="center">README</h3>
-
-
   <p align="center">
     A guide to install and use <i>Beyond Mondrian</i>
-    <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>View a demo»</strong></a> <!--Mettre bon lien-->
   </p>
 </div>
@@ -76,18 +74,12 @@
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 We worked as a team of 3 on this "Thomas was alone" like game. <i>Beyond Mondrian</i> uses basic functionalities of  Mike Bithell's original game and takes them further by adding new stuffs such as levels, moving platform, musics and visual elements.
-Created for an IMAC school project, we are proud to present you the fruit of a one month labour.
+Created for an IMAC school project, we are proud to present you the fruit of a one month labour :smile:
 We also want to shout out Steeve and Enguerrand who has been great helps during the development.
 
-This README will help you through installation and use of <i>Beyond Mondrian</i>
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+This README will help you through installation and use of <i>Beyond Mondrian</i>.
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+This README has been done thanks to <a href="https://github.com/othneildrew/Best-README-Template">othneildrew's Best README Template</a>, big up :smile:
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
