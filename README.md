@@ -36,7 +36,7 @@
         <li><a href="#play">Play</a></li>
       </ul>
     </li>
-    <li><a href="#main-functionalities">Main functionalities</a></li>
+    <li><a href="#quick-guide-to-developers">Quick guide to developers</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
