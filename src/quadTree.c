@@ -62,7 +62,7 @@ void splitQuadTree(QuadTree* quadTree)
         }
     }
 
-    free(quadTree->cubes);
+    delete quadTree->cubes;
 }
 
 int checkQuadTreeCollision(Cube cube, QuadTree quadTree)

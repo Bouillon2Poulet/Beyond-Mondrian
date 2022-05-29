@@ -1,7 +1,7 @@
 #include <GL/gl.h>
 #include "cube.h"
 
-Cube createCube(float x, float y, float width, float height, int filled, float red, float green, float blue)
+Cube createCube(float x, float y, float width, float height, int filled, float red, float green, float blue, int isSpike)
 {
     Cube cube;
     cube.x = x;
@@ -12,6 +12,7 @@ Cube createCube(float x, float y, float width, float height, int filled, float r
     cube.red = red;
     cube.green = green;
     cube.blue = blue;
+    cube.isSpike = isSpike;
     return cube;
 }
 
@@ -28,10 +29,19 @@ void drawCube(Cube cube)
 
     glColor3f(cube.red, cube.green, cube.blue);
 
-    glVertex2f(cube.x + cube.width/2, cube.y - cube.height/2);
-    glVertex2f(cube.x + cube.width/2, cube.y + cube.height/2);
-    glVertex2f(cube.x - cube.width/2, cube.y + cube.height/2);
-    glVertex2f(cube.x - cube.width/2, cube.y - cube.height/2);
+    if (cube.isSpike == 0)
+    {
+        glVertex2f(cube.x + cube.width/2, cube.y - cube.height/2);
+        glVertex2f(cube.x + cube.width/2, cube.y + cube.height/2);
+        glVertex2f(cube.x - cube.width/2, cube.y + cube.height/2);
+        glVertex2f(cube.x - cube.width/2, cube.y - cube.height/2);
+    }
+    else
+    {
+        glVertex2f(cube.x - cube.width/2, cube.y - cube.height/2);
+        glVertex2f(cube.x + cube.width/2, cube.y - cube.height/2);
+        glVertex2f(cube.x, cube.y + cube.height/2);
+    }
 
     glEnd();
 }

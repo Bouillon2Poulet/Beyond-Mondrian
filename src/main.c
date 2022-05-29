@@ -130,12 +130,9 @@ int main(int argc, char** argv)
     Mix_Chunk* jumpSound = Mix_LoadWAV("assets/audio/jump.wav");
     Mix_Chunk* endTheme = Mix_LoadWAV("assets/audio/end.wav");
 
-
     //Start and end screens
     Screen startScreen = createScreen(0);
     Screen endScreen = createScreen(1);
-
-
 
     //Scène
     Scene scene, scene2;
@@ -206,7 +203,7 @@ int main(int argc, char** argv)
                             else if (scene.players[j].cube.y < scene.movingCubes[i].cube.y)
                             {
                                 scene.players[j].cube.y = scene.movingCubes[i].cube.y - scene.movingCubes[i].cube.height/2 - scene.players[j].cube.height/2;
-                                scene.players[j].gravity = 0;
+                                scene.players[j].gravity = 0.5;
                             }
                             break;
                         }
@@ -248,7 +245,7 @@ int main(int argc, char** argv)
                             {
                                 if (checkCollision(scene.players[j], quadTree->cubes[i]) == 1)
                                 {
-                                    if (quadTree->cubes[i].red == 1 && quadTree->cubes[i].green == 0 && quadTree->cubes[i].blue == 0)
+                                    if (quadTree->cubes[i].isSpike == 1)
                                     {
                                         scene.players[j].cube.x = scene.players[j].startPositions[0];
                                         scene.players[j].cube.y = scene.players[j].startPositions[1];
@@ -293,25 +290,23 @@ int main(int argc, char** argv)
             case 4 :
                 while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
                 {
-                    printf(":::::::::::::::\n");
                     Mix_PlayChannel(0, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
                 }
-                printf("?\n");
                 drawScreen(&endScreen);
                 break;
         }
         
         if (checkLevelState(scene) == 1 && gameState > 0 && gameState < 4)
         {
-            if (gameState == 1)
+            gameState++;
+            if (gameState == 2)
             {
                 createLevel2(&scene);
             }
-            if (gameState == 2)
+            else if (gameState == 3)
             {
-                //createLevel3(&scene);
+                createLevel3(&scene);
             }
-            gameState++;
         }
 
         /* Echange du front et du back buffer : mise a jour de la fenetre */
@@ -349,7 +344,7 @@ int main(int argc, char** argv)
                 {
                     if (checkCollision(scene.players[scene.currentPlayerIndex], quadTree->cubes[i]) == 1)
                     {
-                        if (quadTree->cubes[i].red == 1 && quadTree->cubes[i].green == 0 && quadTree->cubes[i].blue == 0)
+                        if (quadTree->cubes[i].isSpike == 1)
                         {
                             scene.players[scene.currentPlayerIndex].cube.x = scene.players[scene.currentPlayerIndex].startPositions[0];
                             scene.players[scene.currentPlayerIndex].cube.y = scene.players[scene.currentPlayerIndex].startPositions[1];
@@ -369,18 +364,6 @@ int main(int argc, char** argv)
                 }
             }
             playerQuadTree.clear();
-
-            /* Collisions obstacles qui bougent */
-
-            for (int i = 0; i < scene.movingCubesCount; i++)
-            {
-                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.movingCubes[i].cube) == 1)
-                {
-                    scene.players[scene.currentPlayerIndex].cube.x = 
-                    scene.movingCubes[i].cube.x + scene.movingCubes[i].cube.width/2 + scene.players[scene.currentPlayerIndex].cube.width/2;
-                    break;
-                }
-            }
         }
         
         if(keystates[SDL_SCANCODE_RIGHT] && gameState != 0) 
@@ -410,7 +393,7 @@ int main(int argc, char** argv)
                 {
                     if (checkCollision(scene.players[scene.currentPlayerIndex], quadTree->cubes[i]) == 1)
                     {
-                        if (quadTree->cubes[i].red == 1 && quadTree->cubes[i].green == 0 && quadTree->cubes[i].blue == 0)
+                        if (quadTree->cubes[i].isSpike == 1)
                         {
                             scene.players[scene.currentPlayerIndex].cube.x = scene.players[scene.currentPlayerIndex].startPositions[0];
                             scene.players[scene.currentPlayerIndex].cube.y = scene.players[scene.currentPlayerIndex].startPositions[1];
@@ -431,18 +414,6 @@ int main(int argc, char** argv)
                 }
             }
             playerQuadTree.clear();
-
-            /* Collisions obstacles qui bougent */
-
-            for (int i = 0; i < scene.movingCubesCount; i++)
-            {
-                if (checkCollision(scene.players[scene.currentPlayerIndex], scene.movingCubes[i].cube) == 1)
-                {
-                    scene.players[scene.currentPlayerIndex].cube.x = 
-                    scene.movingCubes[i].cube.x - scene.movingCubes[i].cube.width/2 - scene.players[scene.currentPlayerIndex].cube.width/2;
-                    break;
-                }
-            }
         }
 
         if(keystates[SDL_SCANCODE_SPACE] && gameState != 0) 

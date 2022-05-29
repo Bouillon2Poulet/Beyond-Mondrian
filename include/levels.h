@@ -8,4 +8,6 @@ void createLevel1(Scene* scene);
 
 void createLevel2(Scene* scene);
 
+void createLevel3(Scene* scene);
+
 #endif

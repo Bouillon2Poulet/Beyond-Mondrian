@@ -16,7 +16,7 @@ void addPlayerToScene(Scene* scene, Player player, float x, float y)
     if (scene->playersCount < MAX_PLAYER_COUNT)
     {
         scene->players[scene->playersCount] = player;
-        scene->playersEnd[scene->playersCount] = createCube(x, y, player.cube.width, player.cube.height, 0, player.cube.red, player.cube.green, player.cube.blue);
+        scene->playersEnd[scene->playersCount] = createCube(x, y, player.cube.width, player.cube.height, 0, player.cube.red, player.cube.green, player.cube.blue, 0);
         scene->playersCount++;
     }
 }

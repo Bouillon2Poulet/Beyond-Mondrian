@@ -121,25 +121,25 @@ void drawScreen(Screen* screen)
     switch (screen->type)
     {
         case 0:
-            drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
+            drawCube(createCube(0,0,2500,1300,1,1,1,1, 0)); //Background
 
             //SDL_GetTicks()=90000;
             glPushAttrib(GL_CURRENT_BIT);
             if(SDL_GetTicks()>=3700)
             {
-                drawCube(createCube(-600,85,1000,325,1,0,0,1));
+                drawCube(createCube(-600,85,1000,325,1,0,0,1, 0));
                 if(SDL_GetTicks()>=4500)
                 {
-                    drawCube(createCube(35,85,260,320,1,1,0,0));
+                    drawCube(createCube(35,85,260,320,1,1,0,0, 0));
                     if (SDL_GetTicks()>=4900)
                     {
-                        drawCube(createCube(35,-325,260,500,1,1,1,0));
+                        drawCube(createCube(35,-325,260,500,1,1,1,0, 0));
                         if (SDL_GetTicks()>=5500)
                         {
-                            drawCube(createCube(853,400,360,300,1,0,0,1)); 
+                            drawCube(createCube(853,400,360,300,1,0,0,1, 0)); 
                             if (SDL_GetTicks()>=6600)
                             {
-                                drawCube(createCube(853,85,360,320,1,1,0,0));
+                                drawCube(createCube(853,85,360,320,1,1,0,0, 0));
                             }
                         }
                     }
@@ -181,7 +181,7 @@ void drawScreen(Screen* screen)
             }
             break;
         case 1:
-            drawCube(createCube(0,0,2500,1300,1,1,1,1)); //Background
+            drawCube(createCube(0,0,2500,1300,1,1,1,1, 0)); //Background
             displayImage(0,0,screen->textureTab[0]);//end.png
             break;
         }

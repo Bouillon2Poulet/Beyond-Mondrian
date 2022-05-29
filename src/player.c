@@ -3,7 +3,7 @@
 Player createPlayer(float x, float y, float width, float height, int filled, float red, float green, float blue)
 {
     Player player;
-    player.cube = createCube(x, y, width, height, filled, red, green, blue);
+    player.cube = createCube(x, y, width, height, filled, red, green, blue, 0);
     player.movementSpeed = 1.5;
     player.jumpPower = 3;
     player.gravity = 0;
