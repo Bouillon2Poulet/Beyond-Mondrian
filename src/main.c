@@ -47,7 +47,7 @@ void onWindowResized(unsigned int width, unsigned int height)
 
 int main(int argc, char** argv)
 {
-    //* Initialisation de la SDL */
+    //*SDL initialisation */
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    // Initialisation de SDL_Mixer
+    // SDL_Mixer initialisation
     if (Mix_OpenAudio(96000, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) < 0)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erreur initialisation SDL_mixer : %s", Mix_GetError());
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    /* Ouverture d'une fenetre et creation d'un contexte OpenGL */
+    /* Window opening and OpenGL context creation */
     SDL_ShowCursor(SDL_DISABLE);
     SDL_Window* window;
     {
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
             const char* error = SDL_GetError();
             fprintf(
                 stderr,
-                "Erreur lors de la creation de la fenetre : %s\n", error);
+                "Erreur while creating window : %s\n", error);
 
             SDL_Quit();
             return EXIT_FAILURE;
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
             const char* error = SDL_GetError();
             fprintf(
                 stderr,
-                "Erreur lors de la creation du contexte OpenGL : %s\n", error);
+                "Erreur while creating OpenGL context : %s\n", error);
 
             SDL_DestroyWindow(window);
             SDL_Quit();
@@ -114,17 +114,11 @@ int main(int argc, char** argv)
 
     onWindowResized(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    /* Création du jeu */
+    /* Game creation*/
     //Audio
-    // Mix_Music* mainTheme;
-    // Mix_Music* jumpSound;
-
-    Mix_AllocateChannels(2); // Allouer 2 cannaux 
-    Mix_Volume(0, MIX_MAX_VOLUME); // Mets le son a 100% en volume pour le premier cannaux
-    Mix_Volume(1, MIX_MAX_VOLUME / 2); // Mets le son a 50% en volume pour le deuxième cannaux 
-
-    // loadMusic(&mainTheme,0);
-    // loadMusic(&jumpSound,1);
+    Mix_AllocateChannels(2); // Allocate 2 channels
+    Mix_Volume(0, MIX_MAX_VOLUME); //volume 100% for channel 0
+    Mix_Volume(1, MIX_MAX_VOLUME / 2); // volume 50% channel 1
 
     Mix_Chunk* mainTheme = Mix_LoadWAV("assets/audio/main.wav");
     Mix_Chunk* jumpSound = Mix_LoadWAV("assets/audio/jump.wav");
@@ -134,10 +128,10 @@ int main(int argc, char** argv)
     Screen startScreen = createScreen(0);
     Screen endScreen = createScreen(1);
 
-    //Scène
+    //Scene
     Scene scene, scene2;
-    initScene(&scene); //Changes on createScene that seemed to not affect value
-    initScene(&scene2); //Test in gameState 5
+    initScene(&scene); // Levels
+    initScene(&scene2); // For background
     scene2.lineCount=0;
 
     //QuadTree
@@ -145,18 +139,17 @@ int main(int argc, char** argv)
     addQuadTreeToScene(&scene, quadTree);
     std::vector<QuadTree*> playerQuadTree;
 
-    //Caméra
+    //Camera
     Camera camera = createCamera(0, 0);
 
-    /* Boucle principale */
+    /* Main loop */
     int loop = 1;
     
     while(loop)
     {
-        /* Recuperation du temps au debut de la boucle */
+        /* Get time since the window opened */
         Uint32 startTime = SDL_GetTicks();
 
-        /* Placer ici le code de dessin */
         glClear(GL_COLOR_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -165,7 +158,7 @@ int main(int argc, char** argv)
             case 0:
                 while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
                 {
-                    Mix_PlayChannel(0, mainTheme, -1); // Joue mainTheme infini fois sur le canal 1
+                    Mix_PlayChannel(0, mainTheme, -1); // Play main theme infinite time on channel 0
                 }
                 drawScreen(&startScreen);
                 break;
@@ -195,7 +188,7 @@ int main(int argc, char** argv)
             gameState++;
             if(gameState==4)
             {
-                Mix_PlayChannel(0, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
+                Mix_PlayChannel(0, endTheme, 1); // Play endTheme 1 time on channel 0
             }
             if (gameState == 2)
             {
@@ -210,7 +203,7 @@ int main(int argc, char** argv)
         /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
 
-        /* Contrôles */
+        /* Input */
 
         const Uint8* keystates = SDL_GetKeyboardState(NULL);
 
@@ -235,11 +228,11 @@ int main(int argc, char** argv)
             }
         }
 
-        /* Boucle traitant les evenements */
+        /* Events loop */
         SDL_Event e;
         while(SDL_PollEvent(&e))
         {
-            /* L'utilisateur ferme la fenetre : */
+            /* Close window : */
 			if(e.type == SDL_QUIT)
 			{
 				loop = 0;
@@ -258,7 +251,7 @@ int main(int argc, char** argv)
                 case SDL_WINDOWEVENT:
                     switch (e.window.event)
                     {
-                        /* Redimensionnement fenetre */
+                        /* Window resized */
                         case SDL_WINDOWEVENT_RESIZED:
                             onWindowResized(e.window.data1, e.window.data2);
                             break;
@@ -268,14 +261,12 @@ int main(int argc, char** argv)
                     }
                     break;
 
-                /* Clic souris */
+                /* Mouse click */
                 case SDL_MOUSEBUTTONUP:
-                    //printf("clic en (%d, %d)\n", e.button.button, e.button.y);
                     break;
 
-                /* Touche clavier */
+                /* Keyboard*/
                 case SDL_KEYDOWN:
-                    //printf("touche pressee (code = %d)\n", e.key.keysym.sym);
                     if (e.key.keysym.sym == SDLK_f)//Fullscreen
                     {
                         switch(windowState)
@@ -309,21 +300,21 @@ int main(int argc, char** argv)
             }
         }
 
-        /* Calcul du temps ecoule */
+        /* Calculated elapsed time */
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
-        /* Si trop peu de temps s'est ecoule, on met en pause le programme */
+        /* If not enough elapsed time, pause the program */
         if(elapsedTime < FRAMERATE_MILLISECONDS)
         {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
 
-    /* Liberation des ressources associees a la SDL */
+    /* Free SDL ressources */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
-    Mix_FreeChunk(mainTheme); // Libére la mémoire allouer pour le son
+    Mix_FreeChunk(mainTheme); // Free audio memory
     Mix_FreeChunk(jumpSound);
-    Mix_FreeChunk(endTheme); // Libére la mémoire allouer pour le son
+    Mix_FreeChunk(endTheme); 
     Mix_CloseAudio();
     SDL_Quit();
 

@@ -138,7 +138,7 @@ void checkGravityCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
         checkEndCollision(&scene->players[j], scene->playersEnd[j]);
         findPlayerQuadTree(&scene->quadTree, scene->players[j], playerQuadTree);
 
-        /* Collisions obstacles qui bougent */
+        /* Collisions with moving obstacles */
 
         int temp = 0;
 
@@ -164,7 +164,7 @@ void checkGravityCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
             }
         }
                     
-        /* Collisions joueurs */
+        /* Collisions players */
 
         if (temp == 0)
         {
@@ -237,7 +237,7 @@ void checkLeftCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
 {
     int temp1 = 0;
 
-    /* Collisions joueurs */
+    /* Collisions players */
 
             for (int i = 0; i < scene->playersCount; i++)
             {
@@ -285,7 +285,7 @@ void checkRightCollisions(Scene* scene, std::vector<QuadTree*> playerQuadTree)
 {
     int temp1 = 0;
 
-    /* Collisions joueurs */
+    /* Collisions players */
 
     for (int i = 0; i < scene->playersCount; i++)
     {

@@ -60,7 +60,7 @@ void createLevel2(Scene* scene)
     QuadTree quadTree = createQuadTree(0, 0, 1920, 1080);
     addQuadTreeToScene(&newScene, quadTree);
 
-    //Joueurs
+    //Players
     Player player = createPlayer(0, -45, 10, 10, 1, 1, 0, 0);
     Player player2 = createPlayer(-20, -45, 5, 20, 1, 1, 1, 0);
     Player player3 = createPlayer(20, -45, 20, 5, 1, 0, 0, 1);
@@ -90,7 +90,7 @@ void createLevel2(Scene* scene)
     tabCube[12] = createCube(110, 45, 20, 5, 1, 0, 0, 0, 0);
     tabCube[13] = createCube(500, -200, 10, 800, 1, 0, 0, 0, 0);
     
-    //Piques
+    //Spikes
     tabCube[14] = createCube(220, -65, 20, 20, 1, 0, 0, 0, 1);
     tabCube[15] = createCube(240, -65, 20, 20, 1, 0, 0, 0, 1);
     tabCube[16] = createCube(260, -65, 20, 20, 1, 0, 0, 0, 1);
@@ -100,7 +100,7 @@ void createLevel2(Scene* scene)
         addCubeToScene(&newScene, tabCube[i]);
     }
 
-    //Génération du QuadTree
+    //Quadtree generation
     generateQuadTree(&newScene.quadTree);
 
     *scene = newScene;
@@ -114,7 +114,7 @@ void createLevel3(Scene* scene)
     QuadTree quadTree = createQuadTree(0, 0, 1920, 1080);
     addQuadTreeToScene(&newScene, quadTree);
 
-    //Joueurs
+    //Players
     Player player = createPlayer(0, -45, 10, 10, 1, 1, 0, 0);
     Player player2 = createPlayer(-70, 5, 5, 20, 1, 1, 1, 0);
     Player player3 = createPlayer(20, -45, 20, 5, 1, 0, 0, 1);
@@ -130,7 +130,7 @@ void createLevel3(Scene* scene)
     //Cubes
     Cube tabCube[21];
 
-    //Cadre dessus/dessous
+    //Borders
     tabCube[0] = createCube(20, -97, 200, 45, 1, 0, 0, 0, 0);
     tabCube[1] = createCube(-10, 75, 5, 300, 1, 0, 0, 0, 0);
     tabCube[2] = createCube(-77.5, 200, 5, 550, 1, 0, 0, 0, 0);
@@ -160,7 +160,7 @@ void createLevel3(Scene* scene)
         addCubeToScene(&newScene, tabCube[i]);
     }
 
-    //Génération du QuadTree
+    //QuadTree generation
     generateQuadTree(&newScene.quadTree);
 
     *scene = newScene;

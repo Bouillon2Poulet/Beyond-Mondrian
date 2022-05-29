@@ -36,10 +36,10 @@ void drawCube(Cube cube)
             glVertex2f(cube.x, cube.y + cube.height/2);
         }
     }
-    else
+    else //Draw a frame with a stroke
     {
         float innerStroke = 1;
-        
+
         //Top Line
         glBegin(GL_TRIANGLE_FAN);
         glVertex2f(cube.x - cube.width/2, cube.y + cube.height/2); //Top Left corner

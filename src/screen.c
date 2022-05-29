@@ -61,7 +61,7 @@ SDL_Surface* IMG_Load(const char* filename) {
 GLuint drawCase(int w, int h)
 {
     GLuint id = glGenLists(1);
-    glNewList(id, GL_COMPILE); //Logo.png : 0
+    glNewList(id, GL_COMPILE);
         glBegin(GL_QUADS);
             glTexCoord2f(0,1);
             glVertex2f(-w/2, -h/2);
@@ -123,7 +123,6 @@ void drawScreen(Screen* screen)
         case 0:
             drawCube(createCube(0,0,2500,1300,1,1,1,1, 0)); //Background
 
-            //SDL_GetTicks()=90000;
             glPushAttrib(GL_CURRENT_BIT);
             if(SDL_GetTicks()>=3700)
             {
@@ -196,7 +195,7 @@ void displayImage(int x, int y, GLuint texture) //Display an image from center o
     glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
             glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w); //Get texture width -> w
-            glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
+            glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h); //Get texture height -> h
             caseID = drawCase(w,h);
             glCallList(caseID);
         glBindTexture(GL_TEXTURE_2D, 0);

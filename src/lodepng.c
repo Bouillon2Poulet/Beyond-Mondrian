@@ -1,4 +1,8 @@
 /*
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!BLACK MAGIC DO NOT TOUCH !!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 LodePNG version 20220109
 
 Copyright (c) 2005-2022 Lode Vandevenne

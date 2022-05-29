@@ -67,7 +67,7 @@ void splitQuadTree(QuadTree* quadTree)
 
 int checkQuadTreeCollision(Cube cube, QuadTree quadTree)
 {
-    float x = cube.x + 1920/2; //Conversion coordonnées
+    float x = cube.x + 1920/2; //Coordinates conversion
     float y = 1080/2 - cube.y;
     
     if (x - cube.width/2 < quadTree.x + quadTree.width &&
