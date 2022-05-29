@@ -37,6 +37,7 @@
       </ul>
     </li>
     <li><a href="#quick-guide-to-developers">Quick guide to developers</a></li>
+    <li><a href="#post-mortem">Post Mortem</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -272,6 +273,22 @@ Mix_PlayChannel(0, mainTheme, int nbLoop);
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+
+<!-- POST MORTEM -->
+## Post Mortem
+
+We took a lot of pleasure working on this project. Some team members were used to game engine, yet it still very interessting to work with a low-level language in order to make a video game. We splitted the work well, each member had his speciality and we managed to merge our different commit without that much problem.<br>
+This project was realy challenging, we encountered some difficulties on collisions and animations especially. Adding audio and textures was not that hard and it was realy fun to custom the game our way !<br>
+We're also very proud of the game design, we provide 3 levels with a good evolution of the difficuly curve.
+
+<div align="center">
+  <a href="">
+    <img src="assets/textImage/end.png" alt="Logo" width="468" height="250">
+  </a>
+  <br>
+</div>
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- CONTACT -->
