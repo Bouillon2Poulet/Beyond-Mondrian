@@ -89,11 +89,7 @@ npm sudo apt install build-essential
 npm sudo apt-get install freeglut3-dev
 ```
 
-* SDL2 and all its libraries
-```sh
-npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0
-```
-OR only SDL2, SDL_image et SDL_mixer
+* SDL2, SDL_image et SDL_mixer
 ```sh
 npm sudo apt install libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0
 ```
