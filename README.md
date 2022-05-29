@@ -74,27 +74,23 @@ Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to 
 ## Getting Started
 
 ### Prerequisites
-First of all, let's upgrade our all outdated packages with :
-* npm
+* First of all, let's upgrade our all outdated packages with :
 ```sh
 npm sudo apt update
 ```
 
 In order to compile our source code, we'll need to install :
-gcc compiler and make
-* npm
+* gcc compiler and make
   ```sh
   npm sudo apt install build-essential
   ```
 
-OpenGL library
-* npm
+* OpenGL library
 ```sh
 npm sudo apt-get install freeglut3-dev
 ```
 
-SDL2 and all its libraries
-* npm
+* SDL2 and all its libraries
 ```sh
 npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0
 ```
@@ -107,12 +103,10 @@ npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2
    ```
 
 2. Make clean and make main
-at the root of the TeamGolem file :
-  * npm
+* at the root of the TeamGolem file :
   ```sh
   make clean
   ```
-  * npm
   ```sh
   make main
   ```
@@ -125,7 +119,6 @@ at the root of the TeamGolem file :
 
 In order to play to <i>Beyond Mondrian</i>, you will have to execute from terminal the bin/main.out file.
 at the root of the TeamGolem file :
-  * npm
   ```sh
   ./bin/main.out
   ```
