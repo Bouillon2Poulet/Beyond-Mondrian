@@ -1,30 +1,4 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -37,7 +11,7 @@
 
   <h3 align="center">README</h3>
   <p align="center">
-    A guide to install and use <i>Beyond Mondrian</i>
+    A guide to install and use <i>Beyond Mondrian</i><br>
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>View a demo»</strong></a> <!--Mettre bon lien-->
   </p>
 </div>
@@ -77,30 +51,23 @@ We worked as a team of 3 on this "Thomas was alone" like game. <i>Beyond Mondria
 Created for an IMAC school project, we are proud to present you the fruit of a one month labour :smile:
 We also want to shout out Steeve and Enguerrand who has been great helps during the development.
 
-This README will help you through installation and use of <i>Beyond Mondrian</i>.
-
-This README has been done thanks to <a href="https://github.com/othneildrew/Best-README-Template">othneildrew's Best README Template</a>, big up :smile:
+This README will help you through installation and use of <i>Beyond Mondrian</i>. It has been done thanks to <a href="https://github.com/othneildrew/Best-README-Template">othneildrew's Best README Template</a>, big up :smile:
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 ### Built With
+Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to do the same as long as we don't realy know how it will react on other OS.
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [C](https://www.learn-c.org/)
+* [gcc](https://gcc.gnu.org/)
+* [make](https://linuxhint.com/install-make-ubuntu/)
+* [OpenGL](https://www.opengl.org/)
+* [SDL2](https://www.libsdl.org/download-2.0.php)
+* [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
