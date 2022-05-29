@@ -184,10 +184,6 @@ int main(int argc, char** argv)
                 drawHUD(scene);
                 break;
             case 4 :
-                while(Mix_Playing(0)==0)//Check if there is a sound playing on channel 0
-                {
-                    Mix_PlayChannel(0, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
-                }
                 drawScreen(&endScreen);
                 break;
         }
@@ -197,6 +193,10 @@ int main(int argc, char** argv)
         if (checkLevelState(scene) == 1 && gameState > 0 && gameState < 4)
         {
             gameState++;
+            if(gameState==4)
+            {
+                Mix_PlayChannel(0, endTheme, 1); // Joue mainTheme infini fois sur le canal 1
+            }
             if (gameState == 2)
             {
                 createLevel2(&scene);
@@ -270,12 +270,12 @@ int main(int argc, char** argv)
 
                 /* Clic souris */
                 case SDL_MOUSEBUTTONUP:
-                    printf("clic en (%d, %d)\n", e.button.button, e.button.y);
+                    //printf("clic en (%d, %d)\n", e.button.button, e.button.y);
                     break;
 
                 /* Touche clavier */
                 case SDL_KEYDOWN:
-                    printf("touche pressee (code = %d)\n", e.key.keysym.sym);
+                    //printf("touche pressee (code = %d)\n", e.key.keysym.sym);
                     if (e.key.keysym.sym == SDLK_f)//Fullscreen
                     {
                         switch(windowState)
@@ -294,6 +294,7 @@ int main(int argc, char** argv)
                     {
                         switchCurrentPlayer(&scene);
                     }
+
                     if (gameState == 0 && e.key.keysym.sym != SDLK_F6) //F6 input was automatic, this aims to avoid skipping screen
                     {
                         if (startTime>=900)
@@ -302,6 +303,7 @@ int main(int argc, char** argv)
                             gameState = 1;
                         }
                     }
+
                 default:
                     break;
             }
@@ -319,9 +321,9 @@ int main(int argc, char** argv)
     /* Liberation des ressources associees a la SDL */
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
-    //Mix_FreeMusic(mainTheme);
     Mix_FreeChunk(mainTheme); // Libére la mémoire allouer pour le son
     Mix_FreeChunk(jumpSound);
+    Mix_FreeChunk(endTheme); // Libére la mémoire allouer pour le son
     Mix_CloseAudio();
     SDL_Quit();
 

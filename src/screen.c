@@ -26,7 +26,7 @@ GLuint loadTextureScreen (int indexTexture, Screen screen)
     }
     else
     {
-        printf("image chargée !\n");
+        //printf("image chargée !\n");
     }
 
     glBindTexture(GL_TEXTURE_2D, texture);
