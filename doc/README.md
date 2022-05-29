@@ -1,2 +1,0 @@
-# TeamGolem
-OUG OUG OUG
