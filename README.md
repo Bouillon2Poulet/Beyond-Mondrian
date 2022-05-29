@@ -179,7 +179,7 @@ typedef struct QuadTree {
     int nbCubes;
     int isLeaf;
 } QuadTree;
-```c
+```
 
 *Functions
 ```c
@@ -188,7 +188,7 @@ void splitQuadTree(QuadTree* quadTree);
 int checkQuadTreeCollision(Cube cube, QuadTree quadTree);
 void generateQuadTree(QuadTree* quadTree);
 void findPlayerQuadTree(QuadTree* quadTree, Player player, std::vector<QuadTree*> &playerQuadTree);
-```c
+```
 
 ### Textures
 Textures are loaded from ./assets/textImages folder with
