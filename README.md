@@ -64,6 +64,7 @@ Because we worked on Linux (Ubuntu and Mint) for this project, we advice you to 
 * [make](https://linuxhint.com/install-make-ubuntu/)
 * [OpenGL](https://www.opengl.org/)
 * [SDL2](https://www.libsdl.org/download-2.0.php)
+* [SDL_image](https://www.libsdl.org/projects/SDL_image/)
 * [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -92,6 +93,11 @@ npm sudo apt-get install freeglut3-dev
 ```sh
 npm sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0
 ```
+OR only SDL2, SDL_image et SDL_mixer
+```sh
+npm sudo apt install libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0
+```
+
 
 
 ### Installation
