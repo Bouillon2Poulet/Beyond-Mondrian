@@ -133,23 +133,23 @@ For those who may want to fork our game in order to create their own, we will de
 
 ### Window and scene
 The window is create thanks to SDL2 lib as we can see in main with :
-  ```sh
+  ```c
   SDL_Window* window;
   ```
 It will also help us by giving us time since the window opened with :
-  ```sh
+  ```c
   SDL_GetTicks();
   ```
 
 We do draw our scenes and cubes thanks to OpenGL lib
 *Setup
-  ```sh
+  ```c
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   ```
 *Draw
-  ```sh
+  ```c
   glBegin(GL_TRIANGLE_FAN);
   glColor3f(float r, float g, float b);
   glVertex2f(int x, int y);
@@ -163,6 +163,32 @@ Decorative lines are based on Line struct.
 ### Camera
 
 ### Quadtree and collisions
+The collision system is based on a <a href="https://en.wikipedia.org/wiki/Quadtree">Quadtree</a> which allows to calculate collisions only with near objects.<br>
+<img src="https://www.researchgate.net/profile/Patrick-Guidotti/publication/2560370/figure/fig3/AS:669330421325826@1536592216141/Point-quadtree-example-with-a-fan-out-of-4-also-at-the-leaf-level-up-to-4-elements-per.png"" alt="Quadtree" width="723" height="307">
+
+The source code of the Quadtree is homemade, it's all in the quadtree.c file.
+*Struct
+```c
+typedef struct QuadTree {
+    float x;
+    float y;
+    float width;
+    float height;
+    struct QuadTree* nodes[4];
+    Cube* cubes;
+    int nbCubes;
+    int isLeaf;
+} QuadTree;
+```c
+
+*Functions
+```c
+QuadTree createQuadTree(float x, float y, float width, float height);
+void splitQuadTree(QuadTree* quadTree);
+int checkQuadTreeCollision(Cube cube, QuadTree quadTree);
+void generateQuadTree(QuadTree* quadTree);
+void findPlayerQuadTree(QuadTree* quadTree, Player player, std::vector<QuadTree*> &playerQuadTree);
+```c
 
 ### Textures
 Textures are loaded from ./assets/textImages folder with
@@ -180,6 +206,8 @@ that returns an SDL_Surface binded to a GLuint Texture :
     glBindTexture(GL_TEXTURE_2D, 0);
     return texture;
   ```
+
+The SDL_Surface itself it generated thanks with SDL_Surface* IMG_Load(). It uses lodepng.c which allows us to use png but this is kind of black magic :smile:
 
 ### Audio
 
