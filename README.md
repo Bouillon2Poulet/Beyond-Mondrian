@@ -210,7 +210,21 @@ that returns an SDL_Surface binded to a GLuint Texture :
 The SDL_Surface itself it generated thanks with SDL_Surface* IMG_Load(). It uses lodepng.c which allows us to use png but this is kind of black magic :smile:
 
 ### Audio
-
+The audio is managed with SDL_mixer. You can find a tutorial <a href="https://soundprogramming.net/programming/tutorial-using-sdl2-and-sdl_mixer-to-play-samples/">here</a>.
+To sum up, it's all about :
+* Allocate channels
+```c
+#include <SDL2/SDL_mixer.h>
+Mix_AllocateChannels(int nbChannel);
+```
+* Create Mix_Chunk
+```c
+Mix_Chunk* mainTheme = Mix_LoadWAV("assets/audio/main.wav");
+```
+* Play chunk on channel
+```c
+Mix_PlayChannel(0, mainTheme, int nbLoop);
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
