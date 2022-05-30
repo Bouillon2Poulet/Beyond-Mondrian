@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     //Audio
     Mix_AllocateChannels(2); // Allocate 2 channels
     Mix_Volume(0, MIX_MAX_VOLUME); //volume 100% for channel 0
-    Mix_Volume(1, MIX_MAX_VOLUME / 2); // volume 50% channel 1
+    Mix_Volume(1, MIX_MAX_VOLUME / 3); // volume 33% channel 1
 
     Mix_Chunk* mainTheme = Mix_LoadWAV("assets/audio/main.wav");
     Mix_Chunk* jumpSound = Mix_LoadWAV("assets/audio/jump.wav");
